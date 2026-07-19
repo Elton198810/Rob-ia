@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#07111f">
+<title>IA Trader X — Versão 1</title>
+<style>
+:root{--bg:#07111f;--card:#0d1b2d;--line:#203650;--text:#eef7ff;--muted:#91a8be;--blue:#27d7ff;--green:#39e58c;--yellow:#ffd45c;--red:#ff6577}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top,#15345b 0,transparent 32%),var(--bg);color:var(--text);font-family:Arial,sans-serif}
+header{position:sticky;top:0;z-index:10;padding:13px 16px;background:#07111fe8;border-bottom:1px solid #ffffff17;display:flex;justify-content:space-between;align-items:center}
+.logo{font-weight:900}.logo span{color:var(--blue)}.status{font-size:13px;color:var(--muted)}
+main{max-width:1100px;margin:auto;padding:14px}.hero,.card{background:linear-gradient(145deg,#102641ee,#0a1728ee);border:1px solid #ffffff17;border-radius:20px;padding:17px;box-shadow:0 12px 35px #0005}
+.hero h1{margin:0 0 8px;font-size:clamp(26px,7vw,44px)}.hero p,.muted{color:var(--muted)}.warning{padding:11px;border:1px solid #ffd45c55;background:#ffd45c12;color:#ffe99b;border-radius:13px}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:13px;margin-top:13px}.card{grid-column:span 4}.wide{grid-column:span 8}.full{grid-column:span 12}
+h2{font-size:17px;margin:0 0 13px}.row{display:flex;gap:9px;align-items:end;flex-wrap:wrap}.field{flex:1;min-width:135px}.field label{display:block;font-size:12px;color:var(--muted);margin-bottom:5px}
+input,select{width:100%;padding:11px;border-radius:11px;border:1px solid var(--line);background:#081422;color:#fff}
+button{padding:11px 14px;border:0;border-radius:12px;font-weight:800;background:linear-gradient(135deg,var(--blue),#8ceeff);color:#06101d}
+button.secondary{background:#ffffff0d;color:#fff;border:1px solid var(--line)}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}.kpi{padding:12px;border-radius:14px;background:#ffffff08;border:1px solid #ffffff12}.kpi small{display:block;color:var(--muted);margin-bottom:6px}.kpi b{font-size:20px}
+.price{font-size:36px;font-weight:900;margin:11px 0}.chart{height:260px;border-radius:15px;background:#06101c;border:1px solid #ffffff10;overflow:hidden}canvas{width:100%;height:100%}
+.signal{text-align:center;padding:15px;border-radius:17px;background:#ffffff08}.lamp{width:68px;height:68px;border-radius:50%;display:grid;place-items:center;margin:auto;font-size:30px;background:var(--yellow);color:#06101d;box-shadow:0 0 28px #ffd45c77}.signal.buy .lamp{background:var(--green)}.signal.sell .lamp{background:var(--red);color:#fff}
+.signal h3{font-size:28px;margin:9px 0}.score{font-size:40px;font-weight:900}.bar{height:11px;background:#ffffff12;border-radius:99px;overflow:hidden}.bar span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--red),var(--yellow),var(--green))}
+.inds{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.ind{padding:11px;background:#ffffff07;border-radius:13px;border:1px solid #ffffff0f}.ind small{display:block;color:var(--muted);font-size:12px}.tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}.tag{font-size:12px;padding:6px 8px;border-radius:99px;background:#ffffff0b;color:var(--muted)}
+.diary{display:grid;gap:8px;max-height:350px;overflow:auto}.entry{display:grid;grid-template-columns:75px 1fr auto;gap:8px;padding:10px;border-radius:13px;background:#ffffff07;border:1px solid #ffffff10}.entry small{display:block;color:var(--muted)}.pill{padding:6px 8px;border-radius:99px;font-size:12px;font-weight:800}.win{color:#79f4ad;background:#39e58c20}.loss{color:#ff9ba8;background:#ff657720}.pending{color:#ffe596;background:#ffd45c20}
+.discipline{padding:14px;border-radius:15px;border:1px solid #39e58c55;background:#39e58c0b}.blocked{border-color:#ff657766;background:#ff65770c}.hidden{display:none}
+footer{text-align:center;padding:28px;color:var(--muted);font-size:12px}
+@media(max-width:800px){.card,.wide{grid-column:span 12}.kpis{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<header><div class="logo">IA Trader <span>X</span> — V1</div><div class="status" id="status">● Desconectado</div></header>
+<main>
+<section class="hero">
+<h1>Radar inteligente de mercado</h1>
+<p>Análise técnica, score de qualidade, simulação e disciplina diária em um único painel.</p>
+<div class="warning">⚠️ Versão educacional. Não envia ordens e não usa dinheiro real. Nenhum sinal garante lucro.</div>
+</section>
+
+<section class="grid">
+<div class="card full">
+<h2>🎯 Gerente do dia</h2>
+<div class="kpis">
+<div class="kpi"><small>Saldo simulado</small><b id="balance">$1.000,00</b></div>
+<div class="kpi"><small>Resultado hoje</small><b id="dayResult">$0,00</b></div>
+<div class="kpi"><small>Meta diária</small><b id="goalView">$20,00</b></div>
+<div class="kpi"><small>Limite de perda</small><b id="limitView">-$15,00</b></div>
+</div>
+<div class="row" style="margin-top:11px">
+<div class="field"><label>Meta diária USD</label><input id="goal" type="number" value="20"></div>
+<div class="field"><label>Limite de perda USD</label><input id="limit" type="number" value="15"></div>
+<div class="field"><label>Valor por teste USD</label><input id="stake" type="number" step=".01" value="1"></div>
+<button class="secondary" onclick="saveSettings()">Salvar</button>
+</div>
+</div>
+
+<div class="card wide">
+<h2>📡 Mercado ao vivo</h2>
+<div class="row">
+<div class="field"><label>Ativo</label><select id="symbol">
+<option value="1HZ100V">Volatility 100 (1s)</option>
+<option value="1HZ75V">Volatility 75 (1s)</option>
+<option value="1HZ50V">Volatility 50 (1s)</option>
+<option value="1HZ25V">Volatility 25 (1s)</option>
+<option value="R_100">Volatility 100</option>
+<option value="R_75">Volatility 75</option>
+<option value="R_50">Volatility 50</option>
+<option value="R_25">Volatility 25</option>
+</select></div>
+<div class="field"><label>Duração da previsão</label><select id="horizon"><option value="15">15 ticks</option><option value="30" selected>30 ticks</option><option value="60">60 ticks</option></select></div>
+<button onclick="connectMarket()">Conectar</button>
+</div>
+<div class="price" id="price">—</div>
+<div class="chart"><canvas id="chart"></canvas></div>
+</div>
+
+<div class="card">
+<h2>🧠 Decisão da IA</h2>
+<div class="signal" id="signalBox">
+<div class="lamp" id="lamp">⏸</div><h3 id="decision">AGUARDAR</h3>
+<div><span class="score" id="score">0</span>/100</div>
+<div class="bar"><span id="bar"></span></div>
+<p class="muted" id="explain">Conecte para começar.</p>
+<button class="hidden" id="simulate" onclick="registerSignal()">Registrar simulação</button>
+</div>
+</div>
+
+<div class="card">
+<h2>📊 Indicadores</h2>
+<div class="inds">
+<div class="ind"><small>Tendência</small><b id="trend">—</b></div>
+<div class="ind"><small>RSI 14</small><b id="rsi">—</b></div>
+<div class="ind"><small>EMA 9 / 21</small><b id="emas">—</b></div>
+<div class="ind"><small>Momentum</small><b id="momentum">—</b></div>
+<div class="ind"><small>Volatilidade</small><b id="volatility">—</b></div>
+<div class="ind"><small>Suporte / resistência</small><b id="levels">—</b></div>
+</div><div class="tags" id="reasons"></div>
+</div>
+
+<div class="card wide">
+<h2>🛡️ Modo Disciplina</h2>
+<div class="discipline" id="discipline"><b id="disciplineTitle">Aguardando análise</b><p class="muted" id="disciplineText">O sistema bloqueia testes após atingir a meta ou o limite.</p></div>
+<div class="kpis" style="margin-top:10px">
+<div class="kpi"><small>Acertos</small><b id="wins">0</b></div>
+<div class="kpi"><small>Erros</small><b id="losses">0</b></div>
+<div class="kpi"><small>Taxa real</small><b id="rate">0%</b></div>
+<div class="kpi"><small>Pendentes</small><b id="pending">0</b></div>
+</div>
+</div>
+
+<div class="card full">
+<div class="row" style="justify-content:space-between"><h2>📋 Diário automático</h2><button class="secondary" onclick="clearHistory()">Limpar</button></div>
+<div class="diary" id="diary"></div>
+</div>
+</section>
+</main>
+<footer>IA Trader X V1 • Simulação local • Dados públicos via WebSocket da Deriv</footer>
+
+<script>
+const WS_URL='wss://ws.binaryws.com/websockets/v3';
+let ws=null,prices=[],current=null,last=null;
+let state=JSON.parse(localStorage.getItem('iaTraderXV1')||'null')||{balance:1000,goal:20,limit:15,stake:1,day:new Date().toISOString().slice(0,10),result:0,history:[]};
+const $=id=>document.getElementById(id), money=v=>new Intl.NumberFormat('pt-BR',{style:'currency',currency:'USD'}).format(v);
+function persist(){localStorage.setItem('iaTraderXV1',JSON.stringify(state));renderStats()}
+function newDay(){let d=new Date().toISOString().slice(0,10);if(state.day!==d){state.day=d;state.result=0;persist()}}
+function init(){newDay();$('goal').value=state.goal;$('limit').value=state.limit;$('stake').value=state.stake;renderStats();renderDiary();resize();addEventListener('resize',resize)}
+function saveSettings(){state.goal=Math.max(1,+$('goal').value||20);state.limit=Math.max(1,+$('limit').value||15);state.stake=Math.max(.35,+$('stake').value||1);persist()}
+function connectMarket(){
+if(ws)try{ws.close()}catch(e){}
+prices=[];$('status').textContent='● Conectando...';
+ws=new WebSocket(WS_URL);
+ws.onopen=()=>{$('status').textContent='● Mercado conectado';requestHistory()};
+ws.onerror=()=>{$('status').textContent='● Falha na conexão'};
+ws.onclose=()=>{$('status').textContent='● Desconectado'};
+ws.onmessage=e=>{let d=JSON.parse(e.data);if(d.error){$('explain').textContent=d.error.message;return}
+if(d.msg_type==='history'){prices=d.history.prices.map(Number);subscribe();update()}
+if(d.msg_type==='tick'){let q=Number(d.tick.quote);prices.push(q);if(prices.length>300)prices.shift();resolve(q);update()}}
+}
+function requestHistory(){ws.send(JSON.stringify({ticks_history:$('symbol').value,count:200,end:'latest',style:'ticks'}))}
+function subscribe(){ws.send(JSON.stringify({ticks:$('symbol').value,subscribe:1}))}
+$('symbol').addEventListener('change',()=>{if(ws&&ws.readyState===1){prices=[];requestHistory()}})
+function ema(a,n){let k=2/(n+1),v=a[0];for(let i=1;i<a.length;i++)v=a[i]*k+v*(1-k);return v}
+function rsi(a,n=14){if(a.length<n+1)return 50;let g=0,l=0;for(let i=a.length-n;i<a.length;i++){let d=a[i]-a[i-1];d>0?g+=d:l-=d}return l===0?100:100-100/(1+(g/n)/(l/n))}
+function sd(a){let m=a.reduce((s,x)=>s+x,0)/a.length;return Math.sqrt(a.reduce((s,x)=>s+(x-m)**2,0)/a.length)}
+function analyze(){
+if(prices.length<40)return null;let p=prices,c=p.at(-1),e9=ema(p.slice(-80),9),e21=ema(p.slice(-100),21),r=rsi(p),m=(c-p.at(-11))/p.at(-11)*100,v=sd(p.slice(-30))/c*100,s=Math.min(...p.slice(-20)),res=Math.max(...p.slice(-20)),buy=0,sell=0,why=[];
+if(e9>e21){buy+=25;why.push('EMA confirma alta')}else{sell+=25;why.push('EMA confirma baixa')}
+if(r>=52&&r<=70){buy+=20;why.push('RSI comprador')}else if(r<=48&&r>=30){sell+=20;why.push('RSI vendedor')}else if(r>70){sell+=8;why.push('Sobrecompra')}else if(r<30){buy+=8;why.push('Sobrevenda')}
+if(m>.01){buy+=20;why.push('Momentum positivo')}else if(m<-.01){sell+=20;why.push('Momentum negativo')}else why.push('Momentum fraco');
+let slope=c-p.at(-16);if(slope>0){buy+=15;why.push('Inclinação de alta')}else{sell+=15;why.push('Inclinação de baixa')}
+let pos=(c-s)/(res-s||1);if(pos<.3){buy+=10;why.push('Próximo do suporte')}else if(pos>.7){sell+=10;why.push('Próximo da resistência')}
+let max=Math.max(buy,sell),decision=max<52?'AGUARDAR':buy>sell?'COMPRA':'VENDA',score=decision==='AGUARDAR'?Math.round(max):Math.min(95,Math.round(max+Math.abs(buy-sell)*.15));
+return{c,e9,e21,r,m,v,s,res,decision,score,why,trend:Math.abs(e9-e21)/c<.00003?'Lateral':e9>e21?'Alta':'Baixa'}
+}
+function update(){
+let a=analyze();if(!a)return;current=a;$('price').textContent=a.c.toFixed(5);$('trend').textContent=a.trend;$('rsi').textContent=a.r.toFixed(1);$('emas').textContent=a.e9.toFixed(4)+' / '+a.e21.toFixed(4);$('momentum').textContent=(a.m>=0?'+':'')+a.m.toFixed(4)+'%';$('volatility').textContent=a.v.toFixed(4)+'%';$('levels').textContent=a.s.toFixed(4)+' / '+a.res.toFixed(4);
+$('decision').textContent=a.decision;$('score').textContent=a.score;$('bar').style.width=a.score+'%';$('reasons').innerHTML=a.why.map(x=>'<span class="tag">'+x+'</span>').join('');
+$('signalBox').className='signal '+(a.decision==='COMPRA'?'buy':a.decision==='VENDA'?'sell':'');$('lamp').textContent=a.decision==='COMPRA'?'▲':a.decision==='VENDA'?'▼':'⏸';$('explain').textContent=a.decision==='AGUARDAR'?'Condições fracas. Preserve o capital.':a.why.slice(0,2).join(' • ');
+$('simulate').classList.toggle('hidden',a.decision==='AGUARDAR'||blocked());disciplineUpdate();draw();
+}
+function blocked(){return state.result>=state.goal||state.result<=-state.limit}
+function disciplineUpdate(){let box=$('discipline');box.className='discipline'+(blocked()?' blocked':'');if(state.result>=state.goal){$('disciplineTitle').textContent='Meta atingida — encerrar o dia';$('disciplineText').textContent='Novos testes foram bloqueados.'}else if(state.result<=-state.limit){$('disciplineTitle').textContent='Limite de perda atingido';$('disciplineText').textContent='Pare agora e não tente recuperar aumentando o valor.'}else if(current&&current.decision==='AGUARDAR'){$('disciplineTitle').textContent='Não operar agora';$('disciplineText').textContent='O filtro mínimo não foi atingido.'}else{$('disciplineTitle').textContent='Simulação permitida';$('disciplineText').textContent='Condições mínimas atendidas, sem garantia de resultado.'}}
+function registerSignal(){if(!current||current.decision==='AGUARDAR'||blocked())return;state.history.unshift({id:Date.now(),time:new Date().toISOString(),symbol:$('symbol').value,direction:current.decision,score:current.score,entry:current.c,remaining:+$('horizon').value,status:'Pendente',stake:state.stake});state.history=state.history.slice(0,200);persist();renderDiary()}
+function resolve(price){let changed=false;state.history.forEach(x=>{if(x.status==='Pendente'&&x.symbol===$('symbol').value){x.remaining--;if(x.remaining<=0){let ok=x.direction==='COMPRA'?price>x.entry:price<x.entry;x.exit=price;x.status=ok?'Acerto':'Erro';x.profit=ok?x.stake*.8:-x.stake;state.balance+=x.profit;state.result+=x.profit;changed=true}}});if(changed){persist();renderDiary()}}
+function renderStats(){newDay();$('balance').textContent=money(state.balance);$('dayResult').textContent=money(state.result);$('goalView').textContent=money(state.goal);$('limitView').textContent='-'+money(state.limit);let done=state.history.filter(x=>x.status!=='Pendente'),w=done.filter(x=>x.status==='Acerto').length,l=done.length-w,p=state.history.filter(x=>x.status==='Pendente').length;$('wins').textContent=w;$('losses').textContent=l;$('pending').textContent=p;$('rate').textContent=(done.length?Math.round(w/done.length*100):0)+'%';disciplineUpdate()}
+function renderDiary(){let h=state.history;$('diary').innerHTML=h.length?h.map(x=>'<div class="entry"><div><b>'+new Date(x.time).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})+'</b><small>'+x.symbol+'</small></div><div><b>'+x.direction+' • Score '+x.score+'</b><small>Entrada '+x.entry.toFixed(5)+(x.exit?' • Saída '+x.exit.toFixed(5):' • faltam '+x.remaining+' ticks')+'</small></div><div class="pill '+(x.status==='Acerto'?'win':x.status==='Erro'?'loss':'pending')+'">'+x.status+(x.profit!=null?' '+money(x.profit):'')+'</div></div>').join(''):'<p class="muted">Nenhuma simulação registrada.</p>'}
+function clearHistory(){if(confirm('Apagar todo o histórico?')){state.history=[];persist();renderDiary()}}
+function resize(){let c=$('chart'),r=c.getBoundingClientRect(),d=devicePixelRatio||1;c.width=r.width*d;c.height=r.height*d;draw()}
+function draw(){let c=$('chart'),ctx=c.getContext('2d'),a=prices.slice(-100),w=c.width,h=c.height;if(a.length<2)return;ctx.clearRect(0,0,w,h);let min=Math.min(...a),max=Math.max(...a),pad=(max-min)*.15||1;min-=pad;max+=pad;ctx.strokeStyle='#203650';for(let i=1;i<5;i++){let y=h*i/5;ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke()}ctx.strokeStyle='#27d7ff';ctx.lineWidth=3;ctx.beginPath();a.forEach((v,i)=>{let x=i/(a.length-1)*w,y=h-(v-min)/(max-min)*h;i?ctx.lineTo(x,y):ctx.moveTo(x,y)});ctx.stroke()}
+init();
+</script>
+</body>
+</html>
