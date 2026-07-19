@@ -2,172 +2,92 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#07111f">
-<title>IA Trader X — Versão 1</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta name="theme-color" content="#050b18">
+<meta name="description" content="IA Trader X V2 — painel educacional de análise técnica, scanner e simulação de mercado.">
+<title>IA Trader X — Versão 2</title>
 <style>
-:root{--bg:#07111f;--card:#0d1b2d;--line:#203650;--text:#eef7ff;--muted:#91a8be;--blue:#27d7ff;--green:#39e58c;--yellow:#ffd45c;--red:#ff6577}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top,#15345b 0,transparent 32%),var(--bg);color:var(--text);font-family:Arial,sans-serif}
-header{position:sticky;top:0;z-index:10;padding:13px 16px;background:#07111fe8;border-bottom:1px solid #ffffff17;display:flex;justify-content:space-between;align-items:center}
-.logo{font-weight:900}.logo span{color:var(--blue)}.status{font-size:13px;color:var(--muted)}
-main{max-width:1100px;margin:auto;padding:14px}.hero,.card{background:linear-gradient(145deg,#102641ee,#0a1728ee);border:1px solid #ffffff17;border-radius:20px;padding:17px;box-shadow:0 12px 35px #0005}
-.hero h1{margin:0 0 8px;font-size:clamp(26px,7vw,44px)}.hero p,.muted{color:var(--muted)}.warning{padding:11px;border:1px solid #ffd45c55;background:#ffd45c12;color:#ffe99b;border-radius:13px}
-.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:13px;margin-top:13px}.card{grid-column:span 4}.wide{grid-column:span 8}.full{grid-column:span 12}
-h2{font-size:17px;margin:0 0 13px}.row{display:flex;gap:9px;align-items:end;flex-wrap:wrap}.field{flex:1;min-width:135px}.field label{display:block;font-size:12px;color:var(--muted);margin-bottom:5px}
-input,select{width:100%;padding:11px;border-radius:11px;border:1px solid var(--line);background:#081422;color:#fff}
-button{padding:11px 14px;border:0;border-radius:12px;font-weight:800;background:linear-gradient(135deg,var(--blue),#8ceeff);color:#06101d}
-button.secondary{background:#ffffff0d;color:#fff;border:1px solid var(--line)}
-.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}.kpi{padding:12px;border-radius:14px;background:#ffffff08;border:1px solid #ffffff12}.kpi small{display:block;color:var(--muted);margin-bottom:6px}.kpi b{font-size:20px}
-.price{font-size:36px;font-weight:900;margin:11px 0}.chart{height:260px;border-radius:15px;background:#06101c;border:1px solid #ffffff10;overflow:hidden}canvas{width:100%;height:100%}
-.signal{text-align:center;padding:15px;border-radius:17px;background:#ffffff08}.lamp{width:68px;height:68px;border-radius:50%;display:grid;place-items:center;margin:auto;font-size:30px;background:var(--yellow);color:#06101d;box-shadow:0 0 28px #ffd45c77}.signal.buy .lamp{background:var(--green)}.signal.sell .lamp{background:var(--red);color:#fff}
-.signal h3{font-size:28px;margin:9px 0}.score{font-size:40px;font-weight:900}.bar{height:11px;background:#ffffff12;border-radius:99px;overflow:hidden}.bar span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--red),var(--yellow),var(--green))}
-.inds{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.ind{padding:11px;background:#ffffff07;border-radius:13px;border:1px solid #ffffff0f}.ind small{display:block;color:var(--muted);font-size:12px}.tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}.tag{font-size:12px;padding:6px 8px;border-radius:99px;background:#ffffff0b;color:var(--muted)}
-.diary{display:grid;gap:8px;max-height:350px;overflow:auto}.entry{display:grid;grid-template-columns:75px 1fr auto;gap:8px;padding:10px;border-radius:13px;background:#ffffff07;border:1px solid #ffffff10}.entry small{display:block;color:var(--muted)}.pill{padding:6px 8px;border-radius:99px;font-size:12px;font-weight:800}.win{color:#79f4ad;background:#39e58c20}.loss{color:#ff9ba8;background:#ff657720}.pending{color:#ffe596;background:#ffd45c20}
-.discipline{padding:14px;border-radius:15px;border:1px solid #39e58c55;background:#39e58c0b}.blocked{border-color:#ff657766;background:#ff65770c}.hidden{display:none}
-footer{text-align:center;padding:28px;color:var(--muted);font-size:12px}
-@media(max-width:800px){.card,.wide{grid-column:span 12}.kpis{grid-template-columns:repeat(2,1fr)}}
+:root{--bg:#050b18;--card:#0b1729;--card2:#0e2038;--line:#1e3855;--text:#eef7ff;--muted:#8fa9c2;--cyan:#25dcff;--blue:#5578ff;--green:#37e891;--yellow:#ffd05a;--red:#ff6076;--purple:#b37cff}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at 15% 0,#163a67 0,transparent 28%),radial-gradient(circle at 90% 10%,#361d6d55 0,transparent 25%),var(--bg);color:var(--text);font-family:Inter,Arial,sans-serif;min-height:100vh}
+button,input,select{font:inherit}header{position:sticky;top:0;z-index:20;padding:12px 14px;background:#050b18e8;backdrop-filter:blur(14px);border-bottom:1px solid #ffffff14;display:flex;justify-content:space-between;align-items:center;gap:10px}.logo{font-weight:950;letter-spacing:.2px}.logo span{color:var(--cyan)}.version{font-size:11px;padding:4px 7px;border-radius:99px;background:#25dcff1b;color:#8cecff}.status{font-size:12px;color:var(--muted);white-space:nowrap}.online{color:var(--green)}
+main{max-width:1240px;margin:auto;padding:14px}.hero,.card{background:linear-gradient(145deg,#102641e8,#081423ed);border:1px solid #ffffff17;border-radius:21px;padding:16px;box-shadow:0 16px 45px #0006}.hero{position:relative;overflow:hidden}.hero:after{content:"";position:absolute;width:220px;height:220px;border-radius:50%;background:#25dcff16;filter:blur(10px);right:-85px;top:-110px}.hero h1{margin:0 0 8px;font-size:clamp(27px,7vw,48px);line-height:1.02}.hero h1 span{background:linear-gradient(90deg,var(--cyan),#9d8cff);-webkit-background-clip:text;color:transparent}.hero p,.muted{color:var(--muted)}.warning{padding:10px 12px;border:1px solid #ffd05a55;background:#ffd05a10;color:#ffe89b;border-radius:13px;font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:13px;margin-top:13px}.card{grid-column:span 4}.wide{grid-column:span 8}.half{grid-column:span 6}.full{grid-column:span 12}h2{font-size:17px;margin:0 0 13px}.row{display:flex;gap:9px;align-items:end;flex-wrap:wrap}.field{flex:1;min-width:130px}.field label{display:block;font-size:11px;color:var(--muted);margin-bottom:5px}input,select{width:100%;padding:11px;border-radius:11px;border:1px solid var(--line);background:#06111f;color:#fff;outline:none}input:focus,select:focus{border-color:var(--cyan)}button{padding:11px 14px;border:0;border-radius:12px;font-weight:900;background:linear-gradient(135deg,var(--cyan),#86efff);color:#04101a;cursor:pointer}button.secondary{background:#ffffff0c;color:#fff;border:1px solid var(--line)}button.danger{background:#ff60761a;color:#ff9dab;border:1px solid #ff607644}button:disabled{opacity:.45;cursor:not-allowed}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.kpi{padding:12px;border-radius:14px;background:#ffffff07;border:1px solid #ffffff10}.kpi small{display:block;color:var(--muted);margin-bottom:5px;font-size:11px}.kpi b{font-size:20px}.positive{color:var(--green)}.negative{color:var(--red)}
+.price{font-size:38px;font-weight:950;margin:10px 0 4px}.subprice{font-size:12px;color:var(--muted);margin-bottom:9px}.chart{height:285px;border-radius:16px;background:#040c17;border:1px solid #ffffff10;overflow:hidden}canvas{width:100%;height:100%}
+.signal{text-align:center;padding:15px;border-radius:18px;background:#ffffff07;border:1px solid #ffffff0f}.lamp{width:72px;height:72px;border-radius:50%;display:grid;place-items:center;margin:auto;font-size:31px;background:var(--yellow);color:#06101d;box-shadow:0 0 30px #ffd05a66}.signal.buy .lamp{background:var(--green);box-shadow:0 0 30px #37e89166}.signal.sell .lamp{background:var(--red);color:#fff;box-shadow:0 0 30px #ff607666}.signal h3{font-size:29px;margin:8px 0}.score{font-size:42px;font-weight:950}.bar{height:11px;background:#ffffff12;border-radius:99px;overflow:hidden;margin:6px 0}.bar span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--red),var(--yellow),var(--green));transition:.35s}
+.probs{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:11px}.prob{padding:8px 4px;border-radius:11px;background:#ffffff06;font-size:11px}.prob b{display:block;font-size:15px;margin-top:3px}.inds{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.ind{padding:10px;background:#ffffff06;border-radius:13px;border:1px solid #ffffff0e}.ind small{display:block;color:var(--muted);font-size:10px;margin-bottom:4px}.ind b{font-size:13px}.tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}.tag{font-size:11px;padding:6px 8px;border-radius:99px;background:#ffffff0a;color:#a9bdd1}.strong{background:#37e89115;color:#70f2aa}.weak{background:#ffd05a15;color:#ffe08d}
+.scanner{display:grid;gap:8px}.scanrow{display:grid;grid-template-columns:1.4fr .8fr .7fr .7fr;gap:8px;align-items:center;padding:11px;border-radius:13px;background:#ffffff06;border:1px solid #ffffff0e}.scanrow b{font-size:13px}.scanrow small{color:var(--muted);display:block;font-size:10px}.badge{justify-self:start;padding:5px 8px;border-radius:99px;font-size:11px;font-weight:900}.buyBadge{color:#6af0a8;background:#37e89117}.sellBadge{color:#ff9eaa;background:#ff607617}.waitBadge{color:#ffe293;background:#ffd05a15}
+.discipline{padding:14px;border-radius:15px;border:1px solid #37e89155;background:#37e8910b}.blocked{border-color:#ff607666;background:#ff60770c}.diary{display:grid;gap:8px;max-height:420px;overflow:auto}.entry{display:grid;grid-template-columns:82px 1fr auto;gap:8px;padding:10px;border-radius:13px;background:#ffffff06;border:1px solid #ffffff0f}.entry small{display:block;color:var(--muted);font-size:11px}.pill{padding:6px 8px;border-radius:99px;font-size:11px;font-weight:900;align-self:center}.win{color:#77f2ad;background:#37e89120}.loss{color:#ff9ba8;background:#ff607720}.pending{color:#ffe596;background:#ffd05a20}.hidden{display:none!important}.toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,100px);background:#0d2035;border:1px solid #ffffff1d;padding:11px 15px;border-radius:13px;z-index:50;opacity:0;transition:.3s;box-shadow:0 12px 35px #0008}.toast.show{opacity:1;transform:translate(-50%,0)}
+footer{text-align:center;padding:28px 14px;color:var(--muted);font-size:11px}.mini{font-size:11px;color:var(--muted)}
+@media(max-width:900px){.card,.wide,.half{grid-column:span 12}.kpis{grid-template-columns:repeat(2,1fr)}}@media(max-width:560px){main{padding:10px}.hero,.card{border-radius:17px;padding:13px}.inds{grid-template-columns:repeat(2,1fr)}.scanrow{grid-template-columns:1.2fr .8fr .6fr}.scanrow>:last-child{display:none}.entry{grid-template-columns:65px 1fr}.entry .pill{grid-column:2}.price{font-size:32px}.chart{height:240px}}
 </style>
 </head>
 <body>
-<header><div class="logo">IA Trader <span>X</span> — V1</div><div class="status" id="status">● Desconectado</div></header>
+<header><div class="logo">IA Trader <span>X</span> <span class="version">V2</span></div><div class="status" id="status">● Desconectado</div></header>
 <main>
-<section class="hero">
-<h1>Radar inteligente de mercado</h1>
-<p>Análise técnica, score de qualidade, simulação e disciplina diária em um único painel.</p>
-<div class="warning">⚠️ Versão educacional. Não envia ordens e não usa dinheiro real. Nenhum sinal garante lucro.</div>
-</section>
-
+<section class="hero"><h1>Central de <span>Inteligência de Mercado</span></h1><p>Scanner multiativos, 9 indicadores, explicação dos sinais e gestão de risco em um painel criado para celular.</p><div class="warning">⚠️ Ferramenta educacional e de simulação. Não envia ordens, não movimenta dinheiro e não garante resultados.</div></section>
 <section class="grid">
-<div class="card full">
-<h2>🎯 Gerente do dia</h2>
-<div class="kpis">
-<div class="kpi"><small>Saldo simulado</small><b id="balance">$1.000,00</b></div>
-<div class="kpi"><small>Resultado hoje</small><b id="dayResult">$0,00</b></div>
-<div class="kpi"><small>Meta diária</small><b id="goalView">$20,00</b></div>
-<div class="kpi"><small>Limite de perda</small><b id="limitView">-$15,00</b></div>
-</div>
-<div class="row" style="margin-top:11px">
-<div class="field"><label>Meta diária USD</label><input id="goal" type="number" value="20"></div>
-<div class="field"><label>Limite de perda USD</label><input id="limit" type="number" value="15"></div>
-<div class="field"><label>Valor por teste USD</label><input id="stake" type="number" step=".01" value="1"></div>
-<button class="secondary" onclick="saveSettings()">Salvar</button>
-</div>
-</div>
+<div class="card full"><h2>🎯 Gerente do dia</h2><div class="kpis">
+<div class="kpi"><small>Saldo simulado</small><b id="balance">$1.000,00</b></div><div class="kpi"><small>Resultado hoje</small><b id="dayResult">$0,00</b></div><div class="kpi"><small>Meta / limite</small><b id="goalView">$20 / -$15</b></div><div class="kpi"><small>Operações hoje</small><b id="opsView">0 / 10</b></div></div>
+<div class="row" style="margin-top:11px"><div class="field"><label>Meta diária USD</label><input id="goal" type="number" value="20"></div><div class="field"><label>Limite de perda USD</label><input id="limit" type="number" value="15"></div><div class="field"><label>Valor por simulação USD</label><input id="stake" type="number" step=".01" value="1"></div><div class="field"><label>Máximo de operações</label><input id="maxOps" type="number" value="10"></div><button class="secondary" onclick="saveSettings()">Salvar</button></div></div>
 
-<div class="card wide">
-<h2>📡 Mercado ao vivo</h2>
-<div class="row">
-<div class="field"><label>Ativo</label><select id="symbol">
-<option value="1HZ100V">Volatility 100 (1s)</option>
-<option value="1HZ75V">Volatility 75 (1s)</option>
-<option value="1HZ50V">Volatility 50 (1s)</option>
-<option value="1HZ25V">Volatility 25 (1s)</option>
-<option value="R_100">Volatility 100</option>
-<option value="R_75">Volatility 75</option>
-<option value="R_50">Volatility 50</option>
-<option value="R_25">Volatility 25</option>
-</select></div>
-<div class="field"><label>Duração da previsão</label><select id="horizon"><option value="15">15 ticks</option><option value="30" selected>30 ticks</option><option value="60">60 ticks</option></select></div>
-<button onclick="connectMarket()">Conectar</button>
-</div>
-<div class="price" id="price">—</div>
-<div class="chart"><canvas id="chart"></canvas></div>
-</div>
+<div class="card wide"><h2>📡 Mercado ao vivo</h2><div class="row"><div class="field"><label>Ativo</label><select id="symbol"></select></div><div class="field"><label>Duração da previsão</label><select id="horizon"><option value="15">15 ticks</option><option value="30" selected>30 ticks</option><option value="60">60 ticks</option></select></div><button id="connectBtn" onclick="connectMarket()">Conectar</button><button class="secondary" onclick="toggleSound()" id="soundBtn">🔕 Som</button></div><div class="price" id="price">—</div><div class="subprice" id="marketInfo">Aguardando conexão</div><div class="chart"><canvas id="chart"></canvas></div></div>
 
-<div class="card">
-<h2>🧠 Decisão da IA</h2>
-<div class="signal" id="signalBox">
-<div class="lamp" id="lamp">⏸</div><h3 id="decision">AGUARDAR</h3>
-<div><span class="score" id="score">0</span>/100</div>
-<div class="bar"><span id="bar"></span></div>
-<p class="muted" id="explain">Conecte para começar.</p>
-<button class="hidden" id="simulate" onclick="registerSignal()">Registrar simulação</button>
-</div>
-</div>
+<div class="card"><h2>🧠 Decisão da IA</h2><div class="signal" id="signalBox"><div class="lamp" id="lamp">⏸</div><h3 id="decision">AGUARDAR</h3><div><span class="score" id="score">0</span>/100</div><div class="bar"><span id="bar"></span></div><div class="probs"><div class="prob">ALTA<b id="pBuy">0%</b></div><div class="prob">BAIXA<b id="pSell">0%</b></div><div class="prob">LATERAL<b id="pSide">100%</b></div></div><p class="muted" id="explain">Conecte para iniciar a análise.</p><button class="hidden" id="simulate" onclick="registerSignal()">Registrar simulação</button></div></div>
 
-<div class="card">
-<h2>📊 Indicadores</h2>
-<div class="inds">
-<div class="ind"><small>Tendência</small><b id="trend">—</b></div>
-<div class="ind"><small>RSI 14</small><b id="rsi">—</b></div>
-<div class="ind"><small>EMA 9 / 21</small><b id="emas">—</b></div>
-<div class="ind"><small>Momentum</small><b id="momentum">—</b></div>
-<div class="ind"><small>Volatilidade</small><b id="volatility">—</b></div>
-<div class="ind"><small>Suporte / resistência</small><b id="levels">—</b></div>
-</div><div class="tags" id="reasons"></div>
-</div>
+<div class="card full"><div class="row" style="justify-content:space-between"><div><h2 style="margin-bottom:3px">🔎 Scanner inteligente</h2><div class="mini">Compara 8 ativos e ordena os melhores cenários.</div></div><button id="scanBtn" onclick="runScanner()">Analisar mercado</button></div><div class="scanner" id="scanner"><p class="muted">Toque em “Analisar mercado” para criar o ranking.</p></div></div>
 
-<div class="card wide">
-<h2>🛡️ Modo Disciplina</h2>
-<div class="discipline" id="discipline"><b id="disciplineTitle">Aguardando análise</b><p class="muted" id="disciplineText">O sistema bloqueia testes após atingir a meta ou o limite.</p></div>
-<div class="kpis" style="margin-top:10px">
-<div class="kpi"><small>Acertos</small><b id="wins">0</b></div>
-<div class="kpi"><small>Erros</small><b id="losses">0</b></div>
-<div class="kpi"><small>Taxa real</small><b id="rate">0%</b></div>
-<div class="kpi"><small>Pendentes</small><b id="pending">0</b></div>
-</div>
-</div>
+<div class="card half"><h2>📊 Indicadores avançados</h2><div class="inds">
+<div class="ind"><small>TENDÊNCIA</small><b id="trend">—</b></div><div class="ind"><small>FORÇA ADX</small><b id="adx">—</b></div><div class="ind"><small>RSI 14</small><b id="rsi">—</b></div><div class="ind"><small>EMA 9 / 21 / 50</small><b id="emas">—</b></div><div class="ind"><small>MACD</small><b id="macd">—</b></div><div class="ind"><small>BOLLINGER</small><b id="bollinger">—</b></div><div class="ind"><small>ATR</small><b id="atr">—</b></div><div class="ind"><small>MOMENTUM</small><b id="momentum">—</b></div><div class="ind"><small>SUPORTE / RESISTÊNCIA</small><b id="levels">—</b></div></div><div class="tags" id="reasons"></div></div>
 
-<div class="card full">
-<div class="row" style="justify-content:space-between"><h2>📋 Diário automático</h2><button class="secondary" onclick="clearHistory()">Limpar</button></div>
-<div class="diary" id="diary"></div>
-</div>
-</section>
-</main>
-<footer>IA Trader X V1 • Simulação local • Dados públicos via WebSocket da Deriv</footer>
+<div class="card half"><h2>🛡️ Modo disciplina</h2><div class="discipline" id="discipline"><b id="disciplineTitle">Aguardando análise</b><p class="muted" id="disciplineText">O sistema bloqueia simulações após a meta, limite ou máximo diário.</p></div><div class="kpis" style="margin-top:10px"><div class="kpi"><small>Acertos</small><b id="wins">0</b></div><div class="kpi"><small>Erros</small><b id="losses">0</b></div><div class="kpi"><small>Taxa observada</small><b id="rate">0%</b></div><div class="kpi"><small>Melhor sequência</small><b id="streak">0</b></div></div></div>
 
+<div class="card full"><div class="row" style="justify-content:space-between"><h2>📋 Diário automático</h2><div><button class="secondary" onclick="exportHistory()">Exportar</button> <button class="danger" onclick="clearHistory()">Limpar</button></div></div><div class="diary" id="diary"></div></div>
+</section></main>
+<footer>IA Trader X V2 • Simulação local • Dados públicos via WebSocket da Deriv • Nenhuma garantia de lucro</footer><div class="toast" id="toast"></div>
 <script>
-const WS_URL='wss://ws.binaryws.com/websockets/v3';
-let ws=null,prices=[],current=null,last=null;
-let state=JSON.parse(localStorage.getItem('iaTraderXV1')||'null')||{balance:1000,goal:20,limit:15,stake:1,day:new Date().toISOString().slice(0,10),result:0,history:[]};
-const $=id=>document.getElementById(id), money=v=>new Intl.NumberFormat('pt-BR',{style:'currency',currency:'USD'}).format(v);
-function persist(){localStorage.setItem('iaTraderXV1',JSON.stringify(state));renderStats()}
-function newDay(){let d=new Date().toISOString().slice(0,10);if(state.day!==d){state.day=d;state.result=0;persist()}}
-function init(){newDay();$('goal').value=state.goal;$('limit').value=state.limit;$('stake').value=state.stake;renderStats();renderDiary();resize();addEventListener('resize',resize)}
-function saveSettings(){state.goal=Math.max(1,+$('goal').value||20);state.limit=Math.max(1,+$('limit').value||15);state.stake=Math.max(.35,+$('stake').value||1);persist()}
-function connectMarket(){
-if(ws)try{ws.close()}catch(e){}
-prices=[];$('status').textContent='● Conectando...';
-ws=new WebSocket(WS_URL);
-ws.onopen=()=>{$('status').textContent='● Mercado conectado';requestHistory()};
-ws.onerror=()=>{$('status').textContent='● Falha na conexão'};
-ws.onclose=()=>{$('status').textContent='● Desconectado'};
-ws.onmessage=e=>{let d=JSON.parse(e.data);if(d.error){$('explain').textContent=d.error.message;return}
-if(d.msg_type==='history'){prices=d.history.prices.map(Number);subscribe();update()}
-if(d.msg_type==='tick'){let q=Number(d.tick.quote);prices.push(q);if(prices.length>300)prices.shift();resolve(q);update()}}
-}
-function requestHistory(){ws.send(JSON.stringify({ticks_history:$('symbol').value,count:200,end:'latest',style:'ticks'}))}
-function subscribe(){ws.send(JSON.stringify({ticks:$('symbol').value,subscribe:1}))}
+const WS_URL='wss://ws.binaryws.com/websockets/v3?app_id=1089';
+const ASSETS=[['1HZ100V','Volatility 100 (1s)'],['1HZ75V','Volatility 75 (1s)'],['1HZ50V','Volatility 50 (1s)'],['1HZ25V','Volatility 25 (1s)'],['R_100','Volatility 100'],['R_75','Volatility 75'],['R_50','Volatility 50'],['R_25','Volatility 25']];
+let ws=null,prices=[],current=null,soundOn=false,lastStrong='';
+let state=JSON.parse(localStorage.getItem('iaTraderXV2')||'null')||{balance:1000,goal:20,limit:15,stake:1,maxOps:10,day:new Date().toISOString().slice(0,10),result:0,history:[]};
+const $=id=>document.getElementById(id),money=v=>new Intl.NumberFormat('pt-BR',{style:'currency',currency:'USD'}).format(v),fmt=v=>Number(v).toFixed(5);
+function toast(t){$('toast').textContent=t;$('toast').classList.add('show');setTimeout(()=>$('toast').classList.remove('show'),2200)}
+function persist(){localStorage.setItem('iaTraderXV2',JSON.stringify(state));renderStats()}
+function today(){return new Date().toISOString().slice(0,10)}
+function newDay(){if(state.day!==today()){state.day=today();state.result=0;persist()}}
+function init(){ASSETS.forEach(a=>$('symbol').insertAdjacentHTML('beforeend',`<option value="${a[0]}">${a[1]}</option>`));newDay();$('goal').value=state.goal;$('limit').value=state.limit;$('stake').value=state.stake;$('maxOps').value=state.maxOps;renderStats();renderDiary();resize();addEventListener('resize',resize)}
+function saveSettings(){state.goal=Math.max(1,+$('goal').value||20);state.limit=Math.max(1,+$('limit').value||15);state.stake=Math.max(.35,+$('stake').value||1);state.maxOps=Math.max(1,Math.floor(+$('maxOps').value||10));persist();toast('Configurações salvas')}
+function connectMarket(){if(ws)try{ws.close()}catch(e){}prices=[];$('status').textContent='● Conectando...';$('connectBtn').disabled=true;ws=new WebSocket(WS_URL);ws.onopen=()=>{$('status').textContent='● Mercado conectado';$('status').className='status online';$('connectBtn').disabled=false;requestHistory()};ws.onerror=()=>{$('status').textContent='● Falha na conexão';$('connectBtn').disabled=false};ws.onclose=()=>{$('status').textContent='● Desconectado';$('status').className='status';$('connectBtn').disabled=false};ws.onmessage=e=>{let d=JSON.parse(e.data);if(d.error){$('explain').textContent=d.error.message;return}if(d.msg_type==='history'){prices=d.history.prices.map(Number);subscribe();update()}if(d.msg_type==='tick'){let q=Number(d.tick.quote);prices.push(q);if(prices.length>360)prices.shift();resolve(q);update()}}}
+function requestHistory(){ws.send(JSON.stringify({ticks_history:$('symbol').value,count:260,end:'latest',style:'ticks'}))}function subscribe(){ws.send(JSON.stringify({ticks:$('symbol').value,subscribe:1}))}
 $('symbol').addEventListener('change',()=>{if(ws&&ws.readyState===1){prices=[];requestHistory()}})
-function ema(a,n){let k=2/(n+1),v=a[0];for(let i=1;i<a.length;i++)v=a[i]*k+v*(1-k);return v}
+function emaSeries(a,n){if(!a.length)return[];let k=2/(n+1),out=[a[0]];for(let i=1;i<a.length;i++)out.push(a[i]*k+out[i-1]*(1-k));return out}function ema(a,n){return emaSeries(a,n).at(-1)}
 function rsi(a,n=14){if(a.length<n+1)return 50;let g=0,l=0;for(let i=a.length-n;i<a.length;i++){let d=a[i]-a[i-1];d>0?g+=d:l-=d}return l===0?100:100-100/(1+(g/n)/(l/n))}
-function sd(a){let m=a.reduce((s,x)=>s+x,0)/a.length;return Math.sqrt(a.reduce((s,x)=>s+(x-m)**2,0)/a.length)}
-function analyze(){
-if(prices.length<40)return null;let p=prices,c=p.at(-1),e9=ema(p.slice(-80),9),e21=ema(p.slice(-100),21),r=rsi(p),m=(c-p.at(-11))/p.at(-11)*100,v=sd(p.slice(-30))/c*100,s=Math.min(...p.slice(-20)),res=Math.max(...p.slice(-20)),buy=0,sell=0,why=[];
-if(e9>e21){buy+=25;why.push('EMA confirma alta')}else{sell+=25;why.push('EMA confirma baixa')}
-if(r>=52&&r<=70){buy+=20;why.push('RSI comprador')}else if(r<=48&&r>=30){sell+=20;why.push('RSI vendedor')}else if(r>70){sell+=8;why.push('Sobrecompra')}else if(r<30){buy+=8;why.push('Sobrevenda')}
-if(m>.01){buy+=20;why.push('Momentum positivo')}else if(m<-.01){sell+=20;why.push('Momentum negativo')}else why.push('Momentum fraco');
-let slope=c-p.at(-16);if(slope>0){buy+=15;why.push('Inclinação de alta')}else{sell+=15;why.push('Inclinação de baixa')}
-let pos=(c-s)/(res-s||1);if(pos<.3){buy+=10;why.push('Próximo do suporte')}else if(pos>.7){sell+=10;why.push('Próximo da resistência')}
-let max=Math.max(buy,sell),decision=max<52?'AGUARDAR':buy>sell?'COMPRA':'VENDA',score=decision==='AGUARDAR'?Math.round(max):Math.min(95,Math.round(max+Math.abs(buy-sell)*.15));
-return{c,e9,e21,r,m,v,s,res,decision,score,why,trend:Math.abs(e9-e21)/c<.00003?'Lateral':e9>e21?'Alta':'Baixa'}
-}
-function update(){
-let a=analyze();if(!a)return;current=a;$('price').textContent=a.c.toFixed(5);$('trend').textContent=a.trend;$('rsi').textContent=a.r.toFixed(1);$('emas').textContent=a.e9.toFixed(4)+' / '+a.e21.toFixed(4);$('momentum').textContent=(a.m>=0?'+':'')+a.m.toFixed(4)+'%';$('volatility').textContent=a.v.toFixed(4)+'%';$('levels').textContent=a.s.toFixed(4)+' / '+a.res.toFixed(4);
-$('decision').textContent=a.decision;$('score').textContent=a.score;$('bar').style.width=a.score+'%';$('reasons').innerHTML=a.why.map(x=>'<span class="tag">'+x+'</span>').join('');
-$('signalBox').className='signal '+(a.decision==='COMPRA'?'buy':a.decision==='VENDA'?'sell':'');$('lamp').textContent=a.decision==='COMPRA'?'▲':a.decision==='VENDA'?'▼':'⏸';$('explain').textContent=a.decision==='AGUARDAR'?'Condições fracas. Preserve o capital.':a.why.slice(0,2).join(' • ');
-$('simulate').classList.toggle('hidden',a.decision==='AGUARDAR'||blocked());disciplineUpdate();draw();
-}
-function blocked(){return state.result>=state.goal||state.result<=-state.limit}
-function disciplineUpdate(){let box=$('discipline');box.className='discipline'+(blocked()?' blocked':'');if(state.result>=state.goal){$('disciplineTitle').textContent='Meta atingida — encerrar o dia';$('disciplineText').textContent='Novos testes foram bloqueados.'}else if(state.result<=-state.limit){$('disciplineTitle').textContent='Limite de perda atingido';$('disciplineText').textContent='Pare agora e não tente recuperar aumentando o valor.'}else if(current&&current.decision==='AGUARDAR'){$('disciplineTitle').textContent='Não operar agora';$('disciplineText').textContent='O filtro mínimo não foi atingido.'}else{$('disciplineTitle').textContent='Simulação permitida';$('disciplineText').textContent='Condições mínimas atendidas, sem garantia de resultado.'}}
-function registerSignal(){if(!current||current.decision==='AGUARDAR'||blocked())return;state.history.unshift({id:Date.now(),time:new Date().toISOString(),symbol:$('symbol').value,direction:current.decision,score:current.score,entry:current.c,remaining:+$('horizon').value,status:'Pendente',stake:state.stake});state.history=state.history.slice(0,200);persist();renderDiary()}
-function resolve(price){let changed=false;state.history.forEach(x=>{if(x.status==='Pendente'&&x.symbol===$('symbol').value){x.remaining--;if(x.remaining<=0){let ok=x.direction==='COMPRA'?price>x.entry:price<x.entry;x.exit=price;x.status=ok?'Acerto':'Erro';x.profit=ok?x.stake*.8:-x.stake;state.balance+=x.profit;state.result+=x.profit;changed=true}}});if(changed){persist();renderDiary()}}
-function renderStats(){newDay();$('balance').textContent=money(state.balance);$('dayResult').textContent=money(state.result);$('goalView').textContent=money(state.goal);$('limitView').textContent='-'+money(state.limit);let done=state.history.filter(x=>x.status!=='Pendente'),w=done.filter(x=>x.status==='Acerto').length,l=done.length-w,p=state.history.filter(x=>x.status==='Pendente').length;$('wins').textContent=w;$('losses').textContent=l;$('pending').textContent=p;$('rate').textContent=(done.length?Math.round(w/done.length*100):0)+'%';disciplineUpdate()}
-function renderDiary(){let h=state.history;$('diary').innerHTML=h.length?h.map(x=>'<div class="entry"><div><b>'+new Date(x.time).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})+'</b><small>'+x.symbol+'</small></div><div><b>'+x.direction+' • Score '+x.score+'</b><small>Entrada '+x.entry.toFixed(5)+(x.exit?' • Saída '+x.exit.toFixed(5):' • faltam '+x.remaining+' ticks')+'</small></div><div class="pill '+(x.status==='Acerto'?'win':x.status==='Erro'?'loss':'pending')+'">'+x.status+(x.profit!=null?' '+money(x.profit):'')+'</div></div>').join(''):'<p class="muted">Nenhuma simulação registrada.</p>'}
-function clearHistory(){if(confirm('Apagar todo o histórico?')){state.history=[];persist();renderDiary()}}
+function sd(a){let m=a.reduce((s,x)=>s+x,0)/a.length;return Math.sqrt(a.reduce((s,x)=>s+(x-m)**2,0)/a.length)}function sma(a,n){let x=a.slice(-n);return x.reduce((s,v)=>s+v,0)/x.length}
+function atr(a,n=14){let ds=[];for(let i=Math.max(1,a.length-n);i<a.length;i++)ds.push(Math.abs(a[i]-a[i-1]));return ds.reduce((s,v)=>s+v,0)/(ds.length||1)}
+function adxApprox(a,n=14){let ups=0,downs=0,total=0;for(let i=Math.max(1,a.length-n);i<a.length;i++){let d=a[i]-a[i-1];total+=Math.abs(d);d>0?ups+=d:downs-=d}return total?Math.min(100,Math.abs(ups-downs)/total*100):0}
+function analyze(p=prices){if(p.length<60)return null;let c=p.at(-1),e9=ema(p.slice(-100),9),e21=ema(p.slice(-130),21),e50=ema(p.slice(-180),50),r=rsi(p),mom=(c-p.at(-11))/p.at(-11)*100,s=Math.min(...p.slice(-30)),res=Math.max(...p.slice(-30)),mid=sma(p,20),dev=sd(p.slice(-20)),upper=mid+2*dev,lower=mid-2*dev,macd=ema(p.slice(-120),12)-ema(p.slice(-150),26),signal=ema(emaSeries(p.slice(-170),12).map((v,i)=>v-emaSeries(p.slice(-170),26)[i]),9),hist=macd-signal,a=atr(p),adx=adxApprox(p),buy=0,sell=0,why=[];
+if(e9>e21&&e21>e50){buy+=24;why.push('EMAs alinhadas em alta')}else if(e9<e21&&e21<e50){sell+=24;why.push('EMAs alinhadas em baixa')}else why.push('EMAs sem alinhamento completo');
+if(r>=52&&r<=69){buy+=15;why.push('RSI comprador')}else if(r<=48&&r>=31){sell+=15;why.push('RSI vendedor')}else if(r>70){sell+=8;why.push('RSI em sobrecompra')}else if(r<30){buy+=8;why.push('RSI em sobrevenda')};
+if(hist>0){buy+=14;why.push('MACD positivo')}else{sell+=14;why.push('MACD negativo')};if(mom>.008){buy+=13;why.push('Momentum positivo')}else if(mom<-.008){sell+=13;why.push('Momentum negativo')};
+let pos=(c-s)/(res-s||1);if(pos<.28){buy+=9;why.push('Próximo do suporte')}else if(pos>.72){sell+=9;why.push('Próximo da resistência')};if(c<lower){buy+=8;why.push('Abaixo da banda inferior')}else if(c>upper){sell+=8;why.push('Acima da banda superior')};
+if(adx>24){if(buy>sell)buy+=10;else sell+=10;why.push('Tendência com força')}else why.push('Tendência fraca');let max=Math.max(buy,sell),diff=Math.abs(buy-sell),decision=max<53||diff<10?'AGUARDAR':buy>sell?'COMPRA':'VENDA',score=decision==='AGUARDAR'?Math.min(69,Math.round(max)):Math.min(96,Math.round(max+diff*.12));let rawBuy=Math.max(5,buy),rawSell=Math.max(5,sell),side=Math.max(8,80-diff-adx*.25),sum=rawBuy+rawSell+side,pBuy=Math.round(rawBuy/sum*100),pSell=Math.round(rawSell/sum*100),pSide=100-pBuy-pSell;return{c,e9,e21,e50,r,mom,s,res,mid,upper,lower,macd,hist,atr:a,adx,decision,score,why,trend:adx<18?'Lateral':e9>e21?'Alta':'Baixa',pBuy,pSell,pSide}}
+function update(){let a=analyze();if(!a)return;current=a;$('price').textContent=fmt(a.c);$('marketInfo').textContent=ASSETS.find(x=>x[0]===$('symbol').value)[1]+' • '+new Date().toLocaleTimeString('pt-BR');$('trend').textContent=a.trend;$('adx').textContent=a.adx.toFixed(1)+(a.adx>24?' forte':' fraco');$('rsi').textContent=a.r.toFixed(1);$('emas').textContent=a.e9.toFixed(3)+' / '+a.e21.toFixed(3)+' / '+a.e50.toFixed(3);$('macd').textContent=(a.hist>=0?'+':'')+a.hist.toFixed(5);$('bollinger').textContent=a.lower.toFixed(3)+' — '+a.upper.toFixed(3);$('atr').textContent=a.atr.toFixed(5);$('momentum').textContent=(a.mom>=0?'+':'')+a.mom.toFixed(4)+'%';$('levels').textContent=a.s.toFixed(3)+' / '+a.res.toFixed(3);$('decision').textContent=a.decision;$('score').textContent=a.score;$('bar').style.width=a.score+'%';$('pBuy').textContent=a.pBuy+'%';$('pSell').textContent=a.pSell+'%';$('pSide').textContent=a.pSide+'%';$('reasons').innerHTML=a.why.map((x,i)=>`<span class="tag ${i<3?'strong':''}">${x}</span>`).join('');$('signalBox').className='signal '+(a.decision==='COMPRA'?'buy':a.decision==='VENDA'?'sell':'');$('lamp').textContent=a.decision==='COMPRA'?'▲':a.decision==='VENDA'?'▼':'⏸';$('explain').textContent=a.decision==='AGUARDAR'?'Filtros insuficientes. A melhor decisão é esperar.':a.why.slice(0,3).join(' • ');$('simulate').classList.toggle('hidden',a.decision==='AGUARDAR'||blocked());if(soundOn&&a.score>=80&&a.decision!=='AGUARDAR'&&lastStrong!==a.decision+a.score){beep();lastStrong=a.decision+a.score}disciplineUpdate();draw()}
+function opsToday(){return state.history.filter(x=>x.time.slice(0,10)===today()).length}function blocked(){return state.result>=state.goal||state.result<=-state.limit||opsToday()>=state.maxOps}
+function disciplineUpdate(){let box=$('discipline');box.className='discipline'+(blocked()?' blocked':'');if(state.result>=state.goal){$('disciplineTitle').textContent='Meta atingida — encerre o dia';$('disciplineText').textContent='Novas simulações foram bloqueadas.'}else if(state.result<=-state.limit){$('disciplineTitle').textContent='Limite de perda atingido';$('disciplineText').textContent='Pare agora. Não aumente o valor para tentar recuperar.'}else if(opsToday()>=state.maxOps){$('disciplineTitle').textContent='Máximo diário atingido';$('disciplineText').textContent='A quantidade de operações foi limitada para proteger a disciplina.'}else if(current&&current.decision==='AGUARDAR'){$('disciplineTitle').textContent='Não operar agora';$('disciplineText').textContent='O conjunto mínimo de filtros ainda não foi atingido.'}else{$('disciplineTitle').textContent='Simulação permitida';$('disciplineText').textContent='Condições mínimas atendidas, sem garantia de resultado.'}}
+function registerSignal(){if(!current||current.decision==='AGUARDAR'||blocked())return;state.history.unshift({id:Date.now(),time:new Date().toISOString(),symbol:$('symbol').value,direction:current.decision,score:current.score,entry:current.c,remaining:+$('horizon').value,status:'Pendente',stake:state.stake});state.history=state.history.slice(0,300);persist();renderDiary();toast('Simulação registrada')}
+function resolve(price){let changed=false;state.history.forEach(x=>{if(x.status==='Pendente'&&x.symbol===$('symbol').value){x.remaining--;if(x.remaining<=0){let ok=x.direction==='COMPRA'?price>x.entry:price<x.entry;x.exit=price;x.status=ok?'Acerto':'Erro';x.profit=ok?x.stake*.8:-x.stake;state.balance+=x.profit;state.result+=x.profit;changed=true}}});if(changed){persist();renderDiary();toast('Uma simulação foi concluída')}}
+function bestStreak(done){let best=0,run=0;[...done].reverse().forEach(x=>{if(x.status==='Acerto'){run++;best=Math.max(best,run)}else run=0});return best}
+function renderStats(){newDay();$('balance').textContent=money(state.balance);$('dayResult').textContent=money(state.result);$('dayResult').className=state.result>0?'positive':state.result<0?'negative':'';$('goalView').textContent=money(state.goal)+' / -'+money(state.limit);$('opsView').textContent=opsToday()+' / '+state.maxOps;let done=state.history.filter(x=>x.status!=='Pendente'),w=done.filter(x=>x.status==='Acerto').length,l=done.length-w;$('wins').textContent=w;$('losses').textContent=l;$('rate').textContent=(done.length?Math.round(w/done.length*100):0)+'%';$('streak').textContent=bestStreak(done);disciplineUpdate()}
+function renderDiary(){let h=state.history;$('diary').innerHTML=h.length?h.map(x=>`<div class="entry"><div><b>${new Date(x.time).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}</b><small>${x.symbol}</small></div><div><b>${x.direction} • Score ${x.score}</b><small>Entrada ${fmt(x.entry)}${x.exit?' • Saída '+fmt(x.exit):' • faltam '+x.remaining+' ticks'}</small></div><div class="pill ${x.status==='Acerto'?'win':x.status==='Erro'?'loss':'pending'}">${x.status}${x.profit!=null?' '+money(x.profit):''}</div></div>`).join(''):'<p class="muted">Nenhuma simulação registrada.</p>'}
+function clearHistory(){if(confirm('Apagar todo o histórico?')){state.history=[];persist();renderDiary();toast('Histórico apagado')}}
+function exportHistory(){let rows=[['Data','Ativo','Direção','Score','Entrada','Saída','Status','Resultado'],...state.history.map(x=>[x.time,x.symbol,x.direction,x.score,x.entry,x.exit||'',x.status,x.profit??''])];let csv=rows.map(r=>r.join(';')).join('\n'),blob=new Blob([csv],{type:'text/csv'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='ia-trader-x-v2-historico.csv';a.click();URL.revokeObjectURL(a.href)}
+async function fetchHistory(symbol){return new Promise((resolve,reject)=>{let s=new WebSocket(WS_URL),timer=setTimeout(()=>{s.close();reject(new Error('timeout'))},9000);s.onopen=()=>s.send(JSON.stringify({ticks_history:symbol,count:220,end:'latest',style:'ticks'}));s.onmessage=e=>{let d=JSON.parse(e.data);if(d.msg_type==='history'){clearTimeout(timer);s.close();resolve(d.history.prices.map(Number))}if(d.error){clearTimeout(timer);s.close();reject(new Error(d.error.message))}};s.onerror=reject})}
+async function runScanner(){let btn=$('scanBtn');btn.disabled=true;btn.textContent='Analisando...';$('scanner').innerHTML='<p class="muted">Lendo os ativos em tempo real...</p>';let results=[];for(let a of ASSETS){try{let p=await fetchHistory(a[0]),r=analyze(p);if(r)results.push({...r,symbol:a[0],name:a[1]})}catch(e){results.push({symbol:a[0],name:a[1],decision:'ERRO',score:0,trend:'—'})}}results.sort((a,b)=>b.score-a.score);$('scanner').innerHTML=results.map(r=>`<div class="scanrow" onclick="selectAsset('${r.symbol}')"><div><b>${r.name}</b><small>${r.symbol}</small></div><span class="badge ${r.decision==='COMPRA'?'buyBadge':r.decision==='VENDA'?'sellBadge':'waitBadge'}">${r.decision}</span><b>${r.score}/100</b><small>${r.trend}</small></div>`).join('');btn.disabled=false;btn.textContent='Atualizar scanner';toast('Scanner concluído')}
+function selectAsset(s){$('symbol').value=s;if(ws&&ws.readyState===1){prices=[];requestHistory();scrollTo({top:250,behavior:'smooth'})}else toast('Ativo selecionado. Agora conecte o mercado.')}
+function toggleSound(){soundOn=!soundOn;$('soundBtn').textContent=soundOn?'🔔 Som':'🔕 Som';if(soundOn)beep()}
+function beep(){try{let c=new (window.AudioContext||window.webkitAudioContext)(),o=c.createOscillator(),g=c.createGain();o.connect(g);g.connect(c.destination);o.frequency.value=740;g.gain.value=.08;o.start();o.stop(c.currentTime+.16)}catch(e){}}
 function resize(){let c=$('chart'),r=c.getBoundingClientRect(),d=devicePixelRatio||1;c.width=r.width*d;c.height=r.height*d;draw()}
-function draw(){let c=$('chart'),ctx=c.getContext('2d'),a=prices.slice(-100),w=c.width,h=c.height;if(a.length<2)return;ctx.clearRect(0,0,w,h);let min=Math.min(...a),max=Math.max(...a),pad=(max-min)*.15||1;min-=pad;max+=pad;ctx.strokeStyle='#203650';for(let i=1;i<5;i++){let y=h*i/5;ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke()}ctx.strokeStyle='#27d7ff';ctx.lineWidth=3;ctx.beginPath();a.forEach((v,i)=>{let x=i/(a.length-1)*w,y=h-(v-min)/(max-min)*h;i?ctx.lineTo(x,y):ctx.moveTo(x,y)});ctx.stroke()}
+function draw(){let c=$('chart'),ctx=c.getContext('2d'),a=prices.slice(-120),w=c.width,h=c.height;if(a.length<2)return;ctx.clearRect(0,0,w,h);let min=Math.min(...a),max=Math.max(...a),pad=(max-min)*.18||1;min-=pad;max+=pad;ctx.strokeStyle='#17314a';ctx.lineWidth=1;for(let i=1;i<5;i++){let y=h*i/5;ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke()}let grad=ctx.createLinearGradient(0,0,w,0);grad.addColorStop(0,'#25dcff');grad.addColorStop(1,'#9d8cff');ctx.strokeStyle=grad;ctx.lineWidth=3*(devicePixelRatio||1);ctx.beginPath();a.forEach((v,i)=>{let x=i/(a.length-1)*w,y=h-(v-min)/(max-min)*h;i?ctx.lineTo(x,y):ctx.moveTo(x,y)});ctx.stroke();ctx.lineTo(w,h);ctx.lineTo(0,h);ctx.closePath();let fill=ctx.createLinearGradient(0,0,0,h);fill.addColorStop(0,'rgba(37,220,255,.20)');fill.addColorStop(1,'rgba(37,220,255,0)');ctx.fillStyle=fill;ctx.fill()}
 init();
 </script>
-</body>
-</html>
+</body></html>
