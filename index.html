@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <meta name="theme-color" content="#050b18">
 <meta name="description" content="IA Trader X V26 — conexão oficial à conta demo Deriv, dados em tempo real, scanner inteligente e automação controlada de opções.">
-<title>IA Trader X — V26 Ajustada</title>
+<title>IA Trader X — V26.1</title>
 <style>
 :root{--bg:#050b18;--card:#0b1729;--card2:#0e2038;--line:#1e3855;--text:#eef7ff;--muted:#8fa9c2;--cyan:#25dcff;--blue:#5578ff;--green:#37e891;--yellow:#ffd05a;--red:#ff6076;--purple:#b37cff}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at 15% 0,#163a67 0,transparent 28%),radial-gradient(circle at 90% 10%,#361d6d55 0,transparent 25%),var(--bg);color:var(--text);font-family:Inter,Arial,sans-serif;min-height:100vh}
@@ -74,10 +74,13 @@ footer{text-align:center;padding:28px 14px;color:var(--muted);font-size:11px}.mi
 
 /* V26 — fila de oportunidades e estado operacional */
 .v26Queue{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:10px}.v26Opportunity{padding:12px;border-radius:14px;background:#ffffff07;border:1px solid #ffffff12}.v26Opportunity.best{border-color:#37e89166;background:#37e8910c}.v26Opportunity small{display:block;color:var(--muted);font-size:10px}.v26Opportunity b{display:block;margin:4px 0}.v26StatusLine{display:flex;gap:8px;flex-wrap:wrap;margin-top:9px}.v26StatusLine span{padding:6px 9px;border-radius:99px;background:#ffffff08;border:1px solid #ffffff10;font-size:11px}.v26Pulse{animation:v26pulse 1.4s infinite}@keyframes v26pulse{50%{opacity:.55}}@media(max-width:760px){.v26Queue{grid-template-columns:1fr}}
+
+/* V26.1 — central de áudio e voz */
+.audioGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}.audioBox{padding:12px;border-radius:14px;background:#ffffff06;border:1px solid #ffffff10}.audioBox small{display:block;color:var(--muted);font-size:10px;margin-bottom:6px}.audioControls{display:flex;gap:9px;flex-wrap:wrap;align-items:center}.audioControls label{display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:12px;background:#ffffff06;border:1px solid #ffffff10;font-size:12px}.audioControls input[type=checkbox]{width:20px;height:20px}.audioControls input[type=range]{width:170px}.soundStatus{margin-top:10px;padding:11px 12px;border-radius:12px;background:#040c17;border:1px solid #ffffff12;color:#dceeff}.soundPulse{animation:soundPulse .7s ease}@keyframes soundPulse{50%{box-shadow:0 0 28px #25dcff55;border-color:#25dcff88}}@media(max-width:760px){.audioGrid{grid-template-columns:repeat(2,1fr)}}@media(max-width:480px){.audioGrid{grid-template-columns:1fr}.audioControls>*{width:100%}.audioControls input[type=range]{width:100%}}
 </style>
 </head>
 <body>
-<header><div class="logo">IA Trader <span>X</span> <span class="version">V26</span></div><div class="status" id="status">● Desconectado</div></header>
+<header><div class="logo">IA Trader <span>X</span> <span class="version">V26.1</span></div><div class="status" id="status">● Desconectado</div></header>
 <main>
 <section class="hero"><h1>Central de <span>Inteligência de Mercado</span></h1><p>Robô para opções da Deriv com conexão oficial por OTP, saldo ao vivo, dados públicos em tempo real, scanner multiativos e execução automática controlada na conta demo.</p><div class="warning">⚠️ V26 inicia protegida e opera somente em CONTA DEMO. Operações automáticas envolvem risco e não existe garantia de lucro. Nunca publique seu token no GitHub.</div>
 </section>
@@ -201,7 +204,24 @@ footer{text-align:center;padding:28px 14px;color:var(--muted);font-size:11px}.mi
 </div></div>
 <div class="card half"><h2>🚨 Guardião de risco</h2><div class="guard safe" id="riskGuard"><b id="riskGuardTitle">Proteção ativa</b><p class="muted" id="riskGuardText">O sistema monitora limite diário, excesso de operações, sequência de erros e qualidade do sinal.</p></div><div class="kpis" style="margin-top:10px"><div class="kpi"><small>Erros consecutivos</small><b id="lossStreak">0</b></div><div class="kpi"><small>Risco da sessão</small><b id="sessionRisk">Baixo</b></div><div class="kpi"><small>Sinais fortes hoje</small><b id="strongSignals">0</b></div><div class="kpi"><small>Proteção</small><b id="guardStatus">ATIVA</b></div></div></div>
 <div class="card full"><div class="row" style="justify-content:space-between"><h2>📋 Diário geral — simulações e operações demo</h2><div><button class="secondary" onclick="exportHistory()">Exportar</button> <button class="danger" onclick="clearHistory()">Limpar</button></div></div><div class="diary" id="diary"></div></div>
-</section></main>
+</section>
+<section class="card full" id="audioCenter">
+  <h2>🔊 Central de áudio V26.1</h2>
+  <div class="audioControls">
+    <label><input type="checkbox" id="audioEnabled" checked> Sons ligados</label>
+    <label><input type="checkbox" id="voiceEnabled" checked> Voz em português</label>
+    <label>Volume <input type="range" id="audioVolume" min="0" max="100" value="70"></label>
+    <button id="unlockAudioBtn" type="button">▶ Ativar e testar áudio</button>
+  </div>
+  <div class="audioGrid" style="margin-top:10px">
+    <div class="audioBox"><small>SINAL FORTE</small><b>🔔 Bip curto</b></div>
+    <div class="audioBox"><small>ENTRADA DEMO</small><b>🚀 Confirmação</b></div>
+    <div class="audioBox"><small>RESULTADO</small><b>🏆 WIN / ❌ LOSS</b></div>
+    <div class="audioBox"><small>CONEXÃO/API</small><b>⚠️ Alerta</b></div>
+  </div>
+  <div class="soundStatus" id="soundStatus">Áudio aguardando ativação. Toque em “Ativar e testar áudio” uma vez.</div>
+</section>
+</main>
 <footer>IA Trader X V26 Ajustada • Diagnóstico completo de cotação, compra e contrato DEMO • Nenhuma garantia de lucro</footer><div class="toast" id="toast"></div>
 <script>
 let v26OpportunityQueue=[],v26LastActionAt=0;
@@ -692,5 +712,61 @@ function handleTradeMessage(ev){
   }
   if(d.msg_type==='proposal_open_contract'&&d.proposal_open_contract){let c=d.proposal_open_contract;if(!c.is_sold){v26SetOrderStep('CONTRATO ABERTO',`Contrato ${c.contract_id||activeContractId} em acompanhamento`,'wait');return}let cid=String(c.contract_id||activeContractId||'');if(settledContracts.has(cid))return;settledContracts.add(cid);let ctx=activeTradeContext||{},profit=Number(c.profit||0),type=profit>0?'win':'loss',direction=ctx.direction||(c.contract_type==='CALL'?'CALL':'PUT'),symbol=ctx.symbol||$('symbol').value,score=Number(ctx.score||current?.score||0);v26Trace('CONTRATO ENCERRADO',`${profit>0?'WIN':'LOSS'} ${money(profit)}`,profit>0?'ok':'error');addAutoLog(`${profit>0?'GANHO':'PERDA'} na conta demo: ${money(profit)}`,type);activeContractId=null;activeTradeContext=null;state.history.unshift({id:Date.now(),time:new Date().toISOString(),symbol,timeframe:tfName(),direction,score,entry:Number(c.entry_spot||0),exit:Number(c.exit_spot||c.exit_tick||0),status:profit>0?'Acerto':'Erro',profit,stake:Number(c.buy_price||ctx.buyPrice||$('autoStake').value),source:'Deriv Demo V26 ajustada'});state.result+=profit;state.balance+=profit;v12SessionTrades++;v12SessionProfit+=profit;if(profit>0)v121SessionWins++;else v121SessionLosses++;persist();renderDiary();updateRiskGuard();renderAssetStats();try{sendTrade({balance:1})}catch(e){}if(autoTrading&&!blocked()){ $('robotStatus').textContent='LIGADO — PROCURANDO NOVO SINAL V26';setTimeout(()=>runSmartPilotScan(),3000)}}
 }
+</script>
+
+<script>
+(function(){
+  'use strict';
+  const $a=id=>document.getElementById(id);
+  let audioCtx=null, unlocked=false, lastSignalKey='', lastSpoken='';
+  const saved=JSON.parse(localStorage.getItem('iaTraderAudioV261')||'{}');
+  const enabled=$a('audioEnabled'), voice=$a('voiceEnabled'), volume=$a('audioVolume'), status=$a('soundStatus');
+  if(enabled && saved.enabled!==undefined) enabled.checked=!!saved.enabled;
+  if(voice && saved.voice!==undefined) voice.checked=!!saved.voice;
+  if(volume && saved.volume!==undefined) volume.value=saved.volume;
+  function save(){localStorage.setItem('iaTraderAudioV261',JSON.stringify({enabled:enabled?.checked,voice:voice?.checked,volume:+(volume?.value||70)}));}
+  [enabled,voice,volume].forEach(x=>x&&x.addEventListener('change',save));
+  function ctx(){if(!audioCtx) audioCtx=new (window.AudioContext||window.webkitAudioContext)(); if(audioCtx.state==='suspended')audioCtx.resume(); return audioCtx;}
+  function tone(freq,start,dur,gain=.16,type='sine'){
+    if(!enabled?.checked)return;
+    try{const c=ctx(),o=c.createOscillator(),g=c.createGain();o.type=type;o.frequency.setValueAtTime(freq,c.currentTime+start);g.gain.setValueAtTime(0.0001,c.currentTime+start);g.gain.exponentialRampToValueAtTime(Math.max(.001,gain*((+volume.value||70)/100)),c.currentTime+start+.015);g.gain.exponentialRampToValueAtTime(.0001,c.currentTime+start+dur);o.connect(g);g.connect(c.destination);o.start(c.currentTime+start);o.stop(c.currentTime+start+dur+.03)}catch(e){}
+  }
+  function mark(label){if(!status)return;status.textContent='Último áudio: '+label+' • '+new Date().toLocaleTimeString('pt-BR');status.classList.remove('soundPulse');void status.offsetWidth;status.classList.add('soundPulse');}
+  function speak(text){if(!voice?.checked||!('speechSynthesis'in window)||!unlocked)return; if(lastSpoken===text)return;lastSpoken=text;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='pt-BR';u.rate=1.04;u.volume=(+volume.value||70)/100;speechSynthesis.speak(u)}catch(e){}}
+  const sounds={
+    signal(){tone(880,0,.10,.13,'sine');tone(1180,.13,.12,.12,'sine');mark('Sinal forte');speak('Novo sinal forte encontrado.')},
+    entry(){tone(520,0,.12,.15,'triangle');tone(780,.14,.14,.16,'triangle');tone(1040,.30,.18,.17,'triangle');mark('Entrada demo executada');speak('Operação executada na conta demo.')},
+    win(){tone(660,0,.12,.15);tone(880,.13,.12,.16);tone(1100,.27,.18,.18);tone(1320,.47,.25,.16);mark('WIN');speak('Operação vencedora.')},
+    loss(){tone(430,0,.16,.15,'sawtooth');tone(320,.18,.22,.13,'sawtooth');mark('LOSS');speak('Operação perdedora.')},
+    error(){tone(240,0,.14,.15,'square');tone(240,.22,.14,.15,'square');tone(190,.44,.22,.14,'square');mark('Erro de conexão ou API');speak('Atenção. Erro na conexão ou na API.')},
+    reconnect(){tone(500,0,.10,.12);tone(750,.12,.16,.14);mark('Conexão restabelecida');speak('Conexão restabelecida.')}
+  };
+  function unlock(){try{ctx();unlocked=true;sounds.entry();if(status)status.textContent='Áudio ativado com sucesso. Os avisos automáticos estão ligados.'}catch(e){if(status)status.textContent='Não foi possível ativar o áudio: '+e.message}}
+  $a('unlockAudioBtn')?.addEventListener('click',unlock);
+  document.addEventListener('pointerdown',()=>{if(!unlocked){try{ctx();unlocked=true}catch(e){}}},{once:true});
+  window.v261Sounds=sounds;
+  if(typeof window.addAutoLog==='function'){
+    const original=window.addAutoLog;
+    window.addAutoLog=function(text,type='info'){
+      const r=original.apply(this,arguments),t=String(text||'').toLowerCase();
+      if(/ordem demo executada|compra .* enviada|operação demo em andamento/.test(t)) sounds.entry();
+      else if(type==='win'||/ganho|vencedora|\bwin\b/.test(t)) sounds.win();
+      else if(type==='loss'&&/perda|\bloss\b/.test(t)) sounds.loss();
+      else if(/erro|falha|recusou|desconect/.test(t)) sounds.error();
+      else if(/reconect|conexão restabelecida|autorizad/.test(t)) sounds.reconnect();
+      return r;
+    };
+  }
+  const observeSignal=()=>{
+    const txt=($a('signalValidity')?.textContent||'')+' '+($a('decision')?.textContent||'')+' '+($a('score')?.textContent||'');
+    const score=parseInt(($a('score')?.textContent||'').replace(/\D/g,''),10)||0;
+    const dir=/CALL|PUT/.test(txt)?(txt.match(/CALL|PUT/)||[])[0]:'';
+    const key=dir+'|'+score;
+    if(dir&&score>=80&&key!==lastSignalKey){lastSignalKey=key;sounds.signal();setTimeout(()=>{if(lastSignalKey===key)lastSignalKey=''},45000)}
+  };
+  new MutationObserver(observeSignal).observe(document.body,{subtree:true,childList:true,characterData:true});
+  window.addEventListener('online',()=>sounds.reconnect());
+  window.addEventListener('offline',()=>sounds.error());
+})();
 </script>
 </body></html>
