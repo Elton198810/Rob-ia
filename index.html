@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <meta name="theme-color" content="#050b18">
 <meta name="description" content="IA Trader X V29 — conexão oficial à conta demo Deriv, dados em tempo real, scanner inteligente e automação controlada de opções.">
-<title>IA Trader X — V29</title>
+<title>IA Trader X — V31 Estável</title>
 <style>
 :root{--bg:#050b18;--card:#0b1729;--card2:#0e2038;--line:#1e3855;--text:#eef7ff;--muted:#8fa9c2;--cyan:#25dcff;--blue:#5578ff;--green:#37e891;--yellow:#ffd05a;--red:#ff6076;--purple:#b37cff}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at 15% 0,#163a67 0,transparent 28%),radial-gradient(circle at 90% 10%,#361d6d55 0,transparent 25%),var(--bg);color:var(--text);font-family:Inter,Arial,sans-serif;min-height:100vh}
@@ -83,7 +83,7 @@ footer{text-align:center;padding:28px 14px;color:var(--muted);font-size:11px}.mi
 </style>
 </head>
 <body>
-<header><div class="logo">IA Trader <span>X</span> <span class="version">V29</span></div><div class="status" id="status">● Desconectado</div></header>
+<header><div class="logo">IA Trader <span>X</span> <span class="version">V31</span></div><div class="status" id="status">● Desconectado</div></header>
 <main>
 <section class="hero"><h1>Central de <span>Inteligência de Mercado</span></h1><p>Robô para opções da Deriv com conexão oficial por OTP, saldo ao vivo, dados públicos em tempo real, scanner multiativos e execução automática controlada na conta demo.</p><div class="warning">⚠️ V26 inicia protegida e opera somente em CONTA DEMO. Operações automáticas envolvem risco e não existe garantia de lucro. Nunca publique seu token no GitHub.</div>
 </section>
@@ -106,7 +106,7 @@ footer{text-align:center;padding:28px 14px;color:var(--muted);font-size:11px}.mi
 <div class="field"><label>Token PAT com permissão trade</label><input id="derivToken" type="password" autocomplete="off" placeholder="Cole somente na hora de conectar"></div>
 <div class="field"><label>Conta autorizada</label><select id="derivMode" disabled><option value="demo">Demo — dinheiro virtual</option></select></div>
 </div>
-<div class="row" style="margin-top:10px"><button class="secondary" id="findDemoBtn" onclick="findDerivDemoAccount()">🔎 Encontrar conta demo</button><button id="derivConnectBtn" onclick="connectDerivDemo()">Conectar conta demo</button><button onclick="quickStartV26()">🚀 Iniciar V29</button><button class="secondary" onclick="testDerivConnection()">Testar conexão</button><button class="secondary" onclick="refreshV26Balance(true)">Atualizar saldo</button><button class="secondary" onclick="disconnectDeriv()">Desconectar</button><button class="danger emergency" onclick="emergencyStop()">🛑 PARAR TUDO</button></div>
+<div class="row" style="margin-top:10px"><button class="secondary" id="findDemoBtn" onclick="findDerivDemoAccount()">🔎 Encontrar conta demo</button><button id="derivConnectBtn" onclick="connectDerivDemo()">Conectar conta demo</button><button onclick="quickStartV26()">🚀 Iniciar V31</button><button class="secondary" onclick="testDerivConnection()">Testar conexão</button><button class="secondary" onclick="refreshV26Balance(true)">Atualizar saldo</button><button class="secondary" onclick="disconnectDeriv()">Desconectar</button><button class="danger emergency" onclick="emergencyStop()">🛑 PARAR TUDO</button></div>
 <div class="row identityActions" style="margin-top:10px;align-items:center"><button class="secondary" type="button" onclick="saveV26Identity()">💾 Salvar identificação</button><button class="secondary" type="button" onclick="saveV26Preferences()">⚙️ Salvar preferências</button><button class="danger" type="button" onclick="clearV26SavedData()">🗑️ Apagar dados salvos</button><span class="mini" id="savedIdentityStatus">App ID e conta demo podem ser salvos neste navegador. O token PAT nunca será salvo.</span></div>
 <div class="connectionGrid" style="margin-top:11px"><div class="connectionState"><span class="dot" id="derivDot"></span><div><small class="mini">CONEXÃO</small><b id="derivStatusText">Desconectada</b></div></div><div class="connectionState"><div><small class="mini">SALDO DERIV</small><b id="derivBalance">—</b></div></div><div class="connectionState"><div><small class="mini">CONTA ATIVA</small><b id="derivActiveAccount">—</b></div></div><div class="connectionState"><div><small class="mini">MOEDA</small><b id="derivCurrency">—</b></div></div><div class="connectionState"><div><small class="mini">ÚLTIMA ORDEM</small><b id="lastAutoOrder">Nenhuma</b></div></div><div class="connectionState"><div><small class="mini">STATUS DO ROBÔ</small><b id="robotStatus">DESLIGADO</b></div></div><div class="connectionState"><div><small class="mini">ÚLTIMA MENSAGEM</small><b id="derivLastMessage">—</b></div></div><div class="connectionState"><div><small class="mini">CANAL</small><b id="derivChannel">OTP Demo</b></div></div><div class="connectionState"><div><small class="mini">DIAGNÓSTICO</small><b id="derivDiagnostic">Aguardando</b></div></div></div>
 <div class="autoPanel">
@@ -116,10 +116,10 @@ footer{text-align:center;padding:28px 14px;color:var(--muted);font-size:11px}.mi
 <div class="field"><label>Valor por entrada USD</label><input id="autoStake" type="number" min="0.35" step="0.01" value="1"></div>
 <div class="switchLine"><div><b>Robô automático</b><div class="mini">Somente DEMO</div></div><input id="autoTradeSwitch" type="checkbox" onchange="toggleAutoTrading()"></div>
 </div>
-<div class="secureNote" style="margin-top:10px;border-color:#37e89155;background:#37e8910b">🚀 <b>Iniciar V29:</b> conecta a conta DEMO, valida os candles, reinicia dados travados, ativa o Piloto Inteligente e liga o robô automático. Use apenas dinheiro virtual e acompanhe os primeiros testes.</div>
+<div class="secureNote" style="margin-top:10px;border-color:#37e89155;background:#37e8910b">🚀 <b>Iniciar V31:</b> conecta a conta DEMO, valida os candles, reinicia dados travados, ativa o Piloto Inteligente e liga o robô automático. Use apenas dinheiro virtual e acompanhe os primeiros testes.</div>
 <div class="secureNote" style="margin-top:10px">🛡️ Segurança: não coloque token dentro do código e não salve token no GitHub. Ao fechar a aba, ele é removido. A V26 usa o endpoint oficial de Options da Deriv, exige conexão demo por OTP e bloqueia qualquer URL de conta real. O token permanece somente na sessão desta aba.</div><div class="secureNote" id="v24SyncNote" style="margin-top:10px;border-color:#25dcff55;background:#25dcff0b">🔄 V26 sincroniza saldo, moeda, scanner e diagnóstico automaticamente enquanto a página permanecer aberta.</div>
-<div class="flowPanel"><div class="flowHeader"><div><h2 style="margin:0 0 3px">🧭 Acompanhamento da operação V29</h2><div class="mini">Mostra exatamente em qual etapa o robô está e por que ainda não enviou uma ordem.</div></div><span class="lockedBadge" id="flowModeBadge">DEMO • MONITORAMENTO</span></div><div class="flowSteps"><div class="flowStep" id="flow1"><small>1. DADOS</small><b id="flow1Text">Aguardando início automático</b></div><div class="flowStep" id="flow2"><small>2. ANÁLISE</small><b id="flow2Text">Sem leitura</b></div><div class="flowStep" id="flow3"><small>3. CONFIRMAÇÃO</small><b id="flow3Text">0/2</b></div><div class="flowStep" id="flow4"><small>4. RISCO</small><b id="flow4Text">Aguardando</b></div><div class="flowStep" id="flow5"><small>5. ORDEM DEMO</small><b id="flow5Text">Não enviada</b></div><div class="flowStep" id="flow6"><small>6. RESULTADO</small><b id="flow6Text">Nenhum</b></div></div><div class="flowMessage" id="flowMessage">Conecte a conta demo e clique em Iniciar V29.</div><div class="flowMeta"><span id="flowAsset">Ativo: —</span><span id="flowScore">Score: —</span><span id="flowQuality">Dados: —</span><span id="flowConflict">Conflito: —</span><span id="flowUpdated">Atualizado: —</span></div></div>
-<div class="diagPanel"><div class="diagHeader"><div><h2 style="margin:0 0 3px">🩺 Diagnóstico automático V29</h2><div class="mini">Mostra a primeira regra que está impedindo a entrada e atualiza em tempo real.</div></div><span class="lockedBadge" id="v24DiagBadge">AGUARDANDO</span></div><div class="diagGrid"><div class="diagItem" id="dConn"><small>1. CONTA DEMO</small><b id="dConnText">Desconectada</b></div><div class="diagItem" id="dMarket"><small>2. DADOS DO MERCADO</small><b id="dMarketText">Sem candles</b></div><div class="diagItem" id="dSignal"><small>3. SINAL</small><b id="dSignalText">Aguardando</b></div><div class="diagItem" id="dScore"><small>4. SCORE</small><b id="dScoreText">0/82</b></div><div class="diagItem" id="dQuality"><small>5. QUALIDADE</small><b id="dQualityText">0/80%</b></div><div class="diagItem" id="dConflict"><small>6. CONFLITO</small><b id="dConflictText">—/45%</b></div><div class="diagItem" id="dConfirm"><small>7. CONFIRMAÇÕES</small><b id="dConfirmText">0/2</b></div><div class="diagItem" id="dRisk"><small>8. RISCO E INTERVALO</small><b id="dRiskText">Aguardando</b></div><div class="diagItem" id="dOrder"><small>9. ORDEM DEMO</small><b id="dOrderText">Não enviada</b></div><div class="diagItem" id="dResult"><small>10. RESULTADO</small><b id="dResultText">Nenhum</b></div></div><div class="diagReason" id="v24Reason"><strong>Motivo atual</strong>Conecte a conta demo e clique em Iniciar V29.</div><div class="diagCounters"><span id="v24LastCandidate">Candidato: —</span><span id="v24LastScan">Último scanner: —</span><span id="v24OrderAttempts">Tentativas de ordem: 0</span><span id="v24OrderErrors">Erros da Deriv: 0</span></div></div>
+<div class="flowPanel"><div class="flowHeader"><div><h2 style="margin:0 0 3px">🧭 Acompanhamento da operação V29</h2><div class="mini">Mostra exatamente em qual etapa o robô está e por que ainda não enviou uma ordem.</div></div><span class="lockedBadge" id="flowModeBadge">DEMO • MONITORAMENTO</span></div><div class="flowSteps"><div class="flowStep" id="flow1"><small>1. DADOS</small><b id="flow1Text">Aguardando início automático</b></div><div class="flowStep" id="flow2"><small>2. ANÁLISE</small><b id="flow2Text">Sem leitura</b></div><div class="flowStep" id="flow3"><small>3. CONFIRMAÇÃO</small><b id="flow3Text">0/2</b></div><div class="flowStep" id="flow4"><small>4. RISCO</small><b id="flow4Text">Aguardando</b></div><div class="flowStep" id="flow5"><small>5. ORDEM DEMO</small><b id="flow5Text">Não enviada</b></div><div class="flowStep" id="flow6"><small>6. RESULTADO</small><b id="flow6Text">Nenhum</b></div></div><div class="flowMessage" id="flowMessage">Conecte a conta demo e clique em Iniciar V31.</div><div class="flowMeta"><span id="flowAsset">Ativo: —</span><span id="flowScore">Score: —</span><span id="flowQuality">Dados: —</span><span id="flowConflict">Conflito: —</span><span id="flowUpdated">Atualizado: —</span></div></div>
+<div class="diagPanel"><div class="diagHeader"><div><h2 style="margin:0 0 3px">🩺 Diagnóstico automático V29</h2><div class="mini">Mostra a primeira regra que está impedindo a entrada e atualiza em tempo real.</div></div><span class="lockedBadge" id="v24DiagBadge">AGUARDANDO</span></div><div class="diagGrid"><div class="diagItem" id="dConn"><small>1. CONTA DEMO</small><b id="dConnText">Desconectada</b></div><div class="diagItem" id="dMarket"><small>2. DADOS DO MERCADO</small><b id="dMarketText">Sem candles</b></div><div class="diagItem" id="dSignal"><small>3. SINAL</small><b id="dSignalText">Aguardando</b></div><div class="diagItem" id="dScore"><small>4. SCORE</small><b id="dScoreText">0/82</b></div><div class="diagItem" id="dQuality"><small>5. QUALIDADE</small><b id="dQualityText">0/80%</b></div><div class="diagItem" id="dConflict"><small>6. CONFLITO</small><b id="dConflictText">—/45%</b></div><div class="diagItem" id="dConfirm"><small>7. CONFIRMAÇÕES</small><b id="dConfirmText">0/2</b></div><div class="diagItem" id="dRisk"><small>8. RISCO E INTERVALO</small><b id="dRiskText">Aguardando</b></div><div class="diagItem" id="dOrder"><small>9. ORDEM DEMO</small><b id="dOrderText">Não enviada</b></div><div class="diagItem" id="dResult"><small>10. RESULTADO</small><b id="dResultText">Nenhum</b></div></div><div class="diagReason" id="v24Reason"><strong>Motivo atual</strong>Conecte a conta demo e clique em Iniciar V31.</div><div class="diagCounters"><span id="v24LastCandidate">Candidato: —</span><span id="v24LastScan">Último scanner: —</span><span id="v24OrderAttempts">Tentativas de ordem: 0</span><span id="v24OrderErrors">Erros da Deriv: 0</span></div></div>
 <div class="demoLab"><div class="row" style="justify-content:space-between"><div><h2 style="margin-bottom:3px">🧪 Primeira operação controlada — DEMO</h2><div class="mini">Primeiro consulte a cotação. A compra só é enviada depois de marcar a confirmação.</div></div><span class="lockedBadge">DINHEIRO VIRTUAL</span></div>
 <div class="demoLabGrid">
 <div class="field"><label>Direção</label><select id="manualDirection"><option value="CALL">CALL — alta</option><option value="PUT">PUT — baixa</option></select></div>
@@ -175,7 +175,7 @@ footer{text-align:center;padding:28px 14px;color:var(--muted);font-size:11px}.mi
 <div class="row" style="margin-top:10px;justify-content:space-between"><div><label class="mini">TIMEFRAME</label><div class="timeframes"><button class="tfBtn" data-tf="60" onclick="setTimeframe(60,this)">M1</button><button class="tfBtn active" data-tf="300" onclick="setTimeframe(300,this)">M5</button><button class="tfBtn" data-tf="900" onclick="setTimeframe(900,this)">M15</button><button class="tfBtn" data-tf="1800" onclick="setTimeframe(1800,this)">M30</button><button class="tfBtn" data-tf="3600" onclick="setTimeframe(3600,this)">H1</button></div></div><div class="row"><button id="connectBtn" onclick="connectMarket()">Conectar</button><button class="secondary" onclick="toggleSound()" id="soundBtn">🔕 Som</button></div></div>
 <div class="notice" style="margin-top:10px"><b>Modo Binárias V26:</b> a análise usa confirmação consecutiva, qualidade dos dados, conflito de indicadores e cooldown por ativo. Ordens automáticas permanecem limitadas à conta DEMO e não há garantia de lucro.</div><div class="price" id="price">—</div><div class="subprice" id="marketInfo">Aguardando início automático</div><div class="chartTools"><button class="secondary" id="lineBtn" onclick="setChartMode('line')">〰 Linha</button><button class="secondary active" id="candleBtn" onclick="setChartMode('candle')">🕯 Velas</button><button class="secondary" onclick="zoomChart(-20)">− Zoom</button><button class="secondary" onclick="zoomChart(20)">+ Zoom</button></div><div class="chart"><canvas id="chart"></canvas></div></div>
 
-<div class="card"><h2>🧠 Decisão da IA</h2><div class="signal" id="signalBox"><div class="lamp" id="lamp">⏸</div><h3 id="decision">AGUARDAR</h3><div><span class="score" id="score">0</span>/100</div><div class="bar"><span id="bar"></span></div><div class="probs"><div class="prob">ALTA<b id="pBuy">0%</b></div><div class="prob">BAIXA<b id="pSell">0%</b></div><div class="prob">LATERAL<b id="pSide">100%</b></div></div><p class="muted" id="explain">Clique em Iniciar V29: a conexão e o scanner começam automaticamente.</p><button class="hidden" id="simulate" onclick="registerSignal()">Registrar simulação manual</button><div class="secureNote" id="v24AutoNotice" style="margin-top:10px">🤖 Automático DEMO: aguardando sinal aprovado. Não é necessário clicar em registrar simulação.</div></div></div>
+<div class="card"><h2>🧠 Decisão da IA</h2><div class="signal" id="signalBox"><div class="lamp" id="lamp">⏸</div><h3 id="decision">AGUARDAR</h3><div><span class="score" id="score">0</span>/100</div><div class="bar"><span id="bar"></span></div><div class="probs"><div class="prob">ALTA<b id="pBuy">0%</b></div><div class="prob">BAIXA<b id="pSell">0%</b></div><div class="prob">LATERAL<b id="pSide">100%</b></div></div><p class="muted" id="explain">Clique em Iniciar V31: a conexão e o scanner começam automaticamente.</p><button class="hidden" id="simulate" onclick="registerSignal()">Registrar simulação manual</button><div class="secureNote" id="v24AutoNotice" style="margin-top:10px">🤖 Automático DEMO: aguardando sinal aprovado. Não é necessário clicar em registrar simulação.</div></div></div>
 
 
 <div class="card half"><h2>🤖 Copiloto X — explicação inteligente</h2><div class="aiReport">
@@ -227,29 +227,31 @@ footer{text-align:center;padding:28px 14px;color:var(--muted);font-size:11px}.mi
     <span class="lockedBadge" id="telegramBadge">DESLIGADO</span>
   </div>
   <div class="row" style="margin-top:10px">
-    <div class="field" style="flex:2"><label>Token novo do bot (não é salvo)</label><input id="telegramToken" type="password" autocomplete="off" placeholder="Cole o token novo do BotFather"></div>
+    <div class="field" style="flex:2"><label>Token do bot</label><input id="telegramToken" type="password" autocomplete="off" placeholder="Cole o token novo do BotFather"></div>
     <div class="field" style="flex:1"><label>Chat ID</label><input id="telegramChatId" type="text" placeholder="Buscar automaticamente"></div>
+    <label class="checkline" style="align-self:end;padding-bottom:12px"><input type="checkbox" id="telegramRememberToken"> Lembrar token neste computador</label>
   </div>
   <div class="row" style="margin-top:10px;align-items:center">
     <button type="button" id="telegramFindBtn" class="secondary">🔎 Buscar Chat ID</button>
     <button type="button" id="telegramTestBtn">📨 Testar Telegram</button>
+    <button type="button" id="telegramSaveBtn" class="secondary">💾 Salvar configurações</button>
     <label class="checkline"><input type="checkbox" id="telegramEnabled"> Alertas ligados</label>
     <label class="checkline"><input type="checkbox" id="telegramSignal" checked> Sinal forte</label>
     <label class="checkline"><input type="checkbox" id="telegramEntry" checked> Entrada</label>
     <label class="checkline"><input type="checkbox" id="telegramResult" checked> WIN/LOSS</label>
   </div>
-  <div class="secureNote" id="telegramStatus" style="margin-top:10px">Envie /start ao bot no Telegram. Depois cole o token novo e toque em “Buscar Chat ID”. O token fica somente nesta aba.</div>
+  <div class="secureNote" id="telegramStatus" style="margin-top:10px">Envie /start ao bot, busque o Chat ID e teste. Marque “Lembrar token” apenas neste computador particular.</div>
 </section>
 <div class="card full"><div class="row" style="justify-content:space-between"><h2>📋 Diário geral — simulações e operações demo</h2><div><button class="secondary" onclick="exportHistory()">Exportar</button> <button class="danger" onclick="clearHistory()">Limpar</button></div></div><div class="diary" id="diary"></div></div>
 </section>
 <section class="card full" id="v27EngineCard">
-  <div class="row" style="justify-content:space-between"><div><h2 style="margin-bottom:3px">🧠 Motor unificado V29</h2><div class="mini">Uma única regra controla scanner, diagnóstico e envio da ordem DEMO.</div></div><button class="secondary" onclick="v27ClearAudit()">Limpar auditoria</button></div>
+  <div class="row" style="justify-content:space-between"><div><h2 style="margin-bottom:3px">🧠 Motor unificado V31</h2><div class="mini">Uma única regra controla scanner, diagnóstico e envio da ordem DEMO.</div></div><button class="secondary" onclick="v27ClearAudit()">Limpar auditoria</button></div>
   <div class="v27Grid"><div class="v27Box"><small>ESTADO DO MOTOR</small><b id="v27EngineState">AGUARDANDO</b></div><div class="v27Box"><small>ÚLTIMA DECISÃO</small><b id="v27Decision">—</b></div><div class="v27Box"><small>ÚLTIMO PEDIDO</small><b id="v27Request">—</b></div><div class="v27Box"><small>ÚLTIMA RESPOSTA</small><b id="v27Response">—</b></div></div>
   <div class="secureNote" id="v27RuleSummary" style="margin-top:10px">Regras: aguardando carregamento.</div>
   <div class="v27Log" id="v27Audit"><div class="v27Line"><span>—</span><strong>INÍCIO</strong><div>A auditoria aparecerá quando o robô analisar ou enviar uma solicitação.</div></div></div>
 </section>
 <section class="card full" id="audioCenter">
-  <h2>🔊 Central de áudio V29</h2>
+  <h2>🔊 Central de áudio V31</h2>
   <div class="audioControls">
     <label><input type="checkbox" id="audioEnabled" checked> Sons ligados</label>
     <label><input type="checkbox" id="voiceEnabled" checked> Voz em português</label>
@@ -341,7 +343,7 @@ function isV26DemoConnected(){
   return !!(derivConnected||(tradeWs&&tradeWs.readyState===1&&/^DOT/i.test(active)));
 }
 function isV26MarketReady(){return !!(v24MarketReady||prices.length>=60||candles.length>=60)}
-function init(){newDay();loadV26SavedData();setTimeout(()=>{$('marketInfo').textContent='V26 pronta: identificação carregada; cole o token PAT e clique em Iniciar V29'},400);setTimeout(()=>{if($('v18UniverseCount'))$('v18UniverseCount').textContent=scannerUniverse().length},300);setTimeout(()=>{if($('manualSymbol'))$('manualSymbol').value=$('symbol').value;updateManualBuyButton()},0);$('goal').value=state.goal;$('limit').value=state.limit;$('stake').value=state.stake;$('maxOps').value=state.maxOps;renderAssets();loadActiveSymbols();renderStats();renderDiary();renderAnalyses();updateRiskGuard();resize();resizeEquity();setInterval(updateSessionClock,1000);setInterval(updateSignalValidity,1000);setInterval(v24AutoCycle,2000);setInterval(updateV26Diagnostics,1000);startV26Watchdog();addEventListener('resize',()=>{resize();resizeEquity()})}
+function init(){newDay();loadV26SavedData();setTimeout(()=>{$('marketInfo').textContent='V26 pronta: identificação carregada; cole o token PAT e clique em Iniciar V31'},400);setTimeout(()=>{if($('v18UniverseCount'))$('v18UniverseCount').textContent=scannerUniverse().length},300);setTimeout(()=>{if($('manualSymbol'))$('manualSymbol').value=$('symbol').value;updateManualBuyButton()},0);$('goal').value=state.goal;$('limit').value=state.limit;$('stake').value=state.stake;$('maxOps').value=state.maxOps;renderAssets();loadActiveSymbols();renderStats();renderDiary();renderAnalyses();updateRiskGuard();resize();resizeEquity();setInterval(updateSessionClock,1000);setInterval(updateSignalValidity,1000);setInterval(v24AutoCycle,2000);setInterval(updateV26Diagnostics,1000);startV26Watchdog();addEventListener('resize',()=>{resize();resizeEquity()})}
 function familyOf(symbol,name=''){let s=(symbol+' '+name).toLowerCase();if(s.includes('1hz')||s.includes('(1s)'))return'one_second';if(s.includes('jump')||s.startsWith('jd'))return'jump';if(s.includes('boom')||s.includes('crash'))return'boom_crash';if(s.includes('step')||s.includes('stprng'))return'step';return'standard'}
 function renderAssets(){let selected=$('symbol').value,list=filteredAssets.length?filteredAssets:ASSETS;$('symbol').innerHTML='';list.forEach(x=>{let o=document.createElement('option');o.value=x.symbol;o.textContent=x.name;$('symbol').appendChild(o)});if(selected&&list.some(x=>x.symbol===selected))$('symbol').value=selected;else if(list.some(x=>x.symbol==='R_75'))$('symbol').value='R_75';$('assetCount').textContent=`${list.length} índices disponíveis • ${tfName()} selecionado`}
 function filterAssets(){let c=$('marketCategory').value;filteredAssets=c==='all'?[...ASSETS]:ASSETS.filter(x=>x.family===c);renderAssets();if($('v18UniverseCount'))$('v18UniverseCount').textContent=scannerUniverse().length}
@@ -538,7 +540,7 @@ function startV26ContinuousScanner(){
 function stopV26ContinuousScanner(){if(v24ScannerPulse){clearInterval(v24ScannerPulse);v24ScannerPulse=null}}
 function scheduleV26MarketRetry(reason='falha desconhecida'){
   if(!(v24StartRequested||autoTrading||window.smartPilotOn))return;
-  if(v24MarketRetries>=4){$('robotStatus').textContent='DADOS INDISPONÍVEIS V26';setFlowStage(1,'A V26 tentou reconectar 4 vezes. Clique em Iniciar V29 para tentar novamente.',{error:true});addAutoLog('Reconexão pausada após 4 tentativas: '+reason,'loss');return}
+  if(v24MarketRetries>=4){$('robotStatus').textContent='DADOS INDISPONÍVEIS V26';setFlowStage(1,'A V26 tentou reconectar 4 vezes. Clique em Iniciar V31 para tentar novamente.',{error:true});addAutoLog('Reconexão pausada após 4 tentativas: '+reason,'loss');return}
   v24MarketRetries++;
   $('robotStatus').textContent=`RECONECTANDO DADOS ${v24MarketRetries}/4`;
   setFlowStage(1,`Reconexão automática ${v24MarketRetries}/4: ${reason}.`);
@@ -573,7 +575,7 @@ function quickStartV26(){
   setFlowStage(1,'Iniciando a V26 e validando conta demo, dados e scanner...');
   try{
     const appId=$('derivAppId').value.trim(),accountId=$('derivAccountId').value.trim(),token=cleanDerivToken($('derivToken').value);$('derivToken').value=token;
-    addAutoLog('Botão Iniciar V29 acionado');if(appId&&accountId&&/^DOT/i.test(accountId)){localStorage.setItem(V26_ID_KEY,JSON.stringify({appId,accountId:accountId.toUpperCase(),savedAt:new Date().toISOString()}));setSavedStatus('Identificação atualizada automaticamente. Token PAT não foi salvo.')} $('robotStatus').textContent='INICIANDO V26...';if($('v8ScannerScore'))$('v8ScannerScore').value=$('autoMinScore').value||72;
+    addAutoLog('Botão Iniciar V31 acionado');if(appId&&accountId&&/^DOT/i.test(accountId)){localStorage.setItem(V26_ID_KEY,JSON.stringify({appId,accountId:accountId.toUpperCase(),savedAt:new Date().toISOString()}));setSavedStatus('Identificação atualizada automaticamente. Token PAT não foi salvo.')} $('robotStatus').textContent='INICIANDO V26...';if($('v8ScannerScore'))$('v8ScannerScore').value=$('autoMinScore').value||72;
     if(!appId||!accountId||!token){$('robotStatus').textContent='AGUARDANDO DADOS';toast('Preencha App ID, conta demo e token PAT');return}
     if(!/^DOT/i.test(accountId)){ $('robotStatus').textContent='CONTA DEMO INVÁLIDA';toast('Use uma conta DEMO iniciada por DOT');return}
     v24StartRequested=true;v24AutomationStarted=false;v24MarketRetries=0;
@@ -638,7 +640,7 @@ function updateV26Diagnostics(){
 function updateV26AutoNotice(a=current){
   const el=$('v24AutoNotice');if(!el)return;
   el.className='secureNote';
-  if(!autoTrading){el.textContent='👀 Modo observação: ligue o robô automático ou clique em Iniciar V29.';return}
+  if(!autoTrading){el.textContent='👀 Modo observação: ligue o robô automático ou clique em Iniciar V31.';return}
   if(activeContractId){el.textContent='📈 Operação DEMO em andamento. O sistema acompanhará o contrato até WIN ou LOSS.';el.classList.add('v24AutoBusy');return}
   if(pendingProposal||pendingBuyContext){el.textContent='🚀 Sinal aprovado. Cotação/ordem DEMO sendo processada automaticamente.';el.classList.add('v24AutoBusy');return}
   if(blocked()){el.textContent='🛡️ Automação bloqueada pelos limites de risco da sessão.';el.classList.add('v24AutoError');return}
@@ -849,7 +851,7 @@ maybeAutoTrade=function(){
 </script>
 
 <script>
-/* ===== CORREÇÃO V29: ponte direta entre sinal aprovado e ordem DEMO ===== */
+/* ===== CORREÇÃO V31: ponte direta entre sinal aprovado e ordem DEMO ===== */
 (function(){
   let stableKey='';
   let stableSince=0;
@@ -937,7 +939,7 @@ maybeAutoTrade=function(){
   }
 
   setInterval(bridge,1000);
-  setTimeout(()=>audit('CORREÇÃO V29','Ponte direta entre sinal confirmado e ordem DEMO ativada.','ok'),1200);
+  setTimeout(()=>audit('CORREÇÃO V31','Ponte direta entre sinal confirmado e ordem DEMO ativada.','ok'),1200);
 })();
 </script>
 
@@ -963,7 +965,7 @@ maybeAutoTrade=function(){
     if(on && !derivConnected){ if(sw) sw.checked=false; setRobotState(false,'DESLIGADO — CONECTE A CONTA DEMO'); toast('Conecte primeiro a conta demo'); return; }
     if(on && blocked()){ if(sw) sw.checked=false; setRobotState(false,'BLOQUEADO PELOS LIMITES'); toast('Robô bloqueado pelos limites do dia'); return; }
     setRobotState(on,on?'LIGADO — MONITORANDO V29':'DESLIGADO');
-    addAutoLog(on?'Robô automático V29 ligado em DEMO':'Robô automático desligado');
+    addAutoLog(on?'Robô automático V31 ligado em DEMO':'Robô automático desligado');
     if(on){ setFlowStage(2,'V29 ligada. O executor aguarda um sinal válido e estável por 8 segundos.'); }
     else { stableKey=''; stableSince=0; setFlowStage(1,'Robô desligado. Nenhuma ordem será enviada.',{blocked:true}); }
   };
@@ -1119,7 +1121,7 @@ maybeAutoTrade=function(){
       return;
     }
     setState(on,on?'LIGADO — MONITORANDO V29':'DESLIGADO');
-    addAutoLog(on?'Robô automático V29 ligado em DEMO':'Robô automático desligado');
+    addAutoLog(on?'Robô automático V31 ligado em DEMO':'Robô automático desligado');
     audit('ESTADO',on?'Automático DEMO ligado':'Automático desligado',on?'ok':'wait');
     if(!on){ v29StableKey=''; v29StableSince=0; }
   };
@@ -1276,7 +1278,7 @@ maybeAutoTrade=function(){
   },500);
 
   document.addEventListener('DOMContentLoaded',()=>{
-    document.title='IA Trader X — V29';
+    document.title='IA Trader X — V31 Estável';
     document.querySelectorAll('*').forEach(node=>{
       if(node.childNodes.length===1 && node.firstChild?.nodeType===3){
         node.firstChild.nodeValue=node.firstChild.nodeValue.replace(/V28/g,'V29');
@@ -1291,14 +1293,33 @@ maybeAutoTrade=function(){
 <script>
 (function stableAlertsV29(){
   const $s=id=>document.getElementById(id);
-  const tokenEl=$s('telegramToken'), chatEl=$s('telegramChatId'), enabledEl=$s('telegramEnabled');
+  const tokenEl=$s('telegramToken'), chatEl=$s('telegramChatId'), enabledEl=$s('telegramEnabled'), rememberEl=$s('telegramRememberToken');
   const statusEl=$s('telegramStatus'), badgeEl=$s('telegramBadge');
   let lastSignalNotice='', lastEntryContract='', lastSettledContract='';
-  try{ chatEl.value=localStorage.getItem('iaTraderTelegramChatId')||''; enabledEl.checked=localStorage.getItem('iaTraderTelegramEnabled')==='1'; }catch(e){}
+  try{
+    chatEl.value=localStorage.getItem('iaTraderTelegramChatId')||'';
+    enabledEl.checked=localStorage.getItem('iaTraderTelegramEnabled')==='1';
+    rememberEl.checked=localStorage.getItem('iaTraderTelegramRememberToken')==='1';
+    if(rememberEl.checked) tokenEl.value=localStorage.getItem('iaTraderTelegramTokenSaved')||'';
+    $s('telegramSignal').checked=localStorage.getItem('iaTraderTelegramSignal')!=='0';
+    $s('telegramEntry').checked=localStorage.getItem('iaTraderTelegramEntry')!=='0';
+    $s('telegramResult').checked=localStorage.getItem('iaTraderTelegramResult')!=='0';
+  }catch(e){}
   function setStatus(text,ok){ if(statusEl){statusEl.textContent=text;statusEl.style.color=ok?'#86efac':'#fca5a5'} if(badgeEl){badgeEl.textContent=ok?'LIGADO':'DESLIGADO';badgeEl.style.color=ok?'#86efac':'#fbbf24'} }
-  function token(){return (tokenEl?.value||sessionStorage.getItem('iaTraderTelegramToken')||'').trim()}
+  function token(){return (tokenEl?.value||sessionStorage.getItem('iaTraderTelegramToken')||localStorage.getItem('iaTraderTelegramTokenSaved')||'').trim()}
   function chat(){return (chatEl?.value||'').trim()}
-  function savePrefs(){try{sessionStorage.setItem('iaTraderTelegramToken',tokenEl?.value||'');localStorage.setItem('iaTraderTelegramChatId',chat());localStorage.setItem('iaTraderTelegramEnabled',enabledEl?.checked?'1':'0')}catch(e){}}
+  function savePrefs(showMessage=false){try{
+    const t=tokenEl?.value||'';
+    sessionStorage.setItem('iaTraderTelegramToken',t);
+    localStorage.setItem('iaTraderTelegramChatId',chat());
+    localStorage.setItem('iaTraderTelegramEnabled',enabledEl?.checked?'1':'0');
+    localStorage.setItem('iaTraderTelegramRememberToken',rememberEl?.checked?'1':'0');
+    localStorage.setItem('iaTraderTelegramSignal',$s('telegramSignal')?.checked?'1':'0');
+    localStorage.setItem('iaTraderTelegramEntry',$s('telegramEntry')?.checked?'1':'0');
+    localStorage.setItem('iaTraderTelegramResult',$s('telegramResult')?.checked?'1':'0');
+    if(rememberEl?.checked&&t)localStorage.setItem('iaTraderTelegramTokenSaved',t);else localStorage.removeItem('iaTraderTelegramTokenSaved');
+    if(showMessage)setStatus('Configurações do Telegram salvas neste computador.',true);
+  }catch(e){if(showMessage)setStatus('Não foi possível salvar: '+e.message,false)}}
   async function api(method,params={}){
     const t=token(); if(!t)throw new Error('Cole o token novo do bot.');
     const r=await fetch(`https://api.telegram.org/bot${encodeURIComponent(t)}/${method}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(params)});
@@ -1317,8 +1338,8 @@ maybeAutoTrade=function(){
     }catch(e){setStatus('Falha: '+e.message,false)}
   }
   async function test(){try{await send('✅ IA Trader X conectado. As notificações DEMO estão funcionando.',true);enabledEl.checked=true;savePrefs();setStatus('Mensagem de teste enviada ao celular.',true)}catch(e){setStatus('Falha no teste: '+e.message,false)}}
-  $s('telegramFindBtn')?.addEventListener('click',findChat); $s('telegramTestBtn')?.addEventListener('click',test);
-  ;[tokenEl,chatEl,enabledEl,$s('telegramSignal'),$s('telegramEntry'),$s('telegramResult')].forEach(el=>el?.addEventListener('change',savePrefs));
+  $s('telegramFindBtn')?.addEventListener('click',findChat); $s('telegramTestBtn')?.addEventListener('click',test); $s('telegramSaveBtn')?.addEventListener('click',()=>savePrefs(true));
+  ;[tokenEl,chatEl,enabledEl,rememberEl,$s('telegramSignal'),$s('telegramEntry'),$s('telegramResult')].forEach(el=>el?.addEventListener('change',savePrefs));
   function money2(v){try{return new Intl.NumberFormat('pt-BR',{style:'currency',currency:'USD'}).format(Number(v)||0)}catch(e){return 'US$ '+Number(v||0).toFixed(2)}}
   function updateResult({direction,outcome,profit,contract,symbol}){
     if($s('stableDirection'))$s('stableDirection').textContent=direction||'—'; if($s('stableOutcome'))$s('stableOutcome').textContent=outcome||'—';
