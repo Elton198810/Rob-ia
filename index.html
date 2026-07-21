@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <meta name="theme-color" content="#050b18">
 <meta name="description" content="IA Trader X V27 — conexão oficial à conta demo Deriv, dados em tempo real, scanner inteligente e automação controlada de opções.">
-<title>IA Trader X — V27</title>
+<title>IA Trader X — V27 Corrigida</title>
 <style>
 :root{--bg:#050b18;--card:#0b1729;--card2:#0e2038;--line:#1e3855;--text:#eef7ff;--muted:#8fa9c2;--cyan:#25dcff;--blue:#5578ff;--green:#37e891;--yellow:#ffd05a;--red:#ff6076;--purple:#b37cff}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at 15% 0,#163a67 0,transparent 28%),radial-gradient(circle at 90% 10%,#361d6d55 0,transparent 25%),var(--bg);color:var(--text);font-family:Inter,Arial,sans-serif;min-height:100vh}
@@ -813,4 +813,98 @@ maybeAutoTrade=function(){
   window.addEventListener('offline',()=>sounds.error());
 })();
 </script>
+
+<script>
+/* ===== CORREÇÃO V27: ponte direta entre sinal aprovado e ordem DEMO ===== */
+(function(){
+  let stableKey='';
+  let stableSince=0;
+  let lastReason='';
+  let lastAttemptAt=0;
+
+  function setText(id, value){ const el=document.getElementById(id); if(el) el.textContent=value; }
+  function audit(stage, detail, kind='wait'){
+    if(typeof v27Audit==='function') v27Audit(stage, detail, kind);
+  }
+  function block(reason){
+    if(reason!==lastReason){
+      lastReason=reason;
+      audit('BLOQUEIO', reason, 'wait');
+    }
+    setText('robotStatus', 'LIGADO — '+reason.toUpperCase());
+    setText('v27EngineState','MONITORANDO');
+  }
+
+  function bridge(){
+    try{
+      if(!window.autoTrading){ block('robô automático desligado'); return; }
+      if(!window.derivConnected || !window.tradeWs || window.tradeWs.readyState!==1){ block('conta demo desconectada'); return; }
+      if(!window.current){ block('aguardando leitura do mercado'); return; }
+      if(window.activeContractId){ block('operação demo em andamento'); return; }
+      if(window.pendingProposal || window.pendingBuyContext){ block('ordem em processamento'); return; }
+      if(typeof blocked==='function' && blocked()){ block('limite de risco atingido'); return; }
+
+      const a=window.current;
+      const min=Number(document.getElementById('autoMinScore')?.value||72);
+      const minQ=Number(document.getElementById('v8MinQuality')?.value||65);
+      const maxC=Number(document.getElementById('v8MaxConflict')?.value||65);
+      const quality=typeof dataQualityScore==='function'?dataQualityScore():0;
+      const conflict=typeof indicatorConflictScore==='function'?indicatorConflictScore(a):100;
+      const symbol=document.getElementById('symbol')?.value||'';
+
+      if(a.decision==='AGUARDAR'){ stableKey=''; stableSince=0; block('sem direção confirmada'); return; }
+      if(a.score<min){ stableKey=''; stableSince=0; block(`score ${a.score}/${min}`); return; }
+      if(quality<minQ){ stableKey=''; stableSince=0; block(`qualidade ${quality}/${minQ}%`); return; }
+      if(conflict>maxC){ stableKey=''; stableSince=0; block(`conflito ${conflict}/${maxC}%`); return; }
+
+      const key=`${symbol}|${a.decision}`;
+      if(key!==stableKey){
+        stableKey=key;
+        stableSince=Date.now();
+        lastReason='';
+        audit('CONFIRMAÇÃO', `${a.decision} ${a.score}/100 detectado. Confirmando estabilidade por 8 segundos.`, 'wait');
+        setText('robotStatus',`CONFIRMANDO ${a.decision} ${a.score}/100`);
+        return;
+      }
+
+      const elapsed=Date.now()-stableSince;
+      if(elapsed<8000){
+        setText('robotStatus',`CONFIRMANDO ${a.decision} ${a.score}/100 — ${Math.ceil((8000-elapsed)/1000)}s`);
+        return;
+      }
+
+      const cool=(Number(document.getElementById('autoCooldown')?.value||3))*60000;
+      if(Date.now()-(window.lastAutoTradeAt||0)<cool){ block('intervalo mínimo entre operações'); return; }
+      if(Date.now()-lastAttemptAt<15000) return;
+
+      window.v12ApprovedSignal={symbol,direction:a.decision,score:a.score,time:Date.now(),source:'ponte-v27'};
+      window.v12SignalConfirmCount=Math.max(1,Number(document.getElementById('v12Confirmations')?.value||1));
+      setText('v12LastApproved',`${typeof assetInfo==='function'?assetInfo(symbol).name:symbol} • ${a.decision}`);
+      setText('v12ConfirmCount','1/1');
+      setText('v27EngineState','ENVIANDO ORDEM');
+      setText('robotStatus',`SINAL APROVADO — ENVIANDO ${a.decision} DEMO`);
+      audit('SINAL APROVADO', `${a.decision} ${a.score}/100 • qualidade ${quality}% • conflito ${conflict}%.`, 'ok');
+      lastAttemptAt=Date.now();
+      stableSince=Date.now();
+      if(typeof maybeAutoTrade==='function') maybeAutoTrade();
+    }catch(err){
+      audit('ERRO DA PONTE', err.message||String(err), 'error');
+    }
+  }
+
+  // Prova visual: sinal não é entrada. Só contrato confirmado altera saldo.
+  const target=document.getElementById('v27Audit')?.parentElement;
+  if(target && !document.getElementById('v27ProofBox')){
+    const box=document.createElement('div');
+    box.id='v27ProofBox';
+    box.style.cssText='margin-top:10px;padding:12px;border-radius:12px;background:#071522;border:1px solid #25dcff55;color:#dff7ff;font-weight:800';
+    box.innerHTML='🔎 <b>Confirmação verdadeira:</b> o saldo só muda depois de aparecer <b>ORDEM EXECUTADA + ID do contrato DEMO</b>. O bip de sinal não significa compra.';
+    target.appendChild(box);
+  }
+
+  setInterval(bridge,1000);
+  setTimeout(()=>audit('CORREÇÃO V27','Ponte direta entre sinal confirmado e ordem DEMO ativada.','ok'),1200);
+})();
+</script>
+
 </body></html>
