@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <meta name="theme-color" content="#050b18">
 <meta name="description" content="IA Trader X V26 — conexão oficial à conta demo Deriv, dados em tempo real, scanner inteligente e automação controlada de opções.">
-<title>IA Trader X — Versão 22</title>
+<title>IA Trader X — V26 Ajustada</title>
 <style>
 :root{--bg:#050b18;--card:#0b1729;--card2:#0e2038;--line:#1e3855;--text:#eef7ff;--muted:#8fa9c2;--cyan:#25dcff;--blue:#5578ff;--green:#37e891;--yellow:#ffd05a;--red:#ff6076;--purple:#b37cff}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at 15% 0,#163a67 0,transparent 28%),radial-gradient(circle at 90% 10%,#361d6d55 0,transparent 25%),var(--bg);color:var(--text);font-family:Inter,Arial,sans-serif;min-height:100vh}
@@ -181,7 +181,7 @@ footer{text-align:center;padding:28px 14px;color:var(--muted);font-size:11px}.mi
 <div class="card half"><div class="row" style="justify-content:space-between"><div><h2 style="margin-bottom:3px">🧠 Memória da IA</h2><div class="mini">Últimas leituras importantes do mercado.</div></div><button class="secondary" onclick="clearAnalyses()">Limpar</button></div><div class="timeline" id="analysisTimeline"><p class="muted">Nenhuma análise registrada.</p></div></div>
 <div class="card full"><div class="row" style="justify-content:space-between"><div><h2 style="margin-bottom:3px">🏆 Radar dos 5 melhores sinais</h2><div class="mini">O ranking mostra os 5 melhores entre todos os índices analisados.</div></div><button class="secondary" onclick="runScanner()">Atualizar ranking</button></div><div class="topSignals" id="topSignals"><p class="muted">Execute o scanner para montar o ranking.</p></div></div><div class="card full"><div class="row" style="justify-content:space-between"><div><h2 style="margin-bottom:3px">🧾 Auditoria do scanner V26</h2><div class="mini">Mostra por que cada ativo foi aprovado ou descartado no último ciclo.</div></div><button class="secondary" onclick="clearScanAudit()">Limpar auditoria</button></div><div class="auditList" id="scanAudit"><p class="muted">A auditoria aparecerá depois do primeiro scanner.</p></div></div>
 
-<div class="card full" id="recordsGuide"><h2>📚 Entenda os registros da V26</h2><div class="kpis"><div class="kpi"><small>Simulação interna</small><b>Não envia ordem</b><div class="mini">Usa os preços recebidos para testar a leitura da IA sem mexer no saldo Deriv.</div></div><div class="kpi"><small>Operação Deriv Demo</small><b>Ordem virtual real</b><div class="mini">É enviada à conta demo e altera apenas o saldo virtual da Deriv.</div></div><div class="kpi"><small>Backtest</small><b>Teste histórico</b><div class="mini">Compara a estratégia com dados passados; não executa contrato.</div></div><div class="kpi"><small>Diário geral</small><b>Histórico separado</b><div class="mini">Mostra a origem de cada registro: Simulador interno ou Deriv Demo V26.</div></div></div></div>
+<div class="card full" id="orderTraceCard"><div class="row" style="justify-content:space-between"><div><h2 style="margin-bottom:3px">🚦 Rastreador da ordem DEMO — V26 ajustada</h2><div class="mini">Mostra exatamente onde a operação parou: sinal, cotação, compra ou acompanhamento.</div></div><button class="secondary" onclick="clearV26OrderTrace()">Limpar rastreador</button></div><div class="kpis" style="margin-top:10px"><div class="kpi"><small>Etapa atual</small><b id="v26OrderStep">AGUARDANDO SINAL</b></div><div class="kpi"><small>Último pedido</small><b id="v26LastRequest">—</b></div><div class="kpi"><small>Última resposta</small><b id="v26LastResponse">—</b></div><div class="kpi"><small>Tempo da etapa</small><b id="v26OrderElapsed">0s</b></div></div><div class="auditList" id="v26OrderTrace" style="margin-top:10px"><p class="muted">O rastreador começará quando a V26 tentar enviar uma cotação.</p></div><div class="secureNote" style="margin-top:10px">A conta real permanece bloqueada. Este painel não força entradas: ele apenas confirma se a solicitação chegou à API e qual resposta foi recebida.</div></div><div class="card full" id="recordsGuide"><h2>📚 Entenda os registros da V26</h2><div class="kpis"><div class="kpi"><small>Simulação interna</small><b>Não envia ordem</b><div class="mini">Usa os preços recebidos para testar a leitura da IA sem mexer no saldo Deriv.</div></div><div class="kpi"><small>Operação Deriv Demo</small><b>Ordem virtual real</b><div class="mini">É enviada à conta demo e altera apenas o saldo virtual da Deriv.</div></div><div class="kpi"><small>Backtest</small><b>Teste histórico</b><div class="mini">Compara a estratégia com dados passados; não executa contrato.</div></div><div class="kpi"><small>Diário geral</small><b>Histórico separado</b><div class="mini">Mostra a origem de cada registro: Simulador interno ou Deriv Demo V26.</div></div></div></div>
 <div class="card wide"><div class="row" style="justify-content:space-between"><div><h2 style="margin-bottom:3px">🧪 Laboratório de estratégias</h2><div class="mini">Backtest educacional usando o histórico recente do ativo selecionado.</div></div><button id="backtestBtn" onclick="runBacktest()">Rodar backtest</button></div><div class="row" style="margin-top:10px"><div class="field"><label>Estratégia</label><select id="strategy"><option value="trend">Tendência EMA + MACD</option><option value="reversal">Reversão RSI + Bollinger</option><option value="balanced" selected>Confluência balanceada</option></select></div><div class="field"><label>Horizonte do teste</label><select id="btHorizon"><option value="10">10 ticks</option><option value="20" selected>20 ticks</option><option value="30">30 ticks</option></select></div><div class="field"><label>Score mínimo</label><input id="btScore" type="number" min="50" max="95" value="70"></div><label class="checkline"><input id="btDirection" type="checkbox" checked> Testar compra e venda</label></div><div class="strategyGrid" style="margin-top:12px"><div class="strategyCard"><small>Sinais testados</small><b id="btTrades">0</b></div><div class="strategyCard"><small>Taxa de acerto</small><b id="btRate">0%</b></div><div class="strategyCard"><small>Resultado simulado</small><b id="btProfit">US$ 0,00</b></div><div class="strategyCard"><small>Maior queda</small><b id="btDrawdown">US$ 0,00</b></div></div><div class="equityChart" style="margin-top:12px"><canvas id="equityCanvas"></canvas></div><div class="labNote" id="btNote" style="margin-top:10px">O backtest não prevê o futuro. Ele serve para comparar regras no histórico recente e identificar fragilidades.</div></div>
 
 <div class="card card"><h2>🛡️ Qualidade da estratégia</h2><div class="reportBox"><small>Robustez</small><div class="confidence"><b id="robustness">Aguardando</b><span id="robustScore">0/100</span></div><div class="meter"><span id="robustBar" style="width:0%"></span></div></div><div class="reportBox" style="margin-top:9px"><h3>Diagnóstico</h3><p id="robustText">Rode o backtest para avaliar consistência, frequência de sinais e risco.</p></div><div class="reportBox" style="margin-top:9px"><h3>Regra de proteção</h3><p id="protectionRule">Não use uma estratégia real apenas porque funcionou em uma amostra curta.</p></div></div>
@@ -202,7 +202,7 @@ footer{text-align:center;padding:28px 14px;color:var(--muted);font-size:11px}.mi
 <div class="card half"><h2>🚨 Guardião de risco</h2><div class="guard safe" id="riskGuard"><b id="riskGuardTitle">Proteção ativa</b><p class="muted" id="riskGuardText">O sistema monitora limite diário, excesso de operações, sequência de erros e qualidade do sinal.</p></div><div class="kpis" style="margin-top:10px"><div class="kpi"><small>Erros consecutivos</small><b id="lossStreak">0</b></div><div class="kpi"><small>Risco da sessão</small><b id="sessionRisk">Baixo</b></div><div class="kpi"><small>Sinais fortes hoje</small><b id="strongSignals">0</b></div><div class="kpi"><small>Proteção</small><b id="guardStatus">ATIVA</b></div></div></div>
 <div class="card full"><div class="row" style="justify-content:space-between"><h2>📋 Diário geral — simulações e operações demo</h2><div><button class="secondary" onclick="exportHistory()">Exportar</button> <button class="danger" onclick="clearHistory()">Limpar</button></div></div><div class="diary" id="diary"></div></div>
 </section></main>
-<footer>IA Trader X V26 • Conexão oficial demo, confirmação dupla e automação controlada na Deriv • Nenhuma garantia de lucro</footer><div class="toast" id="toast"></div>
+<footer>IA Trader X V26 Ajustada • Diagnóstico completo de cotação, compra e contrato DEMO • Nenhuma garantia de lucro</footer><div class="toast" id="toast"></div>
 <script>
 let v26OpportunityQueue=[],v26LastActionAt=0;
 
@@ -602,5 +602,95 @@ function assetPerformance(){let map={};state.history.filter(x=>x.status!=='Pende
 function renderAssetStats(){if(!$('assetStats'))return;let arr=assetPerformance();$('assetStats').innerHTML=arr.length?arr.slice(0,12).map(x=>{let info=ASSETS.find(a=>a.symbol===x.symbol),rate=Math.round(x.wins/x.ops*100);return `<div class="assetStatRow"><b>${info?.name||x.symbol}</b><span>${x.ops} operações</span><span>${rate}% acerto</span><b class="${x.profit>=0?'positive':'negative'}">${money(x.profit)}</b></div>`}).join(''):'<p class="muted">O histórico aparecerá depois das primeiras operações concluídas.</p>'}
 
 
+
+
+/* ===== V26 AJUSTADA: rastreamento e correção do fluxo de ordens ===== */
+let v26OrderTrace=[],v26OrderStartedAt=0,v26ProposalTimer=null,v26BuyTimer=null,v26LastProposalReq=0,v26LastBuyReq=0;
+function v26SetOrderStep(step,detail='',kind='ok'){
+  v26OrderStartedAt=Date.now();
+  if($('v26OrderStep'))$('v26OrderStep').textContent=step;
+  if(detail)v26Trace(step,detail,kind);
+}
+function v26Trace(step,detail,kind='ok'){
+  v26OrderTrace.unshift({time:new Date().toLocaleTimeString('pt-BR'),step,detail,kind});
+  v26OrderTrace=v26OrderTrace.slice(0,30);
+  const el=$('v26OrderTrace');if(!el)return;
+  el.innerHTML=v26OrderTrace.map(x=>`<div class="auditItem"><b>${x.time} • ${x.step}</b><small>${x.detail}</small><span class="${x.kind==='error'?'reasonError':x.kind==='wait'?'reasonBlock':'reasonOk'}">${x.kind==='error'?'ERRO':x.kind==='wait'?'AGUARDANDO':'OK'}</span></div>`).join('');
+}
+function clearV26OrderTrace(){v26OrderTrace=[];if($('v26OrderTrace'))$('v26OrderTrace').innerHTML='<p class="muted">Rastreador limpo.</p>';if($('v26OrderStep'))$('v26OrderStep').textContent='AGUARDANDO SINAL';if($('v26LastRequest'))$('v26LastRequest').textContent='—';if($('v26LastResponse'))$('v26LastResponse').textContent='—'}
+setInterval(()=>{if($('v26OrderElapsed'))$('v26OrderElapsed').textContent=v26OrderStartedAt?Math.floor((Date.now()-v26OrderStartedAt)/1000)+'s':'0s'},1000);
+
+function sendTrade(obj){
+  if(!tradeWs||tradeWs.readyState!==1)throw new Error('Conta demo desconectada');
+  obj.req_id=obj.req_id||++tradeReq;
+  const type=obj.proposal?'PROPOSTA':obj.buy?'COMPRA':obj.proposal_open_contract?'CONTRATO':obj.balance?'SALDO':obj.transaction?'TRANSAÇÕES':'PEDIDO';
+  if($('v26LastRequest'))$('v26LastRequest').textContent=`${type} #${obj.req_id}`;
+  if(obj.proposal){v26LastProposalReq=obj.req_id;v26SetOrderStep('COTAÇÃO ENVIADA',`${obj.underlying_symbol} • ${obj.contract_type} • ${obj.amount} ${obj.currency}`,'wait')}
+  else if(obj.buy){v26LastBuyReq=obj.req_id;v26SetOrderStep('COMPRA ENVIADA',`Proposal ID ${String(obj.buy).slice(0,12)}… • preço máximo ${obj.price}`,'wait')}
+  tradeWs.send(JSON.stringify(obj));
+  return obj.req_id;
+}
+
+function maybeAutoTrade(){
+  if(!autoTrading||!derivConnected||!current||activeContractId||pendingProposal||pendingBuyContext)return;
+  if(blocked()){addAutoLog('Nenhuma nova entrada: meta, stop ou limite de operações atingido','loss');emergencyStop();return}
+  let min=+$('autoMinScore').value||72,cool=(+$('autoCooldown').value||3)*60000,maxLoss=+$('autoMaxLosses').value||2,stake=+$('autoStake').value||1,quality=dataQualityScore(),conf=indicatorConflictScore(current),minQ=+$('v8MinQuality').value||65,maxC=+$('v8MaxConflict').value||65,assetCool=(+$('v12AssetCooldown').value||5)*60000,symbol=$('symbol').value;
+  if(stake>Math.max(.35,state.limit*.25)){addAutoLog('Entrada bloqueada: valor acima de 25% do limite diário','loss');$('robotStatus').textContent='VALOR DE ENTRADA BLOQUEADO';return}
+  if(current.decision==='AGUARDAR'||current.score<min)return;
+  if(quality<minQ||conf>maxC)return;
+  if(Date.now()-lastAutoTradeAt<cool||Date.now()-(v12AssetLastTrade[symbol]||0)<assetCool)return;
+  if(consecutiveLosses()>=maxLoss){addAutoLog('Robô desligado: limite de perdas seguidas','loss');emergencyStop();return}
+  if(!v12ApprovedSignal||v12ApprovedSignal.symbol!==symbol||v12ApprovedSignal.direction!==current.decision)return;
+  let duration=Math.max(1,Math.round((timeframe/60)*(+$('horizon').value||1)));
+  const approved={...v12ApprovedSignal};
+  pendingProposal={mode:'buy',source:'auto',direction:current.decision,score:current.score,symbol,approved,duration,stake};
+  v24OrderAttempts++;$('robotStatus').textContent='SOLICITANDO COTAÇÃO';
+  v26SetOrderStep('SINAL APROVADO',`${current.decision} ${current.score}/100 em ${assetInfo().name}`,'ok');
+  try{
+    const req=sendTrade({proposal:1,amount:stake,basis:'stake',contract_type:current.decision,currency:($('derivCurrency').textContent==='—'?'USD':$('derivCurrency').textContent),duration,duration_unit:'m',underlying_symbol:symbol});
+    clearTimeout(v26ProposalTimer);v26ProposalTimer=setTimeout(()=>{
+      if(pendingProposal&&pendingProposal.symbol===symbol){v26Trace('TEMPO ESGOTADO','A Deriv não respondeu à cotação em 15 segundos. O sinal foi liberado para nova tentativa.','error');pendingProposal=null;v12ApprovedSignal=approved;$('robotStatus').textContent='SEM RESPOSTA DA COTAÇÃO — TENTANDO NOVAMENTE';setTimeout(()=>{if(autoTrading)runSmartPilotScan()},3000)}
+    },15000);
+    addAutoLog(`Cotação #${req} enviada à Deriv Demo: ${current.decision} ${current.score}/100 em ${assetInfo().name}`);
+    v12ApprovedSignal=null;v12SignalConfirmCount=0;
+  }catch(e){pendingProposal=null;v12ApprovedSignal=approved;v26Trace('FALHA AO ENVIAR',e.message,'error');addAutoLog(e.message,'loss')}
+}
+
+function handleTradeMessage(ev){
+  markDerivMessage();let d;try{d=JSON.parse(ev.data)}catch(e){v26Trace('RESPOSTA INVÁLIDA','A mensagem recebida não era JSON válido.','error');return}
+  const responseType=d.msg_type||'resposta';
+  if($('v26LastResponse'))$('v26LastResponse').textContent=`${responseType}${d.req_id?' #'+d.req_id:''}`;
+  if(d.error){
+    clearTimeout(v26ProposalTimer);clearTimeout(v26BuyTimer);v24OrderErrors++;
+    const msg=d.error.message||d.error.code||'erro desconhecido';
+    v26Trace('DERIV RECUSOU',`${msg}${d.req_id?' • pedido #'+d.req_id:''}`,'error');
+    const retryCtx=pendingProposal?.approved||pendingBuyContext?.approved||null;
+    pendingProposal=null;pendingBuyContext=null;manualQuote=null;
+    if(retryCtx)v12ApprovedSignal=retryCtx;
+    v24LastBlockReason='Deriv recusou: '+msg;setFlowStage(5,'A Deriv recusou a solicitação: '+msg,{error:true});addAutoLog(msg,'loss');
+    if($('manualQuoteStatus'))$('manualQuoteStatus').textContent='Erro: '+msg;$('robotStatus').textContent='ERRO NA ORDEM — MONITORANDO';
+    setTimeout(()=>{if(autoTrading&&!activeContractId)runSmartPilotScan()},5000);return;
+  }
+  if(d.msg_type==='balance'&&d.balance){let bal=Number(d.balance.balance);if(Number.isFinite(bal))$('derivBalance').textContent=money(bal);$('derivCurrency').textContent=d.balance.currency||$('derivCurrency').textContent||'USD';if(d.balance.loginid)$('derivActiveAccount').textContent=d.balance.loginid;v24LastBalanceAt=Date.now()}
+  if(d.msg_type==='proposal'&&d.proposal&&pendingProposal){
+    clearTimeout(v26ProposalTimer);let proposal=d.proposal,ctx=pendingProposal;manualQuote=proposal;pendingProposal=null;
+    v26Trace('COTAÇÃO RECEBIDA',`Custo ${money(Number(proposal.ask_price))} • retorno ${money(Number(proposal.payout||0))}`,'ok');
+    if($('manualQuoteAsk'))$('manualQuoteAsk').textContent=money(Number(proposal.ask_price));if($('manualQuotePayout'))$('manualQuotePayout').textContent=money(Number(proposal.payout));
+    if(ctx.mode==='buy'){
+      pendingBuyContext={...ctx,askPrice:Number(proposal.ask_price),payout:Number(proposal.payout||0),requestedAt:Date.now()};
+      try{
+        const req=sendTrade({buy:proposal.id,price:Number(proposal.ask_price),passthrough:{source:ctx.source||'manual',direction:ctx.direction,symbol:ctx.symbol,score:ctx.score||0}});
+        clearTimeout(v26BuyTimer);v26BuyTimer=setTimeout(()=>{if(pendingBuyContext){const restore=pendingBuyContext.approved||null;v26Trace('TEMPO ESGOTADO','A Deriv não respondeu à compra em 15 segundos.','error');pendingBuyContext=null;if(restore)v12ApprovedSignal=restore;$('robotStatus').textContent='SEM RESPOSTA DA COMPRA — MONITORANDO'}},15000);
+        addAutoLog(`Compra #${req} enviada para a conta DEMO`);
+      }catch(e){const restore=pendingBuyContext.approved||null;pendingBuyContext=null;if(restore)v12ApprovedSignal=restore;v26Trace('FALHA NA COMPRA',e.message,'error')}
+    }
+  }
+  if(d.msg_type==='buy'&&d.buy){
+    clearTimeout(v26BuyTimer);const ctx=pendingBuyContext||{};activeContractId=d.buy.contract_id;activeTradeContext={...ctx,contractId:d.buy.contract_id,buyPrice:Number(d.buy.buy_price||ctx.askPrice||0),openedAt:Date.now()};pendingBuyContext=null;lastAutoTradeAt=Date.now();if(ctx.symbol)v12AssetLastTrade[ctx.symbol]=Date.now();
+    v26Trace('ORDEM EXECUTADA',`Contrato DEMO ${d.buy.contract_id} • custo ${money(Number(d.buy.buy_price||0))}`,'ok');
+    if($('manualContractId'))$('manualContractId').textContent=String(d.buy.contract_id);if($('manualQuoteStatus'))$('manualQuoteStatus').textContent='Contrato DEMO comprado';$('lastAutoOrder').textContent=`${ctx.direction||current?.decision||'DEMO'} • ${money(d.buy.buy_price)}`;addAutoLog(`Ordem DEMO executada. Contrato ${d.buy.contract_id}`);setFlowStage(5,'Operação demo em andamento. Aguardando o encerramento do contrato.');sendTrade({proposal_open_contract:1,contract_id:d.buy.contract_id,subscribe:1});
+  }
+  if(d.msg_type==='proposal_open_contract'&&d.proposal_open_contract){let c=d.proposal_open_contract;if(!c.is_sold){v26SetOrderStep('CONTRATO ABERTO',`Contrato ${c.contract_id||activeContractId} em acompanhamento`,'wait');return}let cid=String(c.contract_id||activeContractId||'');if(settledContracts.has(cid))return;settledContracts.add(cid);let ctx=activeTradeContext||{},profit=Number(c.profit||0),type=profit>0?'win':'loss',direction=ctx.direction||(c.contract_type==='CALL'?'CALL':'PUT'),symbol=ctx.symbol||$('symbol').value,score=Number(ctx.score||current?.score||0);v26Trace('CONTRATO ENCERRADO',`${profit>0?'WIN':'LOSS'} ${money(profit)}`,profit>0?'ok':'error');addAutoLog(`${profit>0?'GANHO':'PERDA'} na conta demo: ${money(profit)}`,type);activeContractId=null;activeTradeContext=null;state.history.unshift({id:Date.now(),time:new Date().toISOString(),symbol,timeframe:tfName(),direction,score,entry:Number(c.entry_spot||0),exit:Number(c.exit_spot||c.exit_tick||0),status:profit>0?'Acerto':'Erro',profit,stake:Number(c.buy_price||ctx.buyPrice||$('autoStake').value),source:'Deriv Demo V26 ajustada'});state.result+=profit;state.balance+=profit;v12SessionTrades++;v12SessionProfit+=profit;if(profit>0)v121SessionWins++;else v121SessionLosses++;persist();renderDiary();updateRiskGuard();renderAssetStats();try{sendTrade({balance:1})}catch(e){}if(autoTrading&&!blocked()){ $('robotStatus').textContent='LIGADO — PROCURANDO NOVO SINAL V26';setTimeout(()=>runSmartPilotScan(),3000)}}
+}
 </script>
 </body></html>
