@@ -106,7 +106,7 @@ footer{text-align:center;padding:28px 14px;color:var(--muted);font-size:11px}.mi
 <div class="field"><label>Token PAT com permissão trade</label><input id="derivToken" type="password" autocomplete="off" placeholder="Cole somente na hora de conectar"></div>
 <div class="field"><label>Conta autorizada</label><select id="derivMode" disabled><option value="demo">Demo — dinheiro virtual</option></select></div>
 </div>
-<div class="row" style="margin-top:10px"><button class="secondary" id="findDemoBtn" onclick="findDerivDemoAccount()">🔎 Encontrar conta demo</button><button id="derivConnectBtn" onclick="connectDerivDemo()">Conectar conta demo</button><button id="startV32Btn" onclick="quickStartV26()">🚀 Iniciar V36</button><button class="secondary" onclick="testDerivConnection()">Testar conexão</button><button class="secondary" onclick="refreshV26Balance(true)">Atualizar saldo</button><button class="secondary" onclick="disconnectDeriv()">Desconectar</button><button class="danger emergency" onclick="emergencyStop()">🛑 PARAR TUDO</button></div>
+<div class="row" style="margin-top:10px"><button class="secondary" id="findDemoBtn" onclick="findDerivDemoAccount()">🔎 Encontrar conta demo</button><button id="derivConnectBtn" onclick="connectDerivDemo()">Conectar conta demo</button><button id="startV32Btn" onclick="quickStartV26()">🚀 Iniciar V37</button><button class="secondary" onclick="testDerivConnection()">Testar conexão</button><button class="secondary" onclick="refreshV26Balance(true)">Atualizar saldo</button><button class="secondary" onclick="disconnectDeriv()">Desconectar</button><button class="danger emergency" onclick="emergencyStop()">🛑 PARAR TUDO</button></div>
 <div class="row identityActions" style="margin-top:10px;align-items:center"><button class="secondary" type="button" onclick="saveV26Identity()">💾 Salvar identificação</button><button class="secondary" type="button" onclick="saveV26Preferences()">⚙️ Salvar preferências</button><button class="danger" type="button" onclick="clearV26SavedData()">🗑️ Apagar dados salvos</button><span class="mini" id="savedIdentityStatus">App ID e conta demo podem ser salvos neste navegador. O token PAT nunca será salvo.</span></div>
 <div class="connectionGrid" style="margin-top:11px"><div class="connectionState"><span class="dot" id="derivDot"></span><div><small class="mini">CONEXÃO</small><b id="derivStatusText">Desconectada</b></div></div><div class="connectionState"><div><small class="mini">SALDO DERIV</small><b id="derivBalance">—</b></div></div><div class="connectionState"><div><small class="mini">CONTA ATIVA</small><b id="derivActiveAccount">—</b></div></div><div class="connectionState"><div><small class="mini">MOEDA</small><b id="derivCurrency">—</b></div></div><div class="connectionState"><div><small class="mini">ÚLTIMA ORDEM</small><b id="lastAutoOrder">Nenhuma</b></div></div><div class="connectionState"><div><small class="mini">STATUS DO ROBÔ</small><b id="robotStatus">DESLIGADO</b></div></div><div class="connectionState"><div><small class="mini">ÚLTIMA MENSAGEM</small><b id="derivLastMessage">—</b></div></div><div class="connectionState"><div><small class="mini">CANAL</small><b id="derivChannel">OTP Demo</b></div></div><div class="connectionState"><div><small class="mini">DIAGNÓSTICO</small><b id="derivDiagnostic">Aguardando</b></div></div></div>
 <div class="autoPanel">
@@ -282,7 +282,7 @@ footer{text-align:center;padding:28px 14px;color:var(--muted);font-size:11px}.mi
   <div class="v27Log" id="v27Audit"><div class="v27Line"><span>—</span><strong>INÍCIO</strong><div>A auditoria aparecerá quando o robô analisar ou enviar uma solicitação.</div></div></div>
 </section>
 <section class="card full" id="audioCenter">
-  <h2>🔊 Central de áudio V36</h2>
+  <h2>🔊 Central de áudio V37</h2>
   <div class="audioControls">
     <label><input type="checkbox" id="audioEnabled" checked> Sons ligados</label>
     <label><input type="checkbox" id="voiceEnabled" checked> Voz em português</label>
@@ -297,8 +297,34 @@ footer{text-align:center;padding:28px 14px;color:var(--muted);font-size:11px}.mi
   </div>
   <div class="soundStatus" id="soundStatus">Áudio aguardando ativação. Toque em “Ativar e testar áudio” uma vez.</div><div class="soundStatus" id="lastTradeSummary">Último resultado: aguardando operação DEMO.</div>
 </section>
+<section class="card full" id="v37LivePanel" style="border:1px solid #25dcff55;box-shadow:0 0 28px #25dcff12">
+  <div class="row" style="justify-content:space-between;align-items:center">
+    <div>
+      <h2 style="margin-bottom:3px">🎯 Operação ao vivo — painel final V37</h2>
+      <div class="mini">Acompanhamento detalhado do contrato DEMO, sempre no final da página.</div>
+    </div>
+    <span class="lockedBadge" id="v37LiveBadge">AGUARDANDO</span>
+  </div>
+  <div style="text-align:center;margin:18px 0 12px">
+    <small style="display:block;letter-spacing:.12em">TEMPO RESTANTE</small>
+    <b id="v37LiveTimer" style="display:block;font-size:64px;line-height:1.05;margin-top:5px">--:--</b>
+  </div>
+  <div style="height:16px;border-radius:999px;background:#07111f;border:1px solid #ffffff18;overflow:hidden">
+    <span id="v37LiveProgress" style="display:block;height:100%;width:0%;background:linear-gradient(90deg,#25dcff,#37e891);transition:width .4s ease"></span>
+  </div>
+  <div class="kpis" style="margin-top:14px">
+    <div class="kpi"><small>STATUS</small><b id="v37LiveStatus">SEM OPERAÇÃO</b></div>
+    <div class="kpi"><small>ATIVO</small><b id="v37LiveSymbol">—</b></div>
+    <div class="kpi"><small>DIREÇÃO</small><b id="v37LiveDirection">—</b></div>
+    <div class="kpi"><small>ENTRADA</small><b id="v37LiveStake">US$ 0,00</b></div>
+    <div class="kpi"><small>CONTRATO</small><b id="v37LiveContract">—</b></div>
+    <div class="kpi"><small>RESULTADO</small><b id="v37LiveResult">AGUARDANDO</b></div>
+  </div>
+  <div class="secureNote" id="v37LiveNote" style="margin-top:12px">Aguardando uma compra DEMO confirmada pela Deriv.</div>
+</section>
+
 </main>
-<footer>IA Trader X V36 Consolidada Estável • Cronômetro + Telegram + estatísticas DEMO • Nenhuma garantia de lucro</footer><div class="toast" id="toast"></div>
+<footer>IA Trader X V37 Estável • Cronômetro + Telegram + estatísticas DEMO • Nenhuma garantia de lucro</footer><div class="toast" id="toast"></div>
 <script>
 let v26OpportunityQueue=[],v26LastActionAt=0;
 
@@ -627,7 +653,7 @@ function requestControlledQuote(execute){if(!derivConnected){toast('Conecte prim
 function toggleAutoTrading(){let on=$('autoTradeSwitch').checked;if(on&&!derivConnected){$('autoTradeSwitch').checked=false;toast('Conecte primeiro a conta demo');return}if(on&&blocked()){$('autoTradeSwitch').checked=false;toast('Robô bloqueado pelos limites do dia');return}autoTrading=on;$('robotStatus').textContent=on?'LIGADO — AGUARDANDO CONFIRMAÇÃO V29':'DESLIGADO';if($('v12Mode'))$('v12Mode').textContent=on?'AUTOMÁTICO DEMO':'OBSERVAÇÃO';addAutoLog(on?'Robô automático ligado em DEMO':'Robô automático desligado');if(on){setFlowText('flow1Text','Dados ao vivo');setFlowStage(2,'Robô ligado. Analisando indicadores em tempo real.')}else setFlowStage(1,'Robô desligado. Nenhuma ordem será enviada.',{blocked:true});toast(on?'Automação demo ligada':'Automação desligada')}
 function emergencyStop(){autoTrading=false;if($('autoTradeSwitch'))$('autoTradeSwitch').checked=false;$('robotStatus').textContent='PARADO POR EMERGÊNCIA';addAutoLog('PARADA DE EMERGÊNCIA acionada','loss');setFlowStage(4,'Parada de emergência acionada. Novas ordens estão bloqueadas.',{blocked:true});toast('Tudo parado. Nenhuma nova ordem será enviada.')}
 function updateRobotReadiness(a){if(!autoTrading)return;let min=+$('autoMinScore').value||72,q=dataQualityScore(),c=indicatorConflictScore(a),needed=+$('v12Confirmations').value||1;setFlowText('flow1Text',prices.length>=60?'Dados suficientes':'Coletando candles');setFlowText('flow2Text',a.decision==='AGUARDAR'?'Sem alinhamento':a.decision+' '+a.score+'/100');setFlowText('flow3Text',Math.min(v12SignalConfirmCount,needed)+'/'+needed);setFlowText('flow4Text',blocked()?'Bloqueado':'Proteção ativa');setFlowText('flow5Text',activeContractId?'Em andamento':pendingProposal?'Solicitando cotação':'Não enviada');setFlowStage(a.decision==='AGUARDAR'||a.score<min?2:v12SignalConfirmCount<needed?3:4,a.decision==='AGUARDAR'?`Analisando mercado: score ${a.score}/${min}. Ainda não existe alinhamento suficiente.`:v12SignalConfirmCount<needed?`Sinal ${a.decision} encontrado. Confirmação ${Math.min(v12SignalConfirmCount,needed)} de ${needed}.`:'Sinal confirmado. Validando risco, qualidade e intervalo antes da ordem.',{asset:assetInfo().name,score:a.score,quality:q,conflict:c});if(blocked()){$('robotStatus').textContent='BLOQUEADO PELO RISCO';autoTrading=false;$('autoTradeSwitch').checked=false;setFlowStage(4,'Entrada bloqueada pelos limites de risco da sessão.',{blocked:true});return}if(activeContractId){$('robotStatus').textContent='OPERAÇÃO EM ANDAMENTO';setFlowStage(5,'Contrato demo aberto. Aguardando encerramento.',{asset:assetInfo().name,score:a.score,quality:q,conflict:c});return}$('robotStatus').textContent=a.decision!=='AGUARDAR'&&a.score>=min?`PRONTO: ${a.decision} ${a.score}/100`:`AGUARDANDO • ${a.score}/${min}`}
-function maybeAutoTrade(){if(!autoTrading||!derivConnected||!current||activeContractId||pendingProposal)return;if(blocked()){addAutoLog('Nenhuma nova entrada: meta, stop ou limite de operações atingido','loss');emergencyStop();return;}let min=+$('autoMinScore').value||72,cool=(+$('autoCooldown').value||3)*60000,maxLoss=+$('autoMaxLosses').value||2,stake=+$('autoStake').value||1,quality=dataQualityScore(),conf=indicatorConflictScore(current),minQ=+$('v8MinQuality').value||65,maxC=+$('v8MaxConflict').value||65,assetCool=(+$('v12AssetCooldown').value||5)*60000,symbol=$('symbol').value;if(stake>Math.max(.35,state.limit*.25)){addAutoLog('Entrada bloqueada: valor acima de 25% do limite diário','loss');$('robotStatus').textContent='VALOR DE ENTRADA BLOQUEADO';return}if(current.decision==='AGUARDAR'||current.score<min){setFlowStage(2,`Aguardando score mínimo: ${current.score}/${min}.`,{asset:assetInfo().name,score:current.score,quality,conflict:conf});return}if(quality<minQ){setFlowStage(4,`Ordem bloqueada: qualidade dos dados ${quality}% abaixo de ${minQ}%.`,{blocked:true,asset:assetInfo().name,score:current.score,quality,conflict:conf});return}if(conf>maxC){setFlowStage(4,`Ordem bloqueada: conflito ${conf}% acima de ${maxC}%.`,{blocked:true,asset:assetInfo().name,score:current.score,quality,conflict:conf});return}if(Date.now()-lastAutoTradeAt<cool){setFlowStage(4,'Aguardando o intervalo mínimo entre operações.',{blocked:true});return}if(Date.now()-(v12AssetLastTrade[symbol]||0)<assetCool){setFlowStage(4,'Ativo em cooldown. Nenhuma nova ordem agora.',{blocked:true});return}if(consecutiveLosses()>=maxLoss){addAutoLog('Robô desligado: limite de perdas seguidas','loss');emergencyStop();return}if(!window.v12ApprovedSignal||window.v12ApprovedSignal.symbol!==symbol||window.v12ApprovedSignal.direction!==current.decision){$('robotStatus').textContent='AGUARDANDO CONFIRMAÇÃO V29';setFlowStage(3,'Sinal detectado, mas ainda falta a confirmação consecutiva.',{asset:assetInfo().name,score:current.score,quality,conflict:conf});return}let duration=Math.max(1,Math.round((timeframe/60)*(+$('horizon').value||1)));pendingProposal={mode:'buy',source:'auto',direction:current.decision,score:current.score,symbol};v24OrderAttempts++;$('robotStatus').textContent='SOLICITANDO COTAÇÃO';if($('v26CurrentStage'))$('v26CurrentStage').textContent='Etapa: solicitando cotação';if($('v26LastAction'))$('v26LastAction').textContent='Última ação: ordem preparada às '+new Date().toLocaleTimeString('pt-BR');setFlowText('flow5Text','Solicitando cotação');setFlowStage(5,'Todos os filtros foram aprovados. Solicitando cotação à Deriv Demo.',{asset:assetInfo().name,score:current.score,quality,conflict:conf});addAutoLog(`V36 aprovou ${current.decision} ${current.score}/100 em ${assetInfo().name} após ${v12SignalConfirmCount} confirmações. Cotação de ${duration} min.`);v12AssetLastTrade[symbol]=Date.now();window.v12ApprovedSignal=null;v12SignalConfirmCount=0;if($('v12ConfirmCount'))$('v12ConfirmCount').textContent='0/'+(+$('v12Confirmations').value||1);try{sendTrade({proposal:1,amount:stake,basis:'stake',contract_type:current.decision,currency:($('derivCurrency').textContent==='—'?'USD':$('derivCurrency').textContent),duration,duration_unit:'m',underlying_symbol:symbol})}catch(e){pendingProposal=null;pendingBuyContext=null;addAutoLog(e.message,'loss');$('robotStatus').textContent='FALHA NA COTAÇÃO — MONITORANDO';setTimeout(()=>{if(autoTrading)runSmartPilotScan()},5000)}}
+function maybeAutoTrade(){if(!autoTrading||!derivConnected||!current||activeContractId||pendingProposal)return;if(blocked()){addAutoLog('Nenhuma nova entrada: meta, stop ou limite de operações atingido','loss');emergencyStop();return;}let min=+$('autoMinScore').value||72,cool=(+$('autoCooldown').value||3)*60000,maxLoss=+$('autoMaxLosses').value||2,stake=+$('autoStake').value||1,quality=dataQualityScore(),conf=indicatorConflictScore(current),minQ=+$('v8MinQuality').value||65,maxC=+$('v8MaxConflict').value||65,assetCool=(+$('v12AssetCooldown').value||5)*60000,symbol=$('symbol').value;if(stake>Math.max(.35,state.limit*.25)){addAutoLog('Entrada bloqueada: valor acima de 25% do limite diário','loss');$('robotStatus').textContent='VALOR DE ENTRADA BLOQUEADO';return}if(current.decision==='AGUARDAR'||current.score<min){setFlowStage(2,`Aguardando score mínimo: ${current.score}/${min}.`,{asset:assetInfo().name,score:current.score,quality,conflict:conf});return}if(quality<minQ){setFlowStage(4,`Ordem bloqueada: qualidade dos dados ${quality}% abaixo de ${minQ}%.`,{blocked:true,asset:assetInfo().name,score:current.score,quality,conflict:conf});return}if(conf>maxC){setFlowStage(4,`Ordem bloqueada: conflito ${conf}% acima de ${maxC}%.`,{blocked:true,asset:assetInfo().name,score:current.score,quality,conflict:conf});return}if(Date.now()-lastAutoTradeAt<cool){setFlowStage(4,'Aguardando o intervalo mínimo entre operações.',{blocked:true});return}if(Date.now()-(v12AssetLastTrade[symbol]||0)<assetCool){setFlowStage(4,'Ativo em cooldown. Nenhuma nova ordem agora.',{blocked:true});return}if(consecutiveLosses()>=maxLoss){addAutoLog('Robô desligado: limite de perdas seguidas','loss');emergencyStop();return}if(!window.v12ApprovedSignal||window.v12ApprovedSignal.symbol!==symbol||window.v12ApprovedSignal.direction!==current.decision){$('robotStatus').textContent='AGUARDANDO CONFIRMAÇÃO V29';setFlowStage(3,'Sinal detectado, mas ainda falta a confirmação consecutiva.',{asset:assetInfo().name,score:current.score,quality,conflict:conf});return}let duration=5;pendingProposal={mode:'buy',source:'auto',direction:current.decision,score:current.score,symbol,duration};v24OrderAttempts++;$('robotStatus').textContent='SOLICITANDO COTAÇÃO';if($('v26CurrentStage'))$('v26CurrentStage').textContent='Etapa: solicitando cotação';if($('v26LastAction'))$('v26LastAction').textContent='Última ação: ordem preparada às '+new Date().toLocaleTimeString('pt-BR');setFlowText('flow5Text','Solicitando cotação');setFlowStage(5,'Todos os filtros foram aprovados. Solicitando cotação à Deriv Demo.',{asset:assetInfo().name,score:current.score,quality,conflict:conf});addAutoLog(`V36 aprovou ${current.decision} ${current.score}/100 em ${assetInfo().name} após ${v12SignalConfirmCount} confirmações. Cotação de ${duration} min.`);v12AssetLastTrade[symbol]=Date.now();window.v12ApprovedSignal=null;v12SignalConfirmCount=0;if($('v12ConfirmCount'))$('v12ConfirmCount').textContent='0/'+(+$('v12Confirmations').value||1);try{sendTrade({proposal:1,amount:stake,basis:'stake',contract_type:current.decision,currency:($('derivCurrency').textContent==='—'?'USD':$('derivCurrency').textContent),duration,duration_unit:'m',underlying_symbol:symbol})}catch(e){pendingProposal=null;pendingBuyContext=null;addAutoLog(e.message,'loss');$('robotStatus').textContent='FALHA NA COTAÇÃO — MONITORANDO';setTimeout(()=>{if(autoTrading)runSmartPilotScan()},5000)}}
 function updateSmartPilotFromScanner(results){let min=+$('autoMinScore').value||72,minQ=+$('v8MinQuality').value||65,maxC=+$('v8MaxConflict').value||65,needed=+$('v12Confirmations').value||1;let best=results.find(r=>r.decision!=='AGUARDAR'&&r.decision!=='ERRO'&&r.score>=min&&r.quality>=minQ&&r.conflict<=maxC)||results.find(r=>r.decision!=='ERRO');lastSmartCandidate=best||null;v24LastCandidate=best||null;if(!best){v24LastBlockReason='Scanner não encontrou candidato válido';return;}$('v8BestAsset').textContent=best.name;$('v8BestDirection').textContent=best.decision;$('v8BestScore').textContent=best.score+'/100';$('v8Quality').textContent=(best.quality||0)+'%';$('v8Conflict').textContent=(best.conflict||0)+'%';let approved=best.decision!=='AGUARDAR'&&best.score>=min&&best.quality>=minQ&&best.conflict<=maxC&&!blocked();let key=approved?best.symbol+'|'+best.decision:'';if(approved&&key===v12SignalKey)v12SignalConfirmCount++;else if(approved){v12SignalKey=key;v12SignalConfirmCount=1}else{v12SignalKey='';v12SignalConfirmCount=0;window.v12ApprovedSignal=null}if(approved&&v12SignalConfirmCount>=needed){window.v12ApprovedSignal={symbol:best.symbol,direction:best.decision,score:best.score,time:Date.now()};$('v12LastApproved').textContent=best.name+' • '+best.decision}else if(!approved){$('v12LastApproved').textContent='Nenhum'}$('v12ConfirmCount').textContent=Math.min(v12SignalConfirmCount,needed)+'/'+needed;$('v8FinalDecision').textContent=approved?(v12SignalConfirmCount>=needed?'APROVADO V26':'CONFIRMANDO'):'BLOQUEADO';if(approved){setFlowText('flow3Text',Math.min(v12SignalConfirmCount,needed)+'/'+needed);setFlowStage(v12SignalConfirmCount>=needed?4:3,v12SignalConfirmCount>=needed?'Confirmações concluídas. Validando risco e cooldown.':`Confirmação ${v12SignalConfirmCount} de ${needed} para ${best.decision}.`,{asset:best.name,score:best.score,quality:best.quality||0,conflict:best.conflict||0})}$('smartPilotCard').classList.toggle('pilotReady',approved&&v12SignalConfirmCount>=needed);$('smartPilotCard').classList.toggle('pilotBlocked',!approved);if(approved&&$('v8AutoAsset').checked&&$('symbol').value!==best.symbol){selectAsset(best.symbol);addAutoLog(`V26 selecionou automaticamente ${best.name} • ${best.decision} ${best.score}/100`)}let assetCool=(+$('v12AssetCooldown').value||5)*60000,left=Math.max(0,Math.ceil((assetCool-(Date.now()-(v12AssetLastTrade[best.symbol]||0)))/60000));$('v12AssetCooldownView').textContent=left?left+' min':'Liberado';$('v12Mode').textContent=autoTrading?'AUTOMÁTICO DEMO':'OBSERVAÇÃO';renderAssetStats();updateV26Diagnostics()}
 
 function setDiag(id,state,text){let el=$(id),t=$(id+'Text');if(!el||!t)return;el.classList.remove('ok','wait','bad');el.classList.add(state);t.textContent=text}
@@ -1310,7 +1336,7 @@ maybeAutoTrade=function(){
   },500);
 
   document.addEventListener('DOMContentLoaded',()=>{
-    document.title='IA Trader X — V36 Estável';
+    document.title='IA Trader X — V37 Estável';
     document.querySelectorAll('*').forEach(node=>{
       if(node.childNodes.length===1 && node.firstChild?.nodeType===3){
         node.firstChild.nodeValue=node.firstChild.nodeValue.replace(/V28/g,'V29');
@@ -1406,12 +1432,12 @@ window.v12ApprovedSignal = window.v12ApprovedSignal || null;
   }
   function ensureTimer(){if(timer)return;timer=setInterval(render,500)}
   function startFromBuy(d){const ctx=window.activeTradeContext||window.pendingBuyContext||{};op={contract:String(d.buy.contract_id||''),symbol:ctx.symbol||$('symbol')?.value||'—',direction:ctx.direction||window.current?.decision||'—',stake:Number(d.buy.buy_price||ctx.askPrice||0),start:Math.floor(Date.now()/1000),expiry:Math.floor(Date.now()/1000)+120,closed:false,profit:0};render();ensureTimer();const b=$('startV32Btn');if(b){b.disabled=true;b.textContent='🟢 Robô em execução'} }
-  function updateContract(c){if(!op||String(c.contract_id||'')!==String(op.contract||''))return;if(c.date_start)op.start=Number(c.date_start);if(c.date_expiry)op.expiry=Number(c.date_expiry);if(c.is_sold){op.closed=true;op.profit=Number(c.profit||0);const outcome=op.profit>0?'WIN':'LOSS';setText('lastTradeSummary',`Último resultado: ${outcome==='WIN'?'🏆':'❌'} ${outcome} ${(op.profit>0?'+':'')+money(op.profit)} • ${op.direction} • ${op.symbol} • ${new Date().toLocaleTimeString('pt-BR')}`);const b=$('startV32Btn');if(b){b.disabled=false;b.textContent='🚀 Iniciar V36'} }render()}
+  function updateContract(c){if(!op||String(c.contract_id||'')!==String(op.contract||''))return;if(c.date_start)op.start=Number(c.date_start);if(c.date_expiry)op.expiry=Number(c.date_expiry);if(c.is_sold){op.closed=true;op.profit=Number(c.profit||0);const outcome=op.profit>0?'WIN':'LOSS';setText('lastTradeSummary',`Último resultado: ${outcome==='WIN'?'🏆':'❌'} ${outcome} ${(op.profit>0?'+':'')+money(op.profit)} • ${op.direction} • ${op.symbol} • ${new Date().toLocaleTimeString('pt-BR')}`);const b=$('startV32Btn');if(b){b.disabled=false;b.textContent='🚀 Iniciar V37'} }render()}
   window.v35OperationStart=startFromBuy;
   window.v35OperationUpdate=updateContract;
-  function attach(){const ws=window.tradeWs;if(!ws||ws===attachedWs)return;attachedWs=ws;ws.addEventListener('message',ev=>{let d;try{d=JSON.parse(ev.data)}catch(e){return}if(d.msg_type==='buy'&&d.buy)startFromBuy(d);if(d.msg_type==='proposal_open_contract'&&d.proposal_open_contract)updateContract(d.proposal_open_contract)});ws.addEventListener('close',()=>{const b=$('startV32Btn');if(b){b.disabled=false;b.textContent='🚀 Iniciar V36'}})}
+  function attach(){const ws=window.tradeWs;if(!ws||ws===attachedWs)return;attachedWs=ws;ws.addEventListener('message',ev=>{let d;try{d=JSON.parse(ev.data)}catch(e){return}if(d.msg_type==='buy'&&d.buy)startFromBuy(d);if(d.msg_type==='proposal_open_contract'&&d.proposal_open_contract)updateContract(d.proposal_open_contract)});ws.addEventListener('close',()=>{const b=$('startV32Btn');if(b){b.disabled=false;b.textContent='🚀 Iniciar V37'}})}
   setInterval(()=>{attach();const b=$('startV32Btn');if(b&&window.autoTrading&&!op?.closed){b.disabled=true;b.textContent='🟢 Robô em execução'}},700);
-  document.addEventListener('DOMContentLoaded',()=>{document.title='IA Trader X — V36 Estável';render()});
+  document.addEventListener('DOMContentLoaded',()=>{document.title='IA Trader X — V37 Estável';render()});
 })();
 </script>
 
@@ -1452,7 +1478,7 @@ window.v12ApprovedSignal = window.v12ApprovedSignal || null;
   document.addEventListener('DOMContentLoaded',()=>{
     render();
     const b=el('v33ResetStats'); if(b)b.addEventListener('click',()=>{if(confirm('Zerar as estatísticas de hoje?')){st=fresh();save();render()}});
-    const start=el('startV32Btn'); if(start)start.addEventListener('click',()=>{start.disabled=true;start.textContent='🟢 Robô em execução';setTimeout(()=>{if(!window.autoTrading){start.disabled=false;start.textContent='🚀 Iniciar V36'}},8000)});
+    const start=el('startV32Btn'); if(start)start.addEventListener('click',()=>{start.disabled=true;start.textContent='🟢 Robô em execução';setTimeout(()=>{if(!window.autoTrading){start.disabled=false;start.textContent='🚀 Iniciar V37'}},8000)});
   });
   setInterval(attach,600);
 })();
@@ -1474,7 +1500,7 @@ window.v12ApprovedSignal = window.v12ApprovedSignal || null;
     if(autoTrading && canonicalConnected()){
       b.disabled=true; b.textContent='🟢 Robô em execução'; b.style.animation='none';
     }else{
-      b.disabled=false; b.textContent='🚀 Iniciar V36'; b.style.animation='none';
+      b.disabled=false; b.textContent='🚀 Iniciar V37'; b.style.animation='none';
     }
   }
   function forceStart(){
@@ -1544,12 +1570,15 @@ window.v12ApprovedSignal = window.v12ApprovedSignal || null;
   function render(){
     if(!op){
       text('activeOpBadge','AGUARDANDO');text('activeOpSymbol','—');text('activeOpDirection','—');text('activeOpStake',money(0));text('activeOpContract','—');text('activeOpTimer','--:--');text('activeOpStatus','SEM OPERAÇÃO');text('activeOpNote','Quando a Deriv confirmar uma compra, o cronômetro começará automaticamente.');
-      const p=$('activeOpProgress');if(p)p.style.width='0%';return;
+      text('v37LiveBadge','AGUARDANDO');text('v37LiveTimer','--:--');text('v37LiveStatus','SEM OPERAÇÃO');text('v37LiveSymbol','—');text('v37LiveDirection','—');text('v37LiveStake',money(0));text('v37LiveContract','—');text('v37LiveResult','AGUARDANDO');text('v37LiveNote','Aguardando uma compra DEMO confirmada pela Deriv.');
+      const p=$('activeOpProgress');if(p)p.style.width='0%';const p37=$('v37LiveProgress');if(p37)p37.style.width='0%';return;
     }
     const now=Math.floor(Date.now()/1000),start=Number(op.start||now),expiry=Number(op.expiry||start+300),total=Math.max(1,expiry-start),remaining=Math.max(0,expiry-now),pct=Math.min(100,Math.max(0,(now-start)/total*100));
     text('activeOpBadge',op.closed?(op.profit>0?'WIN':'LOSS'):'EM ANDAMENTO');text('activeOpSymbol',op.symbol||'—');text('activeOpDirection',op.direction||'—');text('activeOpStake',money(op.stake));text('activeOpContract',op.contract||'—');text('activeOpTimer',op.closed?'00:00':clock(remaining));text('activeOpStatus',op.closed?(op.profit>0?'FINALIZADA COM WIN':'FINALIZADA COM LOSS'):'CONTRATO ABERTO');
-    const p=$('activeOpProgress');if(p)p.style.width=(op.closed?100:pct)+'%';
+    text('v37LiveBadge',op.closed?(op.profit>0?'WIN':'LOSS'):'AO VIVO');text('v37LiveTimer',op.closed?'00:00':clock(remaining));text('v37LiveStatus',op.closed?'CONTRATO ENCERRADO':'CONTRATO ABERTO');text('v37LiveSymbol',op.symbol||'—');text('v37LiveDirection',op.direction||'—');text('v37LiveStake',money(op.stake));text('v37LiveContract',op.contract||'—');text('v37LiveResult',op.closed?`${op.profit>0?'🏆 WIN':'❌ LOSS'} ${(op.profit>0?'+':'')+money(op.profit)}`:'AGUARDANDO ENCERRAMENTO');
+    const p=$('activeOpProgress');if(p)p.style.width=(op.closed?100:pct)+'%';const p37=$('v37LiveProgress');if(p37)p37.style.width=(op.closed?100:pct)+'%';
     text('activeOpNote',op.closed?`${op.direction} • ${op.profit>0?'WIN':'LOSS'} • ${(op.profit>0?'+':'')+money(op.profit)} • contrato ${op.contract}`:`${op.direction} em ${op.symbol} • contrato ${op.contract} • aguardando encerramento oficial.`);
+    text('v37LiveNote',op.closed?`Operação finalizada: ${op.direction} em ${op.symbol} • ${(op.profit>0?'+':'')+money(op.profit)} • contrato ${op.contract}.`:`${op.direction} em ${op.symbol} • entrada ${money(op.stake)} • contrato ${op.contract} • duração oficial acompanhada pela Deriv.`);
     if(!op.closed){const rs=$('robotStatus');if(rs)rs.textContent='LIGADO — OPERAÇÃO EM ANDAMENTO';}
   }
   function ensureTimer(){if(!timer)timer=setInterval(render,500)}
@@ -1558,7 +1587,7 @@ window.v12ApprovedSignal = window.v12ApprovedSignal || null;
     op={contract:String(buy.contract_id||ctx.contractId||''),symbol:ctx.symbol||$('symbol')?.value||'—',direction:ctx.direction||window.current?.decision||'—',stake:Number(buy.buy_price||ctx.buyPrice||ctx.askPrice||0),start:Math.floor(Date.now()/1000),expiry:Math.floor(Date.now()/1000)+durationMin*60,closed:false,profit:0};
     save();render();ensureTimer();
     const b=$('startV32Btn');if(b){b.disabled=true;b.textContent='🟢 Robô em execução'}
-    if(typeof window.addAutoLog==='function')window.addAutoLog(`V36 acompanhando contrato ${op.contract} • ${op.direction} • ${money(op.stake)}`);
+    if(typeof window.addAutoLog==='function')window.addAutoLog(`V37 acompanhando contrato ${op.contract} • ${op.direction} • ${money(op.stake)}`);
   }
   function update(c){
     const cid=String(c.contract_id||'');
@@ -1573,13 +1602,13 @@ window.v12ApprovedSignal = window.v12ApprovedSignal || null;
       const outcome=op.profit>0?'WIN':'LOSS';
       text('lastTradeSummary',`Último resultado: ${outcome==='WIN'?'🏆':'❌'} ${outcome} ${(op.profit>0?'+':'')+money(op.profit)} • ${op.direction} • ${op.symbol} • ${new Date().toLocaleTimeString('pt-BR')}`);
       const rs=$('robotStatus');if(rs)rs.textContent=`LIGADO — ${outcome} ${(op.profit>0?'+':'')+money(op.profit)}`;
-      const b=$('startV32Btn');if(b){b.disabled=false;b.textContent='🚀 Iniciar V36'}
+      const b=$('startV32Btn');if(b){b.disabled=false;b.textContent='🚀 Iniciar V37'}
     }
     save();render();ensureTimer();
   }
   window.v36OperationStart=start;
   window.v36OperationUpdate=update;
-  document.addEventListener('DOMContentLoaded',()=>{document.title='IA Trader X — V36 Estável';render();if(op)ensureTimer()});
+  document.addEventListener('DOMContentLoaded',()=>{document.title='IA Trader X — V37 Estável';render();if(op)ensureTimer()});
   render();if(op)ensureTimer();
 })();
 </script>
