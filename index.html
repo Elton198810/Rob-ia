@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <meta name="theme-color" content="#050b18">
 <meta name="description" content="IA Trader X V29 — conexão oficial à conta demo Deriv, dados em tempo real, scanner inteligente e automação controlada de opções.">
-<title>IA Trader X — V32 Estável</title>
+<title>IA Trader X — V33 Estável</title>
 <style>
 :root{--bg:#050b18;--card:#0b1729;--card2:#0e2038;--line:#1e3855;--text:#eef7ff;--muted:#8fa9c2;--cyan:#25dcff;--blue:#5578ff;--green:#37e891;--yellow:#ffd05a;--red:#ff6076;--purple:#b37cff}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at 15% 0,#163a67 0,transparent 28%),radial-gradient(circle at 90% 10%,#361d6d55 0,transparent 25%),var(--bg);color:var(--text);font-family:Inter,Arial,sans-serif;min-height:100vh}
@@ -106,7 +106,7 @@ footer{text-align:center;padding:28px 14px;color:var(--muted);font-size:11px}.mi
 <div class="field"><label>Token PAT com permissão trade</label><input id="derivToken" type="password" autocomplete="off" placeholder="Cole somente na hora de conectar"></div>
 <div class="field"><label>Conta autorizada</label><select id="derivMode" disabled><option value="demo">Demo — dinheiro virtual</option></select></div>
 </div>
-<div class="row" style="margin-top:10px"><button class="secondary" id="findDemoBtn" onclick="findDerivDemoAccount()">🔎 Encontrar conta demo</button><button id="derivConnectBtn" onclick="connectDerivDemo()">Conectar conta demo</button><button id="startV32Btn" onclick="quickStartV26()">🚀 Iniciar V32</button><button class="secondary" onclick="testDerivConnection()">Testar conexão</button><button class="secondary" onclick="refreshV26Balance(true)">Atualizar saldo</button><button class="secondary" onclick="disconnectDeriv()">Desconectar</button><button class="danger emergency" onclick="emergencyStop()">🛑 PARAR TUDO</button></div>
+<div class="row" style="margin-top:10px"><button class="secondary" id="findDemoBtn" onclick="findDerivDemoAccount()">🔎 Encontrar conta demo</button><button id="derivConnectBtn" onclick="connectDerivDemo()">Conectar conta demo</button><button id="startV32Btn" onclick="quickStartV26()">🚀 Iniciar V33</button><button class="secondary" onclick="testDerivConnection()">Testar conexão</button><button class="secondary" onclick="refreshV26Balance(true)">Atualizar saldo</button><button class="secondary" onclick="disconnectDeriv()">Desconectar</button><button class="danger emergency" onclick="emergencyStop()">🛑 PARAR TUDO</button></div>
 <div class="row identityActions" style="margin-top:10px;align-items:center"><button class="secondary" type="button" onclick="saveV26Identity()">💾 Salvar identificação</button><button class="secondary" type="button" onclick="saveV26Preferences()">⚙️ Salvar preferências</button><button class="danger" type="button" onclick="clearV26SavedData()">🗑️ Apagar dados salvos</button><span class="mini" id="savedIdentityStatus">App ID e conta demo podem ser salvos neste navegador. O token PAT nunca será salvo.</span></div>
 <div class="connectionGrid" style="margin-top:11px"><div class="connectionState"><span class="dot" id="derivDot"></span><div><small class="mini">CONEXÃO</small><b id="derivStatusText">Desconectada</b></div></div><div class="connectionState"><div><small class="mini">SALDO DERIV</small><b id="derivBalance">—</b></div></div><div class="connectionState"><div><small class="mini">CONTA ATIVA</small><b id="derivActiveAccount">—</b></div></div><div class="connectionState"><div><small class="mini">MOEDA</small><b id="derivCurrency">—</b></div></div><div class="connectionState"><div><small class="mini">ÚLTIMA ORDEM</small><b id="lastAutoOrder">Nenhuma</b></div></div><div class="connectionState"><div><small class="mini">STATUS DO ROBÔ</small><b id="robotStatus">DESLIGADO</b></div></div><div class="connectionState"><div><small class="mini">ÚLTIMA MENSAGEM</small><b id="derivLastMessage">—</b></div></div><div class="connectionState"><div><small class="mini">CANAL</small><b id="derivChannel">OTP Demo</b></div></div><div class="connectionState"><div><small class="mini">DIAGNÓSTICO</small><b id="derivDiagnostic">Aguardando</b></div></div></div>
 <div class="autoPanel">
@@ -116,10 +116,10 @@ footer{text-align:center;padding:28px 14px;color:var(--muted);font-size:11px}.mi
 <div class="field"><label>Valor por entrada USD</label><input id="autoStake" type="number" min="0.35" step="0.01" value="1"></div>
 <div class="switchLine"><div><b>Robô automático</b><div class="mini">Somente DEMO</div></div><input id="autoTradeSwitch" type="checkbox" onchange="toggleAutoTrading()"></div>
 </div>
-<div class="secureNote" style="margin-top:10px;border-color:#37e89155;background:#37e8910b">🚀 <b>Iniciar V32:</b> conecta a conta DEMO, valida os candles, reinicia dados travados, ativa o Piloto Inteligente e liga o robô automático. Use apenas dinheiro virtual e acompanhe os primeiros testes.</div>
+<div class="secureNote" style="margin-top:10px;border-color:#37e89155;background:#37e8910b">🚀 <b>Iniciar V33:</b> conecta a conta DEMO, valida os candles, reinicia dados travados, ativa o Piloto Inteligente e liga o robô automático. Use apenas dinheiro virtual e acompanhe os primeiros testes.</div>
 <div class="secureNote" style="margin-top:10px">🛡️ Segurança: não coloque token dentro do código e não salve token no GitHub. Ao fechar a aba, ele é removido. A V26 usa o endpoint oficial de Options da Deriv, exige conexão demo por OTP e bloqueia qualquer URL de conta real. O token permanece somente na sessão desta aba.</div><div class="secureNote" id="v24SyncNote" style="margin-top:10px;border-color:#25dcff55;background:#25dcff0b">🔄 V26 sincroniza saldo, moeda, scanner e diagnóstico automaticamente enquanto a página permanecer aberta.</div>
-<div class="flowPanel"><div class="flowHeader"><div><h2 style="margin:0 0 3px">🧭 Acompanhamento da operação V29</h2><div class="mini">Mostra exatamente em qual etapa o robô está e por que ainda não enviou uma ordem.</div></div><span class="lockedBadge" id="flowModeBadge">DEMO • MONITORAMENTO</span></div><div class="flowSteps"><div class="flowStep" id="flow1"><small>1. DADOS</small><b id="flow1Text">Aguardando início automático</b></div><div class="flowStep" id="flow2"><small>2. ANÁLISE</small><b id="flow2Text">Sem leitura</b></div><div class="flowStep" id="flow3"><small>3. CONFIRMAÇÃO</small><b id="flow3Text">0/2</b></div><div class="flowStep" id="flow4"><small>4. RISCO</small><b id="flow4Text">Aguardando</b></div><div class="flowStep" id="flow5"><small>5. ORDEM DEMO</small><b id="flow5Text">Não enviada</b></div><div class="flowStep" id="flow6"><small>6. RESULTADO</small><b id="flow6Text">Nenhum</b></div></div><div class="flowMessage" id="flowMessage">Conecte a conta demo e clique em Iniciar V32.</div><div class="flowMeta"><span id="flowAsset">Ativo: —</span><span id="flowScore">Score: —</span><span id="flowQuality">Dados: —</span><span id="flowConflict">Conflito: —</span><span id="flowUpdated">Atualizado: —</span></div></div>
-<div class="diagPanel"><div class="diagHeader"><div><h2 style="margin:0 0 3px">🩺 Diagnóstico automático V29</h2><div class="mini">Mostra a primeira regra que está impedindo a entrada e atualiza em tempo real.</div></div><span class="lockedBadge" id="v24DiagBadge">AGUARDANDO</span></div><div class="diagGrid"><div class="diagItem" id="dConn"><small>1. CONTA DEMO</small><b id="dConnText">Desconectada</b></div><div class="diagItem" id="dMarket"><small>2. DADOS DO MERCADO</small><b id="dMarketText">Sem candles</b></div><div class="diagItem" id="dSignal"><small>3. SINAL</small><b id="dSignalText">Aguardando</b></div><div class="diagItem" id="dScore"><small>4. SCORE</small><b id="dScoreText">0/82</b></div><div class="diagItem" id="dQuality"><small>5. QUALIDADE</small><b id="dQualityText">0/80%</b></div><div class="diagItem" id="dConflict"><small>6. CONFLITO</small><b id="dConflictText">—/45%</b></div><div class="diagItem" id="dConfirm"><small>7. CONFIRMAÇÕES</small><b id="dConfirmText">0/2</b></div><div class="diagItem" id="dRisk"><small>8. RISCO E INTERVALO</small><b id="dRiskText">Aguardando</b></div><div class="diagItem" id="dOrder"><small>9. ORDEM DEMO</small><b id="dOrderText">Não enviada</b></div><div class="diagItem" id="dResult"><small>10. RESULTADO</small><b id="dResultText">Nenhum</b></div></div><div class="diagReason" id="v24Reason"><strong>Motivo atual</strong>Conecte a conta demo e clique em Iniciar V32.</div><div class="diagCounters"><span id="v24LastCandidate">Candidato: —</span><span id="v24LastScan">Último scanner: —</span><span id="v24OrderAttempts">Tentativas de ordem: 0</span><span id="v24OrderErrors">Erros da Deriv: 0</span></div></div>
+<div class="flowPanel"><div class="flowHeader"><div><h2 style="margin:0 0 3px">🧭 Acompanhamento da operação V29</h2><div class="mini">Mostra exatamente em qual etapa o robô está e por que ainda não enviou uma ordem.</div></div><span class="lockedBadge" id="flowModeBadge">DEMO • MONITORAMENTO</span></div><div class="flowSteps"><div class="flowStep" id="flow1"><small>1. DADOS</small><b id="flow1Text">Aguardando início automático</b></div><div class="flowStep" id="flow2"><small>2. ANÁLISE</small><b id="flow2Text">Sem leitura</b></div><div class="flowStep" id="flow3"><small>3. CONFIRMAÇÃO</small><b id="flow3Text">0/2</b></div><div class="flowStep" id="flow4"><small>4. RISCO</small><b id="flow4Text">Aguardando</b></div><div class="flowStep" id="flow5"><small>5. ORDEM DEMO</small><b id="flow5Text">Não enviada</b></div><div class="flowStep" id="flow6"><small>6. RESULTADO</small><b id="flow6Text">Nenhum</b></div></div><div class="flowMessage" id="flowMessage">Conecte a conta demo e clique em Iniciar V33.</div><div class="flowMeta"><span id="flowAsset">Ativo: —</span><span id="flowScore">Score: —</span><span id="flowQuality">Dados: —</span><span id="flowConflict">Conflito: —</span><span id="flowUpdated">Atualizado: —</span></div></div>
+<div class="diagPanel"><div class="diagHeader"><div><h2 style="margin:0 0 3px">🩺 Diagnóstico automático V29</h2><div class="mini">Mostra a primeira regra que está impedindo a entrada e atualiza em tempo real.</div></div><span class="lockedBadge" id="v24DiagBadge">AGUARDANDO</span></div><div class="diagGrid"><div class="diagItem" id="dConn"><small>1. CONTA DEMO</small><b id="dConnText">Desconectada</b></div><div class="diagItem" id="dMarket"><small>2. DADOS DO MERCADO</small><b id="dMarketText">Sem candles</b></div><div class="diagItem" id="dSignal"><small>3. SINAL</small><b id="dSignalText">Aguardando</b></div><div class="diagItem" id="dScore"><small>4. SCORE</small><b id="dScoreText">0/82</b></div><div class="diagItem" id="dQuality"><small>5. QUALIDADE</small><b id="dQualityText">0/80%</b></div><div class="diagItem" id="dConflict"><small>6. CONFLITO</small><b id="dConflictText">—/45%</b></div><div class="diagItem" id="dConfirm"><small>7. CONFIRMAÇÕES</small><b id="dConfirmText">0/2</b></div><div class="diagItem" id="dRisk"><small>8. RISCO E INTERVALO</small><b id="dRiskText">Aguardando</b></div><div class="diagItem" id="dOrder"><small>9. ORDEM DEMO</small><b id="dOrderText">Não enviada</b></div><div class="diagItem" id="dResult"><small>10. RESULTADO</small><b id="dResultText">Nenhum</b></div></div><div class="diagReason" id="v24Reason"><strong>Motivo atual</strong>Conecte a conta demo e clique em Iniciar V33.</div><div class="diagCounters"><span id="v24LastCandidate">Candidato: —</span><span id="v24LastScan">Último scanner: —</span><span id="v24OrderAttempts">Tentativas de ordem: 0</span><span id="v24OrderErrors">Erros da Deriv: 0</span></div></div>
 <div class="demoLab"><div class="row" style="justify-content:space-between"><div><h2 style="margin-bottom:3px">🧪 Primeira operação controlada — DEMO</h2><div class="mini">Primeiro consulte a cotação. A compra só é enviada depois de marcar a confirmação.</div></div><span class="lockedBadge">DINHEIRO VIRTUAL</span></div>
 <div class="demoLabGrid">
 <div class="field"><label>Direção</label><select id="manualDirection"><option value="CALL">CALL — alta</option><option value="PUT">PUT — baixa</option></select></div>
@@ -175,7 +175,7 @@ footer{text-align:center;padding:28px 14px;color:var(--muted);font-size:11px}.mi
 <div class="row" style="margin-top:10px;justify-content:space-between"><div><label class="mini">TIMEFRAME</label><div class="timeframes"><button class="tfBtn" data-tf="60" onclick="setTimeframe(60,this)">M1</button><button class="tfBtn active" data-tf="300" onclick="setTimeframe(300,this)">M5</button><button class="tfBtn" data-tf="900" onclick="setTimeframe(900,this)">M15</button><button class="tfBtn" data-tf="1800" onclick="setTimeframe(1800,this)">M30</button><button class="tfBtn" data-tf="3600" onclick="setTimeframe(3600,this)">H1</button></div></div><div class="row"><button id="connectBtn" onclick="connectMarket()">Conectar</button><button class="secondary" onclick="toggleSound()" id="soundBtn">🔕 Som</button></div></div>
 <div class="notice" style="margin-top:10px"><b>Modo Binárias V26:</b> a análise usa confirmação consecutiva, qualidade dos dados, conflito de indicadores e cooldown por ativo. Ordens automáticas permanecem limitadas à conta DEMO e não há garantia de lucro.</div><div class="price" id="price">—</div><div class="subprice" id="marketInfo">Aguardando início automático</div><div class="chartTools"><button class="secondary" id="lineBtn" onclick="setChartMode('line')">〰 Linha</button><button class="secondary active" id="candleBtn" onclick="setChartMode('candle')">🕯 Velas</button><button class="secondary" onclick="zoomChart(-20)">− Zoom</button><button class="secondary" onclick="zoomChart(20)">+ Zoom</button></div><div class="chart"><canvas id="chart"></canvas></div></div>
 
-<div class="card"><h2>🧠 Decisão da IA</h2><div class="signal" id="signalBox"><div class="lamp" id="lamp">⏸</div><h3 id="decision">AGUARDAR</h3><div><span class="score" id="score">0</span>/100</div><div class="bar"><span id="bar"></span></div><div class="probs"><div class="prob">ALTA<b id="pBuy">0%</b></div><div class="prob">BAIXA<b id="pSell">0%</b></div><div class="prob">LATERAL<b id="pSide">100%</b></div></div><p class="muted" id="explain">Clique em Iniciar V32: a conexão e o scanner começam automaticamente.</p><button class="hidden" id="simulate" onclick="registerSignal()">Registrar simulação manual</button><div class="secureNote" id="v24AutoNotice" style="margin-top:10px">🤖 Automático DEMO: aguardando sinal aprovado. Não é necessário clicar em registrar simulação.</div></div></div>
+<div class="card"><h2>🧠 Decisão da IA</h2><div class="signal" id="signalBox"><div class="lamp" id="lamp">⏸</div><h3 id="decision">AGUARDAR</h3><div><span class="score" id="score">0</span>/100</div><div class="bar"><span id="bar"></span></div><div class="probs"><div class="prob">ALTA<b id="pBuy">0%</b></div><div class="prob">BAIXA<b id="pSell">0%</b></div><div class="prob">LATERAL<b id="pSide">100%</b></div></div><p class="muted" id="explain">Clique em Iniciar V33: a conexão e o scanner começam automaticamente.</p><button class="hidden" id="simulate" onclick="registerSignal()">Registrar simulação manual</button><div class="secureNote" id="v24AutoNotice" style="margin-top:10px">🤖 Automático DEMO: aguardando sinal aprovado. Não é necessário clicar em registrar simulação.</div></div></div>
 
 
 <div class="card half"><h2>🤖 Copiloto X — explicação inteligente</h2><div class="aiReport">
@@ -237,6 +237,21 @@ footer{text-align:center;padding:28px 14px;color:var(--muted);font-size:11px}.mi
   </div>
   <div class="secureNote" id="stableResultNote" style="margin-top:10px">Aguardando uma operação DEMO confirmada pela Deriv.</div>
 </div>
+<div class="card full" id="v33StatsCard">
+  <div class="row" style="justify-content:space-between;align-items:center">
+    <div><h2 style="margin-bottom:3px">📊 Estatísticas da sessão V33</h2><div class="mini">Resultados confirmados pela Deriv nesta data.</div></div>
+    <button type="button" class="secondary" id="v33ResetStats">Zerar estatísticas</button>
+  </div>
+  <div class="kpis" style="margin-top:10px">
+    <div class="kpi"><small>OPERAÇÕES</small><b id="v33Ops">0</b></div>
+    <div class="kpi"><small>WIN</small><b id="v33Wins">0</b></div>
+    <div class="kpi"><small>LOSS</small><b id="v33Losses">0</b></div>
+    <div class="kpi"><small>TAXA DE ACERTO</small><b id="v33Rate">0%</b></div>
+    <div class="kpi"><small>LUCRO / PREJUÍZO</small><b id="v33Profit">US$ 0,00</b></div>
+    <div class="kpi"><small>ÚLTIMO RESULTADO</small><b id="v33Last">—</b></div>
+  </div>
+  <div class="secureNote" id="v33StatsNote" style="margin-top:10px">As estatísticas contam somente contratos DEMO encerrados e confirmados pela API.</div>
+</div>
 <section class="card full" id="telegramCenter">
   <div class="row" style="justify-content:space-between;align-items:center">
     <div><h2 style="margin-bottom:3px">📲 Alertas no Telegram</h2><div class="mini">Receba sinal forte, entrada confirmada e resultado no celular.</div></div>
@@ -261,13 +276,13 @@ footer{text-align:center;padding:28px 14px;color:var(--muted);font-size:11px}.mi
 <div class="card full"><div class="row" style="justify-content:space-between"><h2>📋 Diário geral — simulações e operações demo</h2><div><button class="secondary" onclick="exportHistory()">Exportar</button> <button class="danger" onclick="clearHistory()">Limpar</button></div></div><div class="diary" id="diary"></div></div>
 </section>
 <section class="card full" id="v27EngineCard">
-  <div class="row" style="justify-content:space-between"><div><h2 style="margin-bottom:3px">🧠 Motor unificado V31</h2><div class="mini">Uma única regra controla scanner, diagnóstico e envio da ordem DEMO.</div></div><button class="secondary" onclick="v27ClearAudit()">Limpar auditoria</button></div>
+  <div class="row" style="justify-content:space-between"><div><h2 style="margin-bottom:3px">🧠 Motor unificado V33</h2><div class="mini">Uma única regra controla scanner, diagnóstico e envio da ordem DEMO.</div></div><button class="secondary" onclick="v27ClearAudit()">Limpar auditoria</button></div>
   <div class="v27Grid"><div class="v27Box"><small>ESTADO DO MOTOR</small><b id="v27EngineState">AGUARDANDO</b></div><div class="v27Box"><small>ÚLTIMA DECISÃO</small><b id="v27Decision">—</b></div><div class="v27Box"><small>ÚLTIMO PEDIDO</small><b id="v27Request">—</b></div><div class="v27Box"><small>ÚLTIMA RESPOSTA</small><b id="v27Response">—</b></div></div>
   <div class="secureNote" id="v27RuleSummary" style="margin-top:10px">Regras: aguardando carregamento.</div>
   <div class="v27Log" id="v27Audit"><div class="v27Line"><span>—</span><strong>INÍCIO</strong><div>A auditoria aparecerá quando o robô analisar ou enviar uma solicitação.</div></div></div>
 </section>
 <section class="card full" id="audioCenter">
-  <h2>🔊 Central de áudio V32</h2>
+  <h2>🔊 Central de áudio V33</h2>
   <div class="audioControls">
     <label><input type="checkbox" id="audioEnabled" checked> Sons ligados</label>
     <label><input type="checkbox" id="voiceEnabled" checked> Voz em português</label>
@@ -283,7 +298,7 @@ footer{text-align:center;padding:28px 14px;color:var(--muted);font-size:11px}.mi
   <div class="soundStatus" id="soundStatus">Áudio aguardando ativação. Toque em “Ativar e testar áudio” uma vez.</div><div class="soundStatus" id="lastTradeSummary">Último resultado: aguardando operação DEMO.</div>
 </section>
 </main>
-<footer>IA Trader X V29 Estável • Telegram + CALL/PUT + WIN/LOSS de cotação, compra e contrato DEMO • Nenhuma garantia de lucro</footer><div class="toast" id="toast"></div>
+<footer>IA Trader X V33 Estável • Cronômetro + Telegram + estatísticas DEMO • Nenhuma garantia de lucro</footer><div class="toast" id="toast"></div>
 <script>
 let v26OpportunityQueue=[],v26LastActionAt=0;
 
@@ -591,7 +606,7 @@ function quickStartV26(){
   setFlowStage(1,'Iniciando a V26 e validando conta demo, dados e scanner...');
   try{
     const appId=$('derivAppId').value.trim(),accountId=$('derivAccountId').value.trim(),token=cleanDerivToken($('derivToken').value);$('derivToken').value=token;
-    addAutoLog('Botão Iniciar V32 acionado');if(appId&&accountId&&/^DOT/i.test(accountId)){localStorage.setItem(V26_ID_KEY,JSON.stringify({appId,accountId:accountId.toUpperCase(),savedAt:new Date().toISOString()}));setSavedStatus('Identificação atualizada automaticamente. Token PAT não foi salvo.')} $('robotStatus').textContent='INICIANDO V26...';if($('v8ScannerScore'))$('v8ScannerScore').value=$('autoMinScore').value||72;
+    addAutoLog('Botão Iniciar V33 acionado');if(appId&&accountId&&/^DOT/i.test(accountId)){localStorage.setItem(V26_ID_KEY,JSON.stringify({appId,accountId:accountId.toUpperCase(),savedAt:new Date().toISOString()}));setSavedStatus('Identificação atualizada automaticamente. Token PAT não foi salvo.')} $('robotStatus').textContent='INICIANDO V26...';if($('v8ScannerScore'))$('v8ScannerScore').value=$('autoMinScore').value||72;
     if(!appId||!accountId||!token){$('robotStatus').textContent='AGUARDANDO DADOS';toast('Preencha App ID, conta demo e token PAT');return}
     if(!/^DOT/i.test(accountId)){ $('robotStatus').textContent='CONTA DEMO INVÁLIDA';toast('Use uma conta DEMO iniciada por DOT');return}
     v24StartRequested=true;v24AutomationStarted=false;v24MarketRetries=0;
@@ -656,7 +671,7 @@ function updateV26Diagnostics(){
 function updateV26AutoNotice(a=current){
   const el=$('v24AutoNotice');if(!el)return;
   el.className='secureNote';
-  if(!autoTrading){el.textContent='👀 Modo observação: ligue o robô automático ou clique em Iniciar V32.';return}
+  if(!autoTrading){el.textContent='👀 Modo observação: ligue o robô automático ou clique em Iniciar V33.';return}
   if(activeContractId){el.textContent='📈 Operação DEMO em andamento. O sistema acompanhará o contrato até WIN ou LOSS.';el.classList.add('v24AutoBusy');return}
   if(pendingProposal||pendingBuyContext){el.textContent='🚀 Sinal aprovado. Cotação/ordem DEMO sendo processada automaticamente.';el.classList.add('v24AutoBusy');return}
   if(blocked()){el.textContent='🛡️ Automação bloqueada pelos limites de risco da sessão.';el.classList.add('v24AutoError');return}
@@ -1294,7 +1309,7 @@ maybeAutoTrade=function(){
   },500);
 
   document.addEventListener('DOMContentLoaded',()=>{
-    document.title='IA Trader X — V32 Estável';
+    document.title='IA Trader X — V33 Estável';
     document.querySelectorAll('*').forEach(node=>{
       if(node.childNodes.length===1 && node.firstChild?.nodeType===3){
         node.firstChild.nodeValue=node.firstChild.nodeValue.replace(/V28/g,'V29');
@@ -1389,10 +1404,53 @@ maybeAutoTrade=function(){
   }
   function ensureTimer(){if(timer)return;timer=setInterval(render,500)}
   function startFromBuy(d){const ctx=window.activeTradeContext||window.pendingBuyContext||{};op={contract:String(d.buy.contract_id||''),symbol:ctx.symbol||$('symbol')?.value||'—',direction:ctx.direction||window.current?.decision||'—',stake:Number(d.buy.buy_price||ctx.askPrice||0),start:Math.floor(Date.now()/1000),expiry:Math.floor(Date.now()/1000)+120,closed:false,profit:0};render();ensureTimer();const b=$('startV32Btn');if(b){b.disabled=true;b.textContent='🟢 Robô em execução'} }
-  function updateContract(c){if(!op||String(c.contract_id||'')!==String(op.contract||''))return;if(c.date_start)op.start=Number(c.date_start);if(c.date_expiry)op.expiry=Number(c.date_expiry);if(c.is_sold){op.closed=true;op.profit=Number(c.profit||0);const outcome=op.profit>0?'WIN':'LOSS';setText('lastTradeSummary',`Último resultado: ${outcome==='WIN'?'🏆':'❌'} ${outcome} ${(op.profit>0?'+':'')+money(op.profit)} • ${op.direction} • ${op.symbol} • ${new Date().toLocaleTimeString('pt-BR')}`);const b=$('startV32Btn');if(b){b.disabled=false;b.textContent='🚀 Iniciar V32'} }render()}
-  function attach(){const ws=window.tradeWs;if(!ws||ws===attachedWs)return;attachedWs=ws;ws.addEventListener('message',ev=>{let d;try{d=JSON.parse(ev.data)}catch(e){return}if(d.msg_type==='buy'&&d.buy)startFromBuy(d);if(d.msg_type==='proposal_open_contract'&&d.proposal_open_contract)updateContract(d.proposal_open_contract)});ws.addEventListener('close',()=>{const b=$('startV32Btn');if(b){b.disabled=false;b.textContent='🚀 Iniciar V32'}})}
+  function updateContract(c){if(!op||String(c.contract_id||'')!==String(op.contract||''))return;if(c.date_start)op.start=Number(c.date_start);if(c.date_expiry)op.expiry=Number(c.date_expiry);if(c.is_sold){op.closed=true;op.profit=Number(c.profit||0);const outcome=op.profit>0?'WIN':'LOSS';setText('lastTradeSummary',`Último resultado: ${outcome==='WIN'?'🏆':'❌'} ${outcome} ${(op.profit>0?'+':'')+money(op.profit)} • ${op.direction} • ${op.symbol} • ${new Date().toLocaleTimeString('pt-BR')}`);const b=$('startV32Btn');if(b){b.disabled=false;b.textContent='🚀 Iniciar V33'} }render()}
+  function attach(){const ws=window.tradeWs;if(!ws||ws===attachedWs)return;attachedWs=ws;ws.addEventListener('message',ev=>{let d;try{d=JSON.parse(ev.data)}catch(e){return}if(d.msg_type==='buy'&&d.buy)startFromBuy(d);if(d.msg_type==='proposal_open_contract'&&d.proposal_open_contract)updateContract(d.proposal_open_contract)});ws.addEventListener('close',()=>{const b=$('startV32Btn');if(b){b.disabled=false;b.textContent='🚀 Iniciar V33'}})}
   setInterval(()=>{attach();const b=$('startV32Btn');if(b&&window.autoTrading&&!op?.closed){b.disabled=true;b.textContent='🟢 Robô em execução'}},700);
-  document.addEventListener('DOMContentLoaded',()=>{document.title='IA Trader X — V32 Estável';render()});
+  document.addEventListener('DOMContentLoaded',()=>{document.title='IA Trader X — V33 Estável';render()});
+})();
+</script>
+
+<script>
+(()=>{
+  const KEY='iaTraderV33DailyStats';
+  const today=()=>new Date().toISOString().slice(0,10);
+  const fresh=()=>({date:today(),ops:0,wins:0,losses:0,profit:0,last:'—',contracts:[]});
+  let st;
+  try{st=JSON.parse(localStorage.getItem(KEY)||'null')||fresh()}catch(e){st=fresh()}
+  if(st.date!==today())st=fresh();
+  const el=id=>document.getElementById(id);
+  const money=n=>`${n>=0?'+':''}US$ ${Math.abs(Number(n||0)).toFixed(2).replace('.',',')}`;
+  function save(){localStorage.setItem(KEY,JSON.stringify(st))}
+  function render(){
+    if(!el('v33Ops'))return;
+    el('v33Ops').textContent=st.ops;
+    el('v33Wins').textContent=st.wins;
+    el('v33Losses').textContent=st.losses;
+    el('v33Rate').textContent=st.ops?Math.round(st.wins/st.ops*100)+'%':'0%';
+    el('v33Profit').textContent=money(st.profit);
+    el('v33Last').textContent=st.last||'—';
+  }
+  function record(c){
+    const id=String(c.contract_id||'');
+    if(!id||st.contracts.includes(id)||!c.is_sold)return;
+    const p=Number(c.profit||0), outcome=p>0?'WIN':'LOSS';
+    st.contracts.push(id); if(st.contracts.length>100)st.contracts=st.contracts.slice(-100);
+    st.ops++; if(p>0)st.wins++; else st.losses++; st.profit+=p;
+    st.last=`${outcome} ${money(p)}`; save(); render();
+  }
+  function attach(){
+    const ws=window.tradeWs;
+    if(!ws||ws.__v33StatsAttached)return;
+    ws.__v33StatsAttached=true;
+    ws.addEventListener('message',ev=>{let d;try{d=JSON.parse(ev.data)}catch(e){return}if(d.msg_type==='proposal_open_contract'&&d.proposal_open_contract?.is_sold)record(d.proposal_open_contract)});
+  }
+  document.addEventListener('DOMContentLoaded',()=>{
+    render();
+    const b=el('v33ResetStats'); if(b)b.addEventListener('click',()=>{if(confirm('Zerar as estatísticas de hoje?')){st=fresh();save();render()}});
+    const start=el('startV32Btn'); if(start)start.addEventListener('click',()=>{start.disabled=true;start.textContent='🟢 Robô em execução';setTimeout(()=>{if(!window.autoTrading){start.disabled=false;start.textContent='🚀 Iniciar V33'}},8000)});
+  });
+  setInterval(attach,600);
 })();
 </script>
 </body></html>
