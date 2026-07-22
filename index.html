@@ -164,7 +164,7 @@ footer{text-align:center;padding:28px 14px;color:var(--muted);font-size:11px}.mi
 </div>
 <div class="card full"><h2>🎯 Gerente do dia</h2><div class="kpis">
 <div class="kpi"><small>Saldo do simulador interno</small><b id="balance">$1.000,00</b></div><div class="kpi"><small>Resultado hoje</small><b id="dayResult">$0,00</b></div><div class="kpi"><small>Meta / limite</small><b id="goalView">$20 / -$15</b></div><div class="kpi"><small>Operações hoje</small><b id="opsView">0 / 10</b></div></div>
-<div class="row" style="margin-top:11px"><div class="field"><label>Meta diária USD</label><input id="goal" type="number" value="20"></div><div class="field"><label>Limite de perda USD</label><input id="limit" type="number" value="15"></div><div class="field"><label>Valor da simulação interna USD</label><input id="stake" type="number" step=".01" value="1"></div><div class="field"><label>Máximo de operações</label><input id="maxOps" type="number" value="10"></div><button class="secondary" onclick="saveSettings()">Salvar</button></div></div>
+<div class="row" style="margin-top:11px"><div class="field"><label>Meta diária USD</label><input id="goal" type="number" value="20"></div><div class="field"><label>Limite de perda USD</label><input id="limit" type="number" value="15"></div><div class="field"><label>Valor da simulação interna USD</label><input id="stake" type="number" step=".01" value="1"></div><div class="field"><label>Máximo de operações</label><input id="maxOps" type="number" value="50"></div><button class="secondary" onclick="saveSettings()">Salvar</button></div></div>
 
 <div class="card wide"><div class="row" style="justify-content:space-between"><div><h2 style="margin-bottom:3px">🎯 Índices sintéticos ao vivo</h2><div class="assetCount" id="assetCount">Carregando mercados disponíveis...</div></div><span class="sessionBadge" id="marketSession">Índice: aguardando</span></div>
 <div class="marketFilters">
@@ -273,6 +273,32 @@ footer{text-align:center;padding:28px 14px;color:var(--muted);font-size:11px}.mi
   </div>
   <div class="secureNote" id="telegramStatus" style="margin-top:10px">Envie /start ao bot, busque o Chat ID e teste. Marque “Lembrar token” apenas neste computador particular.</div>
 </section>
+<section class="card full" id="v39Lab50Card">
+  <div class="row" style="justify-content:space-between;align-items:center">
+    <div><h2 style="margin-bottom:3px">🧪 Laboratório das 50 operações DEMO</h2><div class="mini">Salva automaticamente as últimas 50 operações confirmadas pela Deriv para análise posterior.</div></div>
+    <span class="lockedBadge" id="v39LabStatus">0 / 50</span>
+  </div>
+  <div class="kpis" style="margin-top:10px">
+    <div class="kpi"><small>REGISTRADAS</small><b id="v39LabOps">0</b></div>
+    <div class="kpi"><small>WIN</small><b id="v39LabWins">0</b></div>
+    <div class="kpi"><small>LOSS</small><b id="v39LabLosses">0</b></div>
+    <div class="kpi"><small>TAXA DE ACERTO</small><b id="v39LabRate">0%</b></div>
+    <div class="kpi"><small>RESULTADO LÍQUIDO</small><b id="v39LabProfit">US$ 0,00</b></div>
+    <div class="kpi"><small>MELHOR ATIVO</small><b id="v39LabBest">—</b></div>
+  </div>
+  <div class="row" style="margin-top:12px">
+    <button type="button" id="v39ExportCsv">📄 Exportar CSV</button>
+    <button type="button" id="v39ExportJson" class="secondary">🧠 Exportar relatório completo</button>
+    <button type="button" id="v39ClearLab" class="danger">Limpar laboratório</button>
+  </div>
+  <div class="secureNote" id="v39LabNote" style="margin-top:10px">Os dados ficam salvos neste navegador. Ao completar 50 operações, exporte o relatório e envie aqui para análise.</div>
+  <div style="overflow:auto;margin-top:12px;border:1px solid #ffffff14;border-radius:12px">
+    <table style="width:100%;border-collapse:collapse;min-width:980px;font-size:13px">
+      <thead><tr style="background:#07111f"><th style="padding:9px;text-align:left">#</th><th style="padding:9px;text-align:left">Data/Hora</th><th style="padding:9px;text-align:left">Ativo</th><th style="padding:9px;text-align:left">Direção</th><th style="padding:9px;text-align:left">Entrada</th><th style="padding:9px;text-align:left">Score</th><th style="padding:9px;text-align:left">Qualidade</th><th style="padding:9px;text-align:left">Conflito</th><th style="padding:9px;text-align:left">Conf.</th><th style="padding:9px;text-align:left">Resultado</th><th style="padding:9px;text-align:left">Lucro</th><th style="padding:9px;text-align:left">Contrato</th></tr></thead>
+      <tbody id="v39LabRows"><tr><td colspan="12" style="padding:14px;text-align:center;color:#9fb3c8">Aguardando operações DEMO encerradas.</td></tr></tbody>
+    </table>
+  </div>
+</section>
 <div class="card full"><div class="row" style="justify-content:space-between"><h2>📋 Diário geral — simulações e operações demo</h2><div><button class="secondary" onclick="exportHistory()">Exportar</button> <button class="danger" onclick="clearHistory()">Limpar</button></div></div><div class="diary" id="diary"></div></div>
 </section>
 <section class="card full" id="v27EngineCard">
@@ -359,7 +385,7 @@ let ws=null,prices=[],current=null,soundOn=false,lastStrong='',chartMode='candle
 let v24MarketReady=false,v24StartRequested=false,v24ScannerRunning=false,v24LastScanAt=0;
 let v24MarketSocketId=0,v24MarketOpenedAt=0,v24LastMarketMessageAt=0,v24LastHistoryRequestAt=0,v24MarketRetries=0,v24WatchdogTimer=null,v24AutomationStarted=false;
 let v24OrderAttempts=0,v24OrderErrors=0,v24LastBlockReason='Aguardando início',v24LastCandidate=null;
-let state=JSON.parse(localStorage.getItem('iaTraderXV26Binary')||localStorage.getItem('iaTraderXV25Binary')||localStorage.getItem('iaTraderXV23Binary')||localStorage.getItem('iaTraderXV21Binary')||localStorage.getItem('iaTraderXV19Binary')||localStorage.getItem('iaTraderXV121Binary')||localStorage.getItem('iaTraderXV17Binary')||localStorage.getItem('iaTraderXV10Binary')||localStorage.getItem('iaTraderXV8Binary')||localStorage.getItem('iaTraderXV7Binary')||localStorage.getItem('iaTraderXV6Binary')||localStorage.getItem('iaTraderXV5')||localStorage.getItem('iaTraderXV4')||localStorage.getItem('iaTraderXV3')||localStorage.getItem('iaTraderXV2')||'null')||{balance:1000,goal:20,limit:15,stake:1,maxOps:10,day:new Date().toISOString().slice(0,10),result:0,history:[],analyses:[]};state.analyses=state.analyses||[];state.backtests=state.backtests||[];
+let state=JSON.parse(localStorage.getItem('iaTraderXV26Binary')||localStorage.getItem('iaTraderXV25Binary')||localStorage.getItem('iaTraderXV23Binary')||localStorage.getItem('iaTraderXV21Binary')||localStorage.getItem('iaTraderXV19Binary')||localStorage.getItem('iaTraderXV121Binary')||localStorage.getItem('iaTraderXV17Binary')||localStorage.getItem('iaTraderXV10Binary')||localStorage.getItem('iaTraderXV8Binary')||localStorage.getItem('iaTraderXV7Binary')||localStorage.getItem('iaTraderXV6Binary')||localStorage.getItem('iaTraderXV5')||localStorage.getItem('iaTraderXV4')||localStorage.getItem('iaTraderXV3')||localStorage.getItem('iaTraderXV2')||'null')||{balance:1000,goal:20,limit:15,stake:1,maxOps:50,day:new Date().toISOString().slice(0,10),result:0,history:[],analyses:[]};state.analyses=state.analyses||[];state.backtests=state.backtests||[];
 const $=id=>document.getElementById(id),money=v=>new Intl.NumberFormat('pt-BR',{style:'currency',currency:'USD'}).format(v),fmt=v=>Number(v).toFixed(5);
 function toast(t){$('toast').textContent=t;$('toast').classList.add('show');setTimeout(()=>$('toast').classList.remove('show'),2200)}
 function persist(){localStorage.setItem('iaTraderXV26Binary',JSON.stringify(state));renderStats()}
@@ -1724,6 +1750,104 @@ window.v12ApprovedSignal = window.v12ApprovedSignal || null;
   document.addEventListener('DOMContentLoaded',()=>{document.title='IA Trader X — V39 Estável';safeDefaults();hardenRequests();attachWs();render();ensureTimer()});
   setInterval(()=>{hardenRequests();attachWs();render();if(op&&!op.closed&&nowSec()>=Number(op.expiry||0)+20)requestOfficialStatus(true)},500);
   window.v38UpdateContract=updateContract;
+})();
+</script>
+
+
+<script>
+/* ===== V39 LABORATÓRIO 50: histórico persistente e exportável ===== */
+(function(){
+  const KEY='iaTraderXV39Lab50';
+  const LIMIT=50;
+  const $=id=>document.getElementById(id);
+  const num=v=>Number.isFinite(Number(v))?Number(v):0;
+  const textValue=id=>($(id)?.textContent||'').trim();
+  const inputValue=id=>num($(id)?.value);
+  const pct=v=>`${Math.round(num(v))}%`;
+  const money=v=>`${num(v)>=0?'+':''}US$ ${Math.abs(num(v)).toFixed(2).replace('.',',')}`;
+  let records=[];
+  let open={};
+  let attachedWs=null;
+  try{records=JSON.parse(localStorage.getItem(KEY)||'[]');if(!Array.isArray(records))records=[]}catch(e){records=[]}
+  records=records.slice(-LIMIT);
+  function save(){localStorage.setItem(KEY,JSON.stringify(records))}
+  function metric(id,fallback=0){const raw=textValue(id).replace(',','.').match(/-?\d+(?:\.\d+)?/);return raw?num(raw[0]):fallback}
+  function contextForBuy(d){
+    const ctx=window.activeTradeContext||window.pendingBuyContext||{};
+    const contract=String(d.buy?.contract_id||'');
+    return {
+      contract,
+      startedAt:new Date().toISOString(),
+      symbol:ctx.symbol||$('symbol')?.value||'—',
+      direction:ctx.direction||window.current?.decision||'—',
+      stake:num(d.buy?.buy_price||ctx.askPrice||ctx.stake),
+      score:num(ctx.score||inputValue('autoMinScore')||metric('dScore')||metric('score')),
+      quality:num(ctx.quality||metric('v8Quality')||metric('dataQuality')||inputValue('v8MinQuality')),
+      conflict:num(ctx.conflict||metric('v8Conflict')||metric('indicatorConflict')||inputValue('v8MaxConflict')),
+      confirmations:textValue('v12ConfirmCount')||String(inputValue('v12Confirmations')||'—'),
+      source:ctx.source||'auto',
+      durationMinutes:num(ctx.duration||5)
+    };
+  }
+  function onBuy(d){const rec=contextForBuy(d);if(rec.contract)open[rec.contract]=rec}
+  function onSold(c){
+    const id=String(c.contract_id||'');
+    if(!id||records.some(r=>r.contract===id))return;
+    const base=open[id]||{};
+    const profit=num(c.profit);
+    const rec={
+      contract:id,
+      startedAt:base.startedAt||new Date((num(c.date_start)||Date.now()/1000)*1000).toISOString(),
+      finishedAt:new Date((num(c.date_expiry)||Date.now()/1000)*1000).toISOString(),
+      symbol:base.symbol||c.underlying||$('symbol')?.value||'—',
+      direction:base.direction||(c.contract_type==='CALL'?'CALL':c.contract_type==='PUT'?'PUT':'—'),
+      stake:num(base.stake||c.buy_price),
+      score:num(base.score),quality:num(base.quality),conflict:num(base.conflict),
+      confirmations:base.confirmations||'—',durationMinutes:num(base.durationMinutes||5),
+      outcome:profit>0?'WIN':'LOSS',profit,
+      payout:num(c.payout),buyPrice:num(c.buy_price),sellPrice:num(c.sell_price),
+      source:base.source||'auto'
+    };
+    records.push(rec);records=records.slice(-LIMIT);delete open[id];save();render();
+  }
+  function summarize(){
+    const wins=records.filter(r=>r.outcome==='WIN').length, losses=records.filter(r=>r.outcome==='LOSS').length;
+    const profit=records.reduce((a,r)=>a+num(r.profit),0);
+    const by={};records.forEach(r=>{const k=r.symbol||'—';by[k]=by[k]||{ops:0,wins:0};by[k].ops++;if(r.outcome==='WIN')by[k].wins++});
+    let best='—',bestRate=-1;Object.entries(by).forEach(([k,v])=>{if(v.ops>=2&&v.wins/v.ops>bestRate){bestRate=v.wins/v.ops;best=`${k} ${Math.round(bestRate*100)}%`}});
+    return {wins,losses,profit,rate:records.length?wins/records.length*100:0,best};
+  }
+  function render(){
+    const s=summarize();
+    if($('v39LabStatus'))$('v39LabStatus').textContent=`${records.length} / ${LIMIT}`;
+    if($('v39LabOps'))$('v39LabOps').textContent=records.length;
+    if($('v39LabWins'))$('v39LabWins').textContent=s.wins;
+    if($('v39LabLosses'))$('v39LabLosses').textContent=s.losses;
+    if($('v39LabRate'))$('v39LabRate').textContent=pct(s.rate);
+    if($('v39LabProfit'))$('v39LabProfit').textContent=money(s.profit);
+    if($('v39LabBest'))$('v39LabBest').textContent=s.best;
+    if($('v39LabNote'))$('v39LabNote').textContent=records.length>=LIMIT?'✅ Amostra de 50 operações concluída. Exporte o relatório completo e envie para análise antes de qualquer uso em conta real.':`Faltam ${LIMIT-records.length} operações para completar a amostra. Os dados permanecem salvos neste navegador.`;
+    const body=$('v39LabRows');if(!body)return;
+    if(!records.length){body.innerHTML='<tr><td colspan="12" style="padding:14px;text-align:center;color:#9fb3c8">Aguardando operações DEMO encerradas.</td></tr>';return}
+    body.innerHTML=records.slice().reverse().map((r,i)=>`<tr style="border-top:1px solid #ffffff10"><td style="padding:8px">${records.length-i}</td><td style="padding:8px">${new Date(r.finishedAt).toLocaleString('pt-BR')}</td><td style="padding:8px">${r.symbol}</td><td style="padding:8px">${r.direction}</td><td style="padding:8px">${money(r.stake).replace('+','')}</td><td style="padding:8px">${r.score||'—'}</td><td style="padding:8px">${r.quality?pct(r.quality):'—'}</td><td style="padding:8px">${r.conflict?pct(r.conflict):'—'}</td><td style="padding:8px">${r.confirmations}</td><td style="padding:8px;font-weight:700">${r.outcome}</td><td style="padding:8px">${money(r.profit)}</td><td style="padding:8px">${r.contract}</td></tr>`).join('');
+  }
+  function download(name,type,content){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([content],{type}));a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500)}
+  function csv(){
+    const headers=['numero','inicio','fim','ativo','direcao','entrada_usd','score','qualidade_pct','conflito_pct','confirmacoes','duracao_min','resultado','lucro_usd','payout','preco_compra','preco_venda','contrato','origem'];
+    const rows=records.map((r,i)=>[i+1,r.startedAt,r.finishedAt,r.symbol,r.direction,r.stake,r.score,r.quality,r.conflict,r.confirmations,r.durationMinutes,r.outcome,r.profit,r.payout,r.buyPrice,r.sellPrice,r.contract,r.source]);
+    const esc=v=>'"'+String(v??'').replaceAll('"','""')+'"';return '﻿'+[headers,...rows].map(row=>row.map(esc).join(';')).join('\n');
+  }
+  function report(){return JSON.stringify({app:'IA Trader X V39',generatedAt:new Date().toISOString(),limit:LIMIT,total:records.length,summary:summarize(),operations:records},null,2)}
+  function attach(){const ws=window.tradeWs;if(!ws||ws===attachedWs)return;attachedWs=ws;ws.addEventListener('message',ev=>{let d;try{d=JSON.parse(ev.data)}catch(e){return}if(d.msg_type==='buy'&&d.buy)onBuy(d);if(d.msg_type==='proposal_open_contract'&&d.proposal_open_contract?.is_sold)onSold(d.proposal_open_contract)});}
+  document.addEventListener('DOMContentLoaded',()=>{
+    if($('maxOps'))$('maxOps').value='50';try{if(window.state){window.state.maxOps=50;window.persist&&window.persist()}}catch(e){}
+    render();
+    $('v39ExportCsv')?.addEventListener('click',()=>download(`ia-trader-v39-50-operacoes-${new Date().toISOString().slice(0,10)}.csv`,'text/csv;charset=utf-8',csv()));
+    $('v39ExportJson')?.addEventListener('click',()=>download(`ia-trader-v39-relatorio-completo-${new Date().toISOString().slice(0,10)}.json`,'application/json;charset=utf-8',report()));
+    $('v39ClearLab')?.addEventListener('click',()=>{if(confirm('Apagar definitivamente as operações salvas neste navegador?')){records=[];open={};save();render()}});
+  });
+  setInterval(attach,600);
+  window.v39Lab50={getRecords:()=>records.slice(),render};
 })();
 </script>
 
