@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <meta name="theme-color" content="#050b18">
 <meta name="description" content="IA Trader X V39 Estável — conexão oficial à conta demo Deriv, dados em tempo real, scanner inteligente e automação controlada de opções.">
-<title>IA Trader X — V39 Estável</title>
+<title>IA Trader X — V39 Completa</title>
 <style>
 :root{--bg:#050b18;--card:#0b1729;--card2:#0e2038;--line:#1e3855;--text:#eef7ff;--muted:#8fa9c2;--cyan:#25dcff;--blue:#5578ff;--green:#37e891;--yellow:#ffd05a;--red:#ff6076;--purple:#b37cff}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at 15% 0,#163a67 0,transparent 28%),radial-gradient(circle at 90% 10%,#361d6d55 0,transparent 25%),var(--bg);color:var(--text);font-family:Inter,Arial,sans-serif;min-height:100vh}
@@ -344,13 +344,19 @@ footer{text-align:center;padding:28px 14px;color:var(--muted);font-size:11px}.mi
     <div class="kpi"><small>DIREÇÃO</small><b id="v37LiveDirection">—</b></div>
     <div class="kpi"><small>ENTRADA</small><b id="v37LiveStake">US$ 0,00</b></div>
     <div class="kpi"><small>CONTRATO</small><b id="v37LiveContract">—</b></div>
+    <div class="kpi"><small>SCORE DA ENTRADA</small><b id="v39LiveScore">—</b></div>
+    <div class="kpi"><small>QUALIDADE</small><b id="v39LiveQuality">—</b></div>
+    <div class="kpi"><small>CONFLITO</small><b id="v39LiveConflict">—</b></div>
+    <div class="kpi"><small>CONFIRMAÇÕES</small><b id="v39LiveConfirmations">—</b></div>
+    <div class="kpi"><small>HORÁRIO DA ENTRADA</small><b id="v39LiveOpenedAt">—</b></div>
     <div class="kpi"><small>RESULTADO</small><b id="v37LiveResult">AGUARDANDO</b></div>
   </div>
-  <div class="secureNote" id="v37LiveNote" style="margin-top:12px">Aguardando uma compra DEMO confirmada pela Deriv.</div>
+  <div class="secureNote" id="v39LiveReason" style="margin-top:12px">Motivo da entrada: aguardando sinal aprovado.</div>
+  <div class="secureNote" id="v37LiveNote" style="margin-top:8px">Aguardando uma compra DEMO confirmada pela Deriv.</div>
 </section>
 
 </main>
-<footer>IA Trader X V39 Estável • Cronômetro + Telegram + estatísticas DEMO • Nenhuma garantia de lucro</footer><div class="toast" id="toast"></div>
+<footer>IA Trader X V39 Completa • Score + filtros + cronômetro + Telegram + laboratório DEMO • Nenhuma garantia de lucro</footer><div class="toast" id="toast"></div>
 <script>
 let v26OpportunityQueue=[],v26LastActionAt=0;
 
@@ -1848,6 +1854,74 @@ window.v12ApprovedSignal = window.v12ApprovedSignal || null;
   });
   setInterval(attach,600);
   window.v39Lab50={getRecords:()=>records.slice(),render};
+})();
+</script>
+
+
+<script>
+/* V39 — fotografia completa da decisão no instante exato da compra DEMO. */
+(()=>{
+  const KEY='iaTraderXV39OperationSnapshots';
+  const $=id=>document.getElementById(id);
+  const txt=id=>($(id)?.textContent||'').trim();
+  const val=id=>$(id)?.value;
+  const numberFrom=v=>{const m=String(v??'').replace(',','.').match(/-?\d+(?:\.\d+)?/);return m?Number(m[0]):0};
+  let snapshots={};
+  try{snapshots=JSON.parse(localStorage.getItem(KEY)||'{}')||{}}catch(e){snapshots={}}
+  let attached=null,lastSnapshot=null;
+  function readMetrics(){
+    const c=window.current||{};
+    const score=numberFrom(c.score||txt('score')||txt('v8BestScore')||txt('v27Decision'));
+    const quality=numberFrom(txt('v8Quality')||txt('dataQuality'));
+    const conflict=numberFrom(txt('v8Conflict')||txt('indicatorConflict'));
+    const confirmations=txt('v12ConfirmCount')||String(val('v12Confirmations')||'—');
+    const direction=c.decision&&c.decision!=='AGUARDAR'?c.decision:(txt('decision').match(/CALL|PUT/)||[])[0]||'—';
+    const reasons=Array.isArray(c.why)?c.why.filter(Boolean):[];
+    return {
+      score,quality,conflict,confirmations,direction,
+      reason:reasons.length?reasons.join(' • '):`Sinal ${direction} aprovado pelos filtros da V39`,
+      openedAt:new Date().toISOString(),
+      symbol:val('symbol')||'—'
+    };
+  }
+  function show(m){
+    if(!m)return;
+    if($('v39LiveScore'))$('v39LiveScore').textContent=m.score?`${m.score}/100`:'—';
+    if($('v39LiveQuality'))$('v39LiveQuality').textContent=m.quality?`${m.quality}%`:'—';
+    if($('v39LiveConflict'))$('v39LiveConflict').textContent=Number.isFinite(m.conflict)?`${m.conflict}%`:'—';
+    if($('v39LiveConfirmations'))$('v39LiveConfirmations').textContent=m.confirmations||'—';
+    if($('v39LiveOpenedAt'))$('v39LiveOpenedAt').textContent=m.openedAt?new Date(m.openedAt).toLocaleTimeString('pt-BR'):'—';
+    if($('v39LiveReason'))$('v39LiveReason').textContent='Motivo da entrada: '+(m.reason||'—');
+  }
+  function save(){try{localStorage.setItem(KEY,JSON.stringify(snapshots))}catch(e){}}
+  function attach(){
+    const ws=window.tradeWs;
+    if(!ws||ws===attached)return;
+    attached=ws;
+    ws.addEventListener('message',ev=>{
+      let d;try{d=JSON.parse(ev.data)}catch(e){return}
+      if(d.msg_type==='buy'&&d.buy){
+        const id=String(d.buy.contract_id||'');
+        const m=readMetrics();m.contract=id;m.stake=numberFrom(d.buy.buy_price);
+        snapshots[id]=m;lastSnapshot=m;save();show(m);
+        try{
+          if(window.activeTradeContext)Object.assign(window.activeTradeContext,m);
+          if(window.pendingBuyContext)Object.assign(window.pendingBuyContext,m);
+        }catch(e){}
+      }
+      if(d.msg_type==='proposal_open_contract'&&d.proposal_open_contract){
+        const c=d.proposal_open_contract,id=String(c.contract_id||'');
+        const m=snapshots[id]||lastSnapshot;
+        if(m)show(m);
+        if(c.is_sold&&m){m.finishedAt=new Date().toISOString();m.outcome=Number(c.profit||0)>0?'WIN':'LOSS';m.profit=Number(c.profit||0);snapshots[id]=m;save()}
+      }
+    });
+  }
+  document.addEventListener('DOMContentLoaded',()=>{
+    const ids=Object.keys(snapshots);if(ids.length){lastSnapshot=snapshots[ids[ids.length-1]];show(lastSnapshot)}
+  });
+  setInterval(attach,500);
+  window.v39OperationSnapshots={get:()=>({...snapshots}),last:()=>lastSnapshot};
 })();
 </script>
 
