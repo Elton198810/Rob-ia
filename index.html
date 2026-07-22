@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <meta name="theme-color" content="#050b18">
 <meta name="description" content="IA Trader X V36 Consolidada — conexão oficial à conta demo Deriv, dados em tempo real, scanner inteligente e automação controlada de opções.">
-<title>IA Trader X — V34 Estável</title>
+<title>IA Trader X — V39 Estável</title>
 <style>
 :root{--bg:#050b18;--card:#0b1729;--card2:#0e2038;--line:#1e3855;--text:#eef7ff;--muted:#8fa9c2;--cyan:#25dcff;--blue:#5578ff;--green:#37e891;--yellow:#ffd05a;--red:#ff6076;--purple:#b37cff}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at 15% 0,#163a67 0,transparent 28%),radial-gradient(circle at 90% 10%,#361d6d55 0,transparent 25%),var(--bg);color:var(--text);font-family:Inter,Arial,sans-serif;min-height:100vh}
@@ -106,7 +106,7 @@ footer{text-align:center;padding:28px 14px;color:var(--muted);font-size:11px}.mi
 <div class="field"><label>Token PAT com permissão trade</label><input id="derivToken" type="password" autocomplete="off" placeholder="Cole somente na hora de conectar"></div>
 <div class="field"><label>Conta autorizada</label><select id="derivMode" disabled><option value="demo">Demo — dinheiro virtual</option></select></div>
 </div>
-<div class="row" style="margin-top:10px"><button class="secondary" id="findDemoBtn" onclick="findDerivDemoAccount()">🔎 Encontrar conta demo</button><button id="derivConnectBtn" onclick="connectDerivDemo()">Conectar conta demo</button><button id="startV32Btn" onclick="quickStartV26()">🚀 Iniciar V38</button><button class="secondary" onclick="testDerivConnection()">Testar conexão</button><button class="secondary" onclick="refreshV26Balance(true)">Atualizar saldo</button><button class="secondary" onclick="disconnectDeriv()">Desconectar</button><button class="danger emergency" onclick="emergencyStop()">🛑 PARAR TUDO</button></div>
+<div class="row" style="margin-top:10px"><button class="secondary" id="findDemoBtn" onclick="findDerivDemoAccount()">🔎 Encontrar conta demo</button><button id="derivConnectBtn" onclick="connectDerivDemo()">Conectar conta demo</button><button id="startV32Btn" onclick="quickStartV26()">🚀 Iniciar V39</button><button class="secondary" onclick="testDerivConnection()">Testar conexão</button><button class="secondary" onclick="refreshV26Balance(true)">Atualizar saldo</button><button class="secondary" onclick="disconnectDeriv()">Desconectar</button><button class="danger emergency" onclick="emergencyStop()">🛑 PARAR TUDO</button></div>
 <div class="row identityActions" style="margin-top:10px;align-items:center"><button class="secondary" type="button" onclick="saveV26Identity()">💾 Salvar identificação</button><button class="secondary" type="button" onclick="saveV26Preferences()">⚙️ Salvar preferências</button><button class="danger" type="button" onclick="clearV26SavedData()">🗑️ Apagar dados salvos</button><span class="mini" id="savedIdentityStatus">App ID e conta demo podem ser salvos neste navegador. O token PAT nunca será salvo.</span></div>
 <div class="connectionGrid" style="margin-top:11px"><div class="connectionState"><span class="dot" id="derivDot"></span><div><small class="mini">CONEXÃO</small><b id="derivStatusText">Desconectada</b></div></div><div class="connectionState"><div><small class="mini">SALDO DERIV</small><b id="derivBalance">—</b></div></div><div class="connectionState"><div><small class="mini">CONTA ATIVA</small><b id="derivActiveAccount">—</b></div></div><div class="connectionState"><div><small class="mini">MOEDA</small><b id="derivCurrency">—</b></div></div><div class="connectionState"><div><small class="mini">ÚLTIMA ORDEM</small><b id="lastAutoOrder">Nenhuma</b></div></div><div class="connectionState"><div><small class="mini">STATUS DO ROBÔ</small><b id="robotStatus">DESLIGADO</b></div></div><div class="connectionState"><div><small class="mini">ÚLTIMA MENSAGEM</small><b id="derivLastMessage">—</b></div></div><div class="connectionState"><div><small class="mini">CANAL</small><b id="derivChannel">OTP Demo</b></div></div><div class="connectionState"><div><small class="mini">DIAGNÓSTICO</small><b id="derivDiagnostic">Aguardando</b></div></div></div>
 <div class="autoPanel">
@@ -254,7 +254,7 @@ footer{text-align:center;padding:28px 14px;color:var(--muted);font-size:11px}.mi
 </div>
 <section class="card full" id="telegramCenter">
   <div class="row" style="justify-content:space-between;align-items:center">
-    <div><h2 style="margin-bottom:3px">📲 Alertas no Telegram</h2><div class="mini">Receba sinal forte, entrada confirmada e resultado no celular.</div></div>
+    <div><h2 style="margin-bottom:3px">📲 Alertas no Telegram</h2><div class="mini">Receba somente entrada confirmada e resultado oficial no celular.</div></div>
     <span class="lockedBadge" id="telegramBadge">DESLIGADO</span>
   </div>
   <div class="row" style="margin-top:10px">
@@ -267,7 +267,7 @@ footer{text-align:center;padding:28px 14px;color:var(--muted);font-size:11px}.mi
     <button type="button" id="telegramTestBtn">📨 Testar Telegram</button>
     <button type="button" id="telegramSaveBtn" class="secondary">💾 Salvar configurações</button>
     <label class="checkline"><input type="checkbox" id="telegramEnabled"> Alertas ligados</label>
-    <label class="checkline"><input type="checkbox" id="telegramSignal" checked> Sinal forte</label>
+    <label class="checkline" title="Na V39, sinais preliminares não são enviados para evitar mensagens repetidas."><input type="checkbox" id="telegramSignal" disabled> Sinal forte desativado</label>
     <label class="checkline"><input type="checkbox" id="telegramEntry" checked> Entrada</label>
     <label class="checkline"><input type="checkbox" id="telegramResult" checked> WIN/LOSS</label>
   </div>
@@ -282,7 +282,7 @@ footer{text-align:center;padding:28px 14px;color:var(--muted);font-size:11px}.mi
   <div class="v27Log" id="v27Audit"><div class="v27Line"><span>—</span><strong>INÍCIO</strong><div>A auditoria aparecerá quando o robô analisar ou enviar uma solicitação.</div></div></div>
 </section>
 <section class="card full" id="audioCenter">
-  <h2>🔊 Central de áudio V38</h2>
+  <h2>🔊 Central de áudio V39</h2>
   <div class="audioControls">
     <label><input type="checkbox" id="audioEnabled" checked> Sons ligados</label>
     <label><input type="checkbox" id="voiceEnabled" checked> Voz em português</label>
@@ -300,7 +300,7 @@ footer{text-align:center;padding:28px 14px;color:var(--muted);font-size:11px}.mi
 <section class="card full" id="v37LivePanel" style="border:1px solid #25dcff55;box-shadow:0 0 28px #25dcff12">
   <div class="row" style="justify-content:space-between;align-items:center">
     <div>
-      <h2 style="margin-bottom:3px">🎯 Operação ao vivo — painel final V38</h2>
+      <h2 style="margin-bottom:3px">🎯 Operação ao vivo — painel final V39</h2>
       <div class="mini">Acompanhamento detalhado do contrato DEMO, sempre no final da página.</div>
     </div>
     <span class="lockedBadge" id="v37LiveBadge">AGUARDANDO</span>
@@ -324,7 +324,7 @@ footer{text-align:center;padding:28px 14px;color:var(--muted);font-size:11px}.mi
 </section>
 
 </main>
-<footer>IA Trader X V38 Final Estável • Cronômetro + Telegram + estatísticas DEMO • Nenhuma garantia de lucro</footer><div class="toast" id="toast"></div>
+<footer>IA Trader X V39 Estável • Cronômetro + Telegram + estatísticas DEMO • Nenhuma garantia de lucro</footer><div class="toast" id="toast"></div>
 <script>
 let v26OpportunityQueue=[],v26LastActionAt=0;
 
@@ -1337,7 +1337,7 @@ maybeAutoTrade=function(){
   },500);
 
   document.addEventListener('DOMContentLoaded',()=>{
-    document.title='IA Trader X — V38 Final Estável';
+    document.title='IA Trader X — V39 Estável';
     document.querySelectorAll('*').forEach(node=>{
       if(node.childNodes.length===1 && node.firstChild?.nodeType===3){
         node.firstChild.nodeValue=node.firstChild.nodeValue.replace(/V28/g,'V29');
@@ -1360,7 +1360,7 @@ maybeAutoTrade=function(){
     enabledEl.checked=localStorage.getItem('iaTraderTelegramEnabled')==='1';
     rememberEl.checked=localStorage.getItem('iaTraderTelegramRememberToken')==='1';
     if(rememberEl.checked) tokenEl.value=localStorage.getItem('iaTraderTelegramTokenSaved')||'';
-    $s('telegramSignal').checked=localStorage.getItem('iaTraderTelegramSignal')!=='0';
+    $s('telegramSignal').checked=false; localStorage.setItem('iaTraderTelegramSignal','0');
     $s('telegramEntry').checked=localStorage.getItem('iaTraderTelegramEntry')!=='0';
     $s('telegramResult').checked=localStorage.getItem('iaTraderTelegramResult')!=='0';
   }catch(e){}
@@ -1373,7 +1373,7 @@ maybeAutoTrade=function(){
     localStorage.setItem('iaTraderTelegramChatId',chat());
     localStorage.setItem('iaTraderTelegramEnabled',enabledEl?.checked?'1':'0');
     localStorage.setItem('iaTraderTelegramRememberToken',rememberEl?.checked?'1':'0');
-    localStorage.setItem('iaTraderTelegramSignal',$s('telegramSignal')?.checked?'1':'0');
+    localStorage.setItem('iaTraderTelegramSignal','0');
     localStorage.setItem('iaTraderTelegramEntry',$s('telegramEntry')?.checked?'1':'0');
     localStorage.setItem('iaTraderTelegramResult',$s('telegramResult')?.checked?'1':'0');
     if(rememberEl?.checked&&t)localStorage.setItem('iaTraderTelegramTokenSaved',t);else localStorage.removeItem('iaTraderTelegramTokenSaved');
@@ -1408,7 +1408,8 @@ maybeAutoTrade=function(){
     if($s('stableResultNote'))$s('stableResultNote').textContent=`${direction||'—'} • ${outcome||'—'} • ${(Number(profit)>0?'+':'')+money2(profit)} • contrato ${contract||'—'}`;
   }
   // Sinal forte: avisa uma vez por direção/ativo/score, sem confundir com entrada.
-  setInterval(()=>{try{if(!enabledEl?.checked||!$s('telegramSignal')?.checked||!window.current)return;const c=window.current;const dir=c.decision;const score=Number(c.score||0);if(!['CALL','PUT'].includes(dir)||score<80)return;const key=`${dir}|${c.symbol||$s('symbol')?.value}|${Math.floor(score/5)}`;if(key===lastSignalNotice)return;lastSignalNotice=key;setTimeout(()=>{if(lastSignalNotice===key)lastSignalNotice=''},60000);send(`🔔 IA Trader X — SINAL FORTE\nDireção: ${dir}\nAtivo: ${c.symbol||$s('symbol')?.value||'—'}\nScore: ${score}/100\nStatus: aguardando confirmação e ordem DEMO.`).catch(e=>setStatus('Telegram: '+e.message,false))}catch(e){}},1500);
+  // V39: alertas preliminares de SINAL FORTE foram desativados.
+  // O Telegram envia somente ENTRADA DEMO CONFIRMADA e o RESULTADO OFICIAL WIN/LOSS.
   // Escuta respostas oficiais da Deriv para entrada confirmada e resultado.
   function attach(){const ws=window.tradeWs;if(!ws||ws.__stableTelegramAttached)return false;ws.__stableTelegramAttached=true;ws.addEventListener('message',ev=>{let d;try{d=JSON.parse(ev.data)}catch(e){return}
       if(d.msg_type==='buy'&&d.buy){const id=String(d.buy.contract_id||'');if(!id||id===lastEntryContract)return;lastEntryContract=id;const ctx=window.activeTradeContext||window.pendingBuyContext||{};const direction=ctx.direction||window.current?.decision||'—';const symbol=ctx.symbol||$s('symbol')?.value||'—';updateResult({direction,outcome:'EM ANDAMENTO',profit:0,contract:id,symbol});if(enabledEl?.checked&&$s('telegramEntry')?.checked)send(`🚀 IA Trader X — ENTRADA DEMO CONFIRMADA\nDireção: ${direction}\nAtivo: ${symbol}\nValor: ${money2(d.buy.buy_price)}\nContrato: ${id}`).catch(e=>setStatus('Telegram: '+e.message,false));}
@@ -1433,12 +1434,12 @@ window.v12ApprovedSignal = window.v12ApprovedSignal || null;
   }
   function ensureTimer(){if(timer)return;timer=setInterval(render,500)}
   function startFromBuy(d){const ctx=window.activeTradeContext||window.pendingBuyContext||{};op={contract:String(d.buy.contract_id||''),symbol:ctx.symbol||$('symbol')?.value||'—',direction:ctx.direction||window.current?.decision||'—',stake:Number(d.buy.buy_price||ctx.askPrice||0),start:Math.floor(Date.now()/1000),expiry:Math.floor(Date.now()/1000)+120,closed:false,profit:0};render();ensureTimer();const b=$('startV32Btn');if(b){b.disabled=true;b.textContent='🟢 Robô em execução'} }
-  function updateContract(c){if(!op||String(c.contract_id||'')!==String(op.contract||''))return;if(c.date_start)op.start=Number(c.date_start);if(c.date_expiry)op.expiry=Number(c.date_expiry);if(c.is_sold){op.closed=true;op.profit=Number(c.profit||0);const outcome=op.profit>0?'WIN':'LOSS';setText('lastTradeSummary',`Último resultado: ${outcome==='WIN'?'🏆':'❌'} ${outcome} ${(op.profit>0?'+':'')+money(op.profit)} • ${op.direction} • ${op.symbol} • ${new Date().toLocaleTimeString('pt-BR')}`);const b=$('startV32Btn');if(b){b.disabled=false;b.textContent='🚀 Iniciar V38'} }render()}
+  function updateContract(c){if(!op||String(c.contract_id||'')!==String(op.contract||''))return;if(c.date_start)op.start=Number(c.date_start);if(c.date_expiry)op.expiry=Number(c.date_expiry);if(c.is_sold){op.closed=true;op.profit=Number(c.profit||0);const outcome=op.profit>0?'WIN':'LOSS';setText('lastTradeSummary',`Último resultado: ${outcome==='WIN'?'🏆':'❌'} ${outcome} ${(op.profit>0?'+':'')+money(op.profit)} • ${op.direction} • ${op.symbol} • ${new Date().toLocaleTimeString('pt-BR')}`);const b=$('startV32Btn');if(b){b.disabled=false;b.textContent='🚀 Iniciar V39'} }render()}
   window.v35OperationStart=startFromBuy;
   window.v35OperationUpdate=updateContract;
-  function attach(){const ws=window.tradeWs;if(!ws||ws===attachedWs)return;attachedWs=ws;ws.addEventListener('message',ev=>{let d;try{d=JSON.parse(ev.data)}catch(e){return}if(d.msg_type==='buy'&&d.buy)startFromBuy(d);if(d.msg_type==='proposal_open_contract'&&d.proposal_open_contract)updateContract(d.proposal_open_contract)});ws.addEventListener('close',()=>{const b=$('startV32Btn');if(b){b.disabled=false;b.textContent='🚀 Iniciar V38'}})}
+  function attach(){const ws=window.tradeWs;if(!ws||ws===attachedWs)return;attachedWs=ws;ws.addEventListener('message',ev=>{let d;try{d=JSON.parse(ev.data)}catch(e){return}if(d.msg_type==='buy'&&d.buy)startFromBuy(d);if(d.msg_type==='proposal_open_contract'&&d.proposal_open_contract)updateContract(d.proposal_open_contract)});ws.addEventListener('close',()=>{const b=$('startV32Btn');if(b){b.disabled=false;b.textContent='🚀 Iniciar V39'}})}
   setInterval(()=>{attach();const b=$('startV32Btn');if(b&&window.autoTrading&&!op?.closed){b.disabled=true;b.textContent='🟢 Robô em execução'}},700);
-  document.addEventListener('DOMContentLoaded',()=>{document.title='IA Trader X — V38 Final Estável';render()});
+  document.addEventListener('DOMContentLoaded',()=>{document.title='IA Trader X — V39 Estável';render()});
 })();
 </script>
 
@@ -1479,7 +1480,7 @@ window.v12ApprovedSignal = window.v12ApprovedSignal || null;
   document.addEventListener('DOMContentLoaded',()=>{
     render();
     const b=el('v33ResetStats'); if(b)b.addEventListener('click',()=>{if(confirm('Zerar as estatísticas de hoje?')){st=fresh();save();render()}});
-    const start=el('startV32Btn'); if(start)start.addEventListener('click',()=>{start.disabled=true;start.textContent='🟢 Robô em execução';setTimeout(()=>{if(!window.autoTrading){start.disabled=false;start.textContent='🚀 Iniciar V38'}},8000)});
+    const start=el('startV32Btn'); if(start)start.addEventListener('click',()=>{start.disabled=true;start.textContent='🟢 Robô em execução';setTimeout(()=>{if(!window.autoTrading){start.disabled=false;start.textContent='🚀 Iniciar V39'}},8000)});
   });
   setInterval(attach,600);
 })();
@@ -1501,7 +1502,7 @@ window.v12ApprovedSignal = window.v12ApprovedSignal || null;
     if(autoTrading && canonicalConnected()){
       b.disabled=true; b.textContent='🟢 Robô em execução'; b.style.animation='none';
     }else{
-      b.disabled=false; b.textContent='🚀 Iniciar V38'; b.style.animation='none';
+      b.disabled=false; b.textContent='🚀 Iniciar V39'; b.style.animation='none';
     }
   }
   function forceStart(){
@@ -1588,7 +1589,7 @@ window.v12ApprovedSignal = window.v12ApprovedSignal || null;
     op={contract:String(buy.contract_id||ctx.contractId||''),symbol:ctx.symbol||$('symbol')?.value||'—',direction:ctx.direction||window.current?.decision||'—',stake:Number(buy.buy_price||ctx.buyPrice||ctx.askPrice||0),start:Math.floor(Date.now()/1000),expiry:Math.floor(Date.now()/1000)+durationMin*60,closed:false,profit:0};
     save();render();ensureTimer();
     const b=$('startV32Btn');if(b){b.disabled=true;b.textContent='🟢 Robô em execução'}
-    if(typeof window.addAutoLog==='function')window.addAutoLog(`V38 acompanhando contrato ${op.contract} • ${op.direction} • ${money(op.stake)}`);
+    if(typeof window.addAutoLog==='function')window.addAutoLog(`V39 acompanhando contrato ${op.contract} • ${op.direction} • ${money(op.stake)}`);
   }
   function update(c){
     const cid=String(c.contract_id||'');
@@ -1603,29 +1604,29 @@ window.v12ApprovedSignal = window.v12ApprovedSignal || null;
       const outcome=op.profit>0?'WIN':'LOSS';
       text('lastTradeSummary',`Último resultado: ${outcome==='WIN'?'🏆':'❌'} ${outcome} ${(op.profit>0?'+':'')+money(op.profit)} • ${op.direction} • ${op.symbol} • ${new Date().toLocaleTimeString('pt-BR')}`);
       const rs=$('robotStatus');if(rs)rs.textContent=`LIGADO — ${outcome} ${(op.profit>0?'+':'')+money(op.profit)}`;
-      const b=$('startV32Btn');if(b){b.disabled=false;b.textContent='🚀 Iniciar V38'}
+      const b=$('startV32Btn');if(b){b.disabled=false;b.textContent='🚀 Iniciar V39'}
     }
     save();render();ensureTimer();
   }
   window.v36OperationStart=start;
   window.v36OperationUpdate=update;
-  document.addEventListener('DOMContentLoaded',()=>{document.title='IA Trader X — V38 Final Estável';render();if(op)ensureTimer()});
+  document.addEventListener('DOMContentLoaded',()=>{document.title='IA Trader X — V39 Estável';render();if(op)ensureTimer()});
   render();if(op)ensureTimer();
 })();
 </script>
 
 
 <script>
-/* ===== V38 FINAL: duração real de 5 minutos + monitor oficial + modo validação DEMO ===== */
+/* ===== V39 ESTÁVEL: duração real de 5 minutos + monitor oficial + modo validação DEMO ===== */
 (function(){
   'use strict';
-  const VERSION='V38';
+  const VERSION='V39';
   const FIXED_DURATION_MIN=5;
   const $=id=>document.getElementById(id);
   const nowSec=()=>Math.floor(Date.now()/1000);
   const money=v=>{try{return new Intl.NumberFormat('pt-BR',{style:'currency',currency:'USD'}).format(Number(v)||0)}catch(e){return 'US$ '+Number(v||0).toFixed(2)}};
   const clock=s=>{s=Math.max(0,Math.ceil(Number(s)||0));return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')};
-  const KEY='iaTraderV38OfficialOperation';
+  const KEY='iaTraderV39OfficialOperation';
   let op=null,timer=null,attachedWs=null,lastProposalMeta=null,lastStatusPoll=0,pollAttempts=0;
   try{op=JSON.parse(sessionStorage.getItem(KEY)||'null')}catch(e){op=null}
   const save=()=>{try{op?sessionStorage.setItem(KEY,JSON.stringify(op)):sessionStorage.removeItem(KEY)}catch(e){}};
@@ -1669,7 +1670,7 @@ window.v12ApprovedSignal = window.v12ApprovedSignal || null;
     const ctx=window.activeTradeContext||window.pendingBuyContext||lastProposalMeta||{};
     const start=nowSec();
     op={contract:String(b.contract_id),symbol:ctx.symbol||$('symbol')?.value||'—',direction:ctx.direction||window.current?.decision||'—',stake:Number(b.buy_price||ctx.askPrice||ctx.stake||0),start,expiry:start+FIXED_DURATION_MIN*60,closed:false,profit:0,duration:FIXED_DURATION_MIN};
-    pollAttempts=0;lastStatusPoll=0;save();render();ensureTimer();addLog(`V38: contrato ${op.contract} aberto por 5 minutos reais • ${op.direction} • ${op.symbol}`);
+    pollAttempts=0;lastStatusPoll=0;save();render();ensureTimer();addLog(`V39: contrato ${op.contract} aberto por 5 minutos reais • ${op.direction} • ${op.symbol}`);
     try{window.sendTrade&&window.sendTrade({proposal_open_contract:1,contract_id:Number(op.contract),subscribe:1})}catch(e){}
   }
   function updateContract(c){
@@ -1683,7 +1684,7 @@ window.v12ApprovedSignal = window.v12ApprovedSignal || null;
       op.closed=true;op.profit=Number(c.profit||0);op.expiry=Number(c.exit_spot_time||c.sell_time||nowSec());op.closedAt=Date.now();
       const outcome=op.profit>0?'WIN':'LOSS';
       set('lastTradeSummary',`Último resultado: ${outcome==='WIN'?'🏆':'❌'} ${outcome} ${(op.profit>0?'+':'')+money(op.profit)} • ${op.direction} • ${op.symbol} • ${new Date().toLocaleTimeString('pt-BR')}`);
-      addLog(`V38 resultado oficial: ${outcome} ${(op.profit>0?'+':'')+money(op.profit)} • contrato ${op.contract}`,op.profit>0?'win':'loss');
+      addLog(`V39 resultado oficial: ${outcome} ${(op.profit>0?'+':'')+money(op.profit)} • contrato ${op.contract}`,op.profit>0?'win':'loss');
       try{window.sendTrade&&window.sendTrade({balance:1})}catch(e){}
     }
     save();render();ensureTimer();
@@ -1720,7 +1721,7 @@ window.v12ApprovedSignal = window.v12ApprovedSignal || null;
     for(const [id,val] of Object.entries(vals)){const e=$(id);if(e&&!e.dataset.v38Set){e.value=val;e.dataset.v38Set='1'}}
     const stake=$('autoStake');if(stake)stake.value='1';
   }
-  document.addEventListener('DOMContentLoaded',()=>{document.title='IA Trader X — V38 Final Estável';safeDefaults();hardenRequests();attachWs();render();ensureTimer()});
+  document.addEventListener('DOMContentLoaded',()=>{document.title='IA Trader X — V39 Estável';safeDefaults();hardenRequests();attachWs();render();ensureTimer()});
   setInterval(()=>{hardenRequests();attachWs();render();if(op&&!op.closed&&nowSec()>=Number(op.expiry||0)+20)requestOfficialStatus(true)},500);
   window.v38UpdateContract=updateContract;
 })();
