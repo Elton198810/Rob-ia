@@ -3,460 +3,246 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#080d18">
-<title>Rob-ia V3 — Binárias Grátis</title>
+<meta name="theme-color" content="#07101d">
+<title>Rob-ia V5 — Print Guiado Grátis</title>
 <style>
-:root{
-  --bg:#060a13;--card:#101a2c;--card2:#0a1323;--border:#263a5e;
-  --text:#f8fafc;--muted:#94a3b8;--blue:#16a3ff;--green:#22c55e;
-  --red:#ef4444;--yellow:#facc15;--orange:#fb923c;
-}
+:root{--bg:#060a12;--card:#101a2c;--card2:#091326;--border:#2a4167;--text:#f8fafc;--muted:#94a3b8;--green:#22c55e;--red:#ef4444;--yellow:#facc15}
 *{box-sizing:border-box}
-body{
-  margin:0;font-family:Arial,sans-serif;color:var(--text);min-height:100vh;
-  background:radial-gradient(circle at top,#182746 0,#080d18 42%,#050810 100%);
-}
-header{
-  padding:18px 15px;background:rgba(6,10,19,.94);border-bottom:1px solid var(--border);
-  position:sticky;top:0;z-index:10;backdrop-filter:blur(8px)
-}
-.wrap{max-width:1050px;margin:auto}
+body{margin:0;font-family:Arial,sans-serif;background:radial-gradient(circle at top,#172947,#060a12 45%);color:var(--text);min-height:100vh}
+header{padding:18px 15px;background:#070c16;border-bottom:1px solid var(--border)}
+.wrap,main{max-width:1080px;margin:auto}
+main{padding:14px}
 h1{margin:0;font-size:clamp(25px,5vw,38px)}
 header p{margin:7px 0 0;color:var(--muted)}
-main{max-width:1050px;margin:auto;padding:14px}
-.card{
-  background:rgba(16,26,44,.97);border:1px solid var(--border);border-radius:16px;
-  padding:16px;margin-bottom:14px;box-shadow:0 14px 35px rgba(0,0,0,.22)
-}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(205px,1fr));gap:11px}
+.card{background:rgba(16,26,44,.97);border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:11px}
 label{display:block;margin:11px 0 6px;font-weight:800}
-input,select,textarea,button{
-  width:100%;padding:13px;border-radius:10px;border:1px solid #365075;
-  background:#081225;color:#fff;font-size:16px
-}
-textarea{resize:vertical}
-button{
-  border:0;font-weight:900;cursor:pointer;margin-top:13px;
-  background:linear-gradient(90deg,#148cff,#16c2ff)
-}
+input,select,textarea,button{width:100%;padding:13px;border-radius:10px;border:1px solid #365075;background:#081225;color:#fff;font-size:16px}
+button{border:0;font-weight:900;cursor:pointer;margin-top:13px;background:linear-gradient(90deg,#148cff,#16c2ff)}
 button.secondary{background:#182844;border:1px solid #38577f}
 button.danger{background:#481a20;border:1px solid #7f1d1d}
-.preview{
-  display:none;max-width:100%;max-height:450px;margin-top:10px;border-radius:12px;
-  border:1px solid #344b6f
-}
-.badge{
-  display:inline-block;margin:0 5px 7px 0;padding:5px 9px;border-radius:999px;
-  background:#17243e;border:1px solid #365075;color:#dbeafe;font-size:13px
-}
-.notice{
-  margin-top:12px;padding:12px;border-radius:10px;background:#3b2606;
-  border:1px solid #92400e;color:#fde68a;line-height:1.45
-}
-.info{
-  margin-top:12px;padding:12px;border-radius:10px;background:#09233c;
-  border:1px solid #155e75;color:#cffafe;line-height:1.45
-}
+.badge{display:inline-block;margin:0 5px 7px 0;padding:5px 9px;border-radius:999px;background:#17243e;border:1px solid #365075;color:#dbeafe;font-size:13px}
+.info,.notice{margin-top:12px;padding:12px;border-radius:10px;line-height:1.45}
+.info{background:#09233c;border:1px solid #155e75;color:#cffafe}
+.notice{background:#3b2606;border:1px solid #92400e;color:#fde68a}
+.preview{display:none;max-width:100%;max-height:520px;margin-top:10px;border-radius:12px;border:1px solid #344b6f}
 .result{display:none}
 .box{background:var(--card2);border:1px solid #2a4065;padding:14px;border-radius:12px}
-.big{font-size:29px;font-weight:950;margin-top:5px}
-.call{color:var(--green)}.put{color:var(--red)}.wait{color:var(--yellow)}
-.muted{color:var(--muted)}
+.big{font-size:28px;font-weight:950;margin-top:5px}
+.call{color:var(--green)}.put{color:var(--red)}.wait{color:var(--yellow)}.muted{color:var(--muted)}
 .score-wrap{height:18px;background:#07101f;border:1px solid #2b4166;border-radius:999px;overflow:hidden;margin-top:8px}
 .score-bar{height:100%;width:0;background:linear-gradient(90deg,#ef4444,#facc15,#22c55e);transition:.4s}
 ul{line-height:1.55;padding-left:20px}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .history-item{background:#091326;border:1px solid #2a4065;border-radius:10px;padding:11px;margin-top:9px}
 .history-top{display:flex;justify-content:space-between;gap:10px}
-.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-small{color:var(--muted)}
-.inline-check{display:flex;gap:10px;align-items:flex-start;margin-top:12px}
-.inline-check input{width:auto;margin-top:3px}
-@media(max-width:600px){
-  main{padding:9px}.card{padding:13px}.actions{grid-template-columns:1fr}
-  header{position:static}.big{font-size:24px}
-}
+.check{display:flex;gap:10px;align-items:flex-start;margin-top:12px}.check input{width:auto;margin-top:3px}
+@media(max-width:600px){main{padding:9px}.card{padding:13px}.actions{grid-template-columns:1fr}.big{font-size:23px}}
 </style>
 </head>
 <body>
-<header>
-  <div class="wrap">
-    <h1>🤖 Rob-ia V3 — Binárias Grátis</h1>
-    <p>Análise técnica por regras, sem chave de API e sem cobrança.</p>
-  </div>
-</header>
+<header><div class="wrap">
+<h1>🤖 Rob-ia V5 — Print Guiado</h1>
+<p>Grátis, sem chave e pensado para testar com gráficos da Avalon.</p>
+</div></header>
 
 <main>
-  <section class="card">
-    <span class="badge">100% grátis</span>
-    <span class="badge">Sem API</span>
-    <span class="badge">Foco M15</span>
-    <span class="badge">Modo teste</span>
+<section class="card">
+<span class="badge">Grátis</span><span class="badge">Sem API</span><span class="badge">Print do gráfico</span><span class="badge">Foco M15</span>
 
-    <div class="info">
-      Esta versão não “enxerga” o print com inteligência artificial. O print serve como referência visual.
-      Você informa abaixo o que aparece no gráfico, e o Rob-ia calcula o sinal por regras técnicas.
-    </div>
+<div class="info">
+O print fica na tela para você observar. Como não existe IA gratuita conectada nesta página, o Rob-ia não lê os candles sozinho:
+você responde perguntas rápidas sobre o que está vendo, e ele calcula uma análise por regras.
+</div>
 
-    <div class="grid">
-      <div>
-        <label for="ativo">Ativo/par</label>
-        <select id="ativo">
-          <option>EUR/USD</option><option>GBP/USD</option><option>USD/JPY</option>
-          <option>AUD/USD</option><option>USD/CAD</option><option>USD/CHF</option>
-          <option>EUR/JPY</option><option>GBP/JPY</option><option>EUR/GBP</option>
-        </select>
-      </div>
-      <div>
-        <label for="tempo">Tempo gráfico</label>
-        <select id="tempo">
-          <option>M5</option><option selected>M15</option><option>M30</option><option>H1</option>
-        </select>
-      </div>
-      <div>
-        <label for="expiracao">Expiração de teste</label>
-        <select id="expiracao">
-          <option>1 candle</option><option selected>2 candles</option><option>3 candles</option>
-        </select>
-      </div>
-    </div>
+<div class="grid">
+<div><label for="ativo">Ativo</label><select id="ativo">
+<option>EUR/USD</option><option>GBP/USD</option><option>USD/JPY</option><option>AUD/USD</option>
+<option>USD/CAD</option><option>EUR/JPY</option><option>GBP/JPY</option><option>Outro</option>
+</select></div>
+<div><label for="tempo">Tempo gráfico</label><select id="tempo">
+<option>M5</option><option selected>M15</option><option>M30</option><option>H1</option>
+</select></div>
+<div><label for="expiracao">Expiração para teste</label><select id="expiracao">
+<option>1 candle</option><option selected>2 candles</option><option>3 candles</option>
+</select></div>
+</div>
 
-    <label for="imagem">Print do gráfico (opcional)</label>
-    <input id="imagem" type="file" accept="image/*">
-    <img id="preview" class="preview" alt="Prévia do gráfico">
+<label for="imagem">Print do gráfico</label>
+<input id="imagem" type="file" accept="image/*">
+<img id="preview" class="preview" alt="Prévia do gráfico">
 
-    <h2>Leitura do gráfico</h2>
+<h2>Responda olhando o print</h2>
+<div class="grid">
+<div><label for="tendencia">Os topos e fundos estão</label><select id="tendencia">
+<option value="alta">Subindo</option><option value="baixa">Descendo</option><option value="lateral" selected>Sem direção clara</option>
+</select></div>
 
-    <div class="grid">
-      <div>
-        <label for="tendencia">Tendência principal</label>
-        <select id="tendencia">
-          <option value="alta">Alta</option>
-          <option value="baixa">Baixa</option>
-          <option value="lateral" selected>Lateral/indefinida</option>
-        </select>
-      </div>
+<div><label for="medias">Médias móveis visíveis</label><select id="medias">
+<option value="alta">Curta acima da longa</option><option value="baixa">Curta abaixo da longa</option>
+<option value="cruzadas" selected>Cruzadas/sem direção</option><option value="nao">Não aparecem</option>
+</select></div>
 
-      <div>
-        <label for="ema">Posição das EMAs</label>
-        <select id="ema">
-          <option value="alta">EMA 9 acima da 21</option>
-          <option value="baixa">EMA 9 abaixo da 21</option>
-          <option value="cruzada" selected>Cruzadas/sem direção</option>
-          <option value="nao">Não uso EMAs</option>
-        </select>
-      </div>
+<div><label for="candle">Último candle fechado</label><select id="candle">
+<option value="alta">Forte comprador</option><option value="baixa">Forte vendedor</option>
+<option value="rejAlta">Rejeitou suporte</option><option value="rejBaixa">Rejeitou resistência</option>
+<option value="doji" selected>Pequeno/indecisão</option>
+</select></div>
 
-      <div>
-        <label for="rsi">RSI aproximado</label>
-        <input id="rsi" type="number" min="0" max="100" value="50">
-      </div>
+<div><label for="zona">Preço está</label><select id="zona">
+<option value="suporte">Perto de suporte</option><option value="resistencia">Perto de resistência</option>
+<option value="rompeAlta">Rompendo para cima</option><option value="rompeBaixa">Rompendo para baixo</option>
+<option value="meio" selected>No meio do movimento</option>
+</select></div>
 
-      <div>
-        <label for="macd">MACD</label>
-        <select id="macd">
-          <option value="alta">Comprador</option>
-          <option value="baixa">Vendedor</option>
-          <option value="neutro" selected>Neutro/sem leitura</option>
-        </select>
-      </div>
+<div><label for="forca">Força dos candles recentes</label><select id="forca">
+<option value="forte">Forte</option><option value="media">Média</option><option value="fraca" selected>Fraca</option>
+</select></div>
 
-      <div>
-        <label for="candle">Último candle fechado</label>
-        <select id="candle">
-          <option value="alta">Forte comprador</option>
-          <option value="baixa">Forte vendedor</option>
-          <option value="rejeicaoAlta">Rejeição de suporte</option>
-          <option value="rejeicaoBaixa">Rejeição de resistência</option>
-          <option value="indecisao" selected>Indecisão/Doji</option>
-        </select>
-      </div>
+<div><label for="mercado">Condição geral</label><select id="mercado">
+<option value="normal">Movimento limpo</option><option value="lateral" selected>Lateral</option>
+<option value="esticado">Movimento muito esticado</option><option value="volatil">Muito volátil</option>
+</select></div>
 
-      <div>
-        <label for="zona">Preço está perto de</label>
-        <select id="zona">
-          <option value="suporte">Suporte</option>
-          <option value="resistencia">Resistência</option>
-          <option value="rompimentoAlta">Rompimento para cima</option>
-          <option value="rompimentoBaixa">Rompimento para baixo</option>
-          <option value="meio" selected>Meio da zona</option>
-        </select>
-      </div>
+<div><label for="rsi">RSI visível</label><select id="rsi">
+<option value="alta">Entre 52 e 68</option><option value="baixa">Entre 32 e 48</option>
+<option value="sobrecompra">Acima de 70</option><option value="sobrevenda">Abaixo de 30</option>
+<option value="neutro" selected>Neutro ou não aparece</option>
+</select></div>
 
-      <div>
-        <label for="forca">Força do movimento</label>
-        <select id="forca">
-          <option value="forte">Forte</option>
-          <option value="moderada">Moderada</option>
-          <option value="fraca" selected>Fraca</option>
-        </select>
-      </div>
+<div><label for="macd">MACD visível</label><select id="macd">
+<option value="alta">Comprador</option><option value="baixa">Vendedor</option>
+<option value="neutro" selected>Neutro ou não aparece</option>
+</select></div>
+</div>
 
-      <div>
-        <label for="mercado">Condição do mercado</label>
-        <select id="mercado">
-          <option value="normal">Movimento normal</option>
-          <option value="lateral" selected>Lateral</option>
-          <option value="esticado">Muito esticado</option>
-          <option value="volatil">Muito volátil</option>
-        </select>
-      </div>
-    </div>
+<div class="check"><input id="noticias" type="checkbox"><label for="noticias" style="margin:0">Conferi que não há notícia importante próxima.</label></div>
+<div class="check"><input id="fechou" type="checkbox"><label for="fechou" style="margin:0">O candle usado na leitura já fechou.</label></div>
 
-    <div class="inline-check">
-      <input id="noticias" type="checkbox">
-      <label for="noticias" style="margin:0">Conferi que não há notícia econômica importante próxima.</label>
-    </div>
+<div class="notice">⚠️ Esta ferramenta não prevê o mercado. Use somente em conta demo durante os testes. Não use martingale.</div>
+<button onclick="analisar()">Analisar o print pelas regras</button>
+</section>
 
-    <div class="notice">
-      ⚠️ Use primeiro em conta demo. Opções binárias têm risco elevado e nenhuma análise garante resultado.
-      Não aumente a entrada para recuperar perdas.
-    </div>
+<section id="resultado" class="card result">
+<h2 style="margin-top:0">Resultado</h2>
+<div class="grid">
+<div class="box"><div class="muted">Decisão</div><div id="decisao" class="big wait">NÃO ENTRAR</div></div>
+<div class="box"><div class="muted">Nota técnica</div><div id="nota" class="big">0/100</div><div class="score-wrap"><div id="barra" class="score-bar"></div></div></div>
+<div class="box"><div class="muted">Qualidade</div><div id="qualidade" class="big">EVITAR</div></div>
+<div class="box"><div class="muted">Expiração de teste</div><div id="expRes" class="big">--</div></div>
+</div>
 
-    <button onclick="analisar()">Gerar análise gratuita</button>
-  </section>
+<div class="grid" style="margin-top:11px">
+<div class="box"><b>Pontos positivos</b><ul id="positivos"></ul></div>
+<div class="box"><b>Alertas</b><ul id="alertas"></ul></div>
+</div>
 
-  <section id="resultado" class="card result">
-    <h2 style="margin-top:0">Resultado do teste</h2>
+<div class="box" style="margin-top:11px"><b>Orientação</b><p id="orientacao"></p></div>
 
-    <div class="grid">
-      <div class="box">
-        <div class="muted">Decisão</div>
-        <div id="decisao" class="big wait">NÃO ENTRAR</div>
-      </div>
-      <div class="box">
-        <div class="muted">Nota técnica</div>
-        <div id="nota" class="big">0/100</div>
-        <div class="score-wrap"><div id="scoreBar" class="score-bar"></div></div>
-      </div>
-      <div class="box">
-        <div class="muted">Qualidade</div>
-        <div id="qualidade" class="big">EVITAR</div>
-      </div>
-      <div class="box">
-        <div class="muted">Expiração de teste</div>
-        <div id="expResultado" class="big">--</div>
-      </div>
-    </div>
+<div class="actions">
+<button class="secondary" onclick="copiar()">📋 Copiar resultado</button>
+<button class="secondary" onclick="nova()">🔄 Nova análise</button>
+</div>
+</section>
 
-    <div class="grid" style="margin-top:11px">
-      <div class="box">
-        <b>Motivos favoráveis</b>
-        <ul id="favoraveis"></ul>
-      </div>
-      <div class="box">
-        <b>Alertas</b>
-        <ul id="alertas"></ul>
-      </div>
-    </div>
-
-    <div class="box" style="margin-top:11px">
-      <b>Orientação</b>
-      <p id="orientacao"></p>
-    </div>
-
-    <div class="actions">
-      <button class="secondary" onclick="copiar()">📋 Copiar análise</button>
-      <button class="secondary" onclick="nova()">🔄 Nova análise</button>
-    </div>
-  </section>
-
-  <section class="card">
-    <div class="history-top">
-      <h2 style="margin:0">Histórico de testes</h2>
-      <button class="danger" style="width:auto;margin:0;padding:9px 12px" onclick="limparHistorico()">Limpar</button>
-    </div>
-    <div id="historico" class="muted" style="margin-top:9px">Nenhum teste salvo.</div>
-  </section>
+<section class="card">
+<div class="history-top"><h2 style="margin:0">Histórico de testes</h2><button class="danger" style="width:auto;margin:0;padding:9px 12px" onclick="limpar()">Limpar</button></div>
+<div id="historico" class="muted" style="margin-top:9px">Nenhum teste salvo.</div>
+</section>
 </main>
 
 <script>
-let ultimoResultado = null;
+let ultimo=null;
 
-document.getElementById("imagem").addEventListener("change", e => {
-  const file = e.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = ev => {
-    const img = document.getElementById("preview");
-    img.src = ev.target.result;
-    img.style.display = "block";
-  };
-  reader.readAsDataURL(file);
+document.getElementById("imagem").addEventListener("change",e=>{
+ const f=e.target.files[0]; if(!f)return;
+ const r=new FileReader(); r.onload=ev=>{const i=document.getElementById("preview");i.src=ev.target.result;i.style.display="block"};r.readAsDataURL(f)
 });
 
-function item(texto, tipo){
-  return {texto, tipo};
-}
-
 function analisar(){
-  const tendencia = document.getElementById("tendencia").value;
-  const ema = document.getElementById("ema").value;
-  const rsi = Number(document.getElementById("rsi").value);
-  const macd = document.getElementById("macd").value;
-  const candle = document.getElementById("candle").value;
-  const zona = document.getElementById("zona").value;
-  const forca = document.getElementById("forca").value;
-  const mercado = document.getElementById("mercado").value;
-  const noticias = document.getElementById("noticias").checked;
+ let call=0,put=0; const pos=[],alt=[];
+ const t=v=>document.getElementById(v).value;
 
-  let call = 0, put = 0;
-  const favoraveis = [], alertas = [];
+ const tendencia=t("tendencia"),medias=t("medias"),candle=t("candle"),zona=t("zona"),forca=t("forca"),mercado=t("mercado"),rsi=t("rsi"),macd=t("macd");
+ const noticias=document.getElementById("noticias").checked,fechou=document.getElementById("fechou").checked;
 
-  if (tendencia === "alta"){ call += 22; favoraveis.push("Tendência principal de alta."); }
-  if (tendencia === "baixa"){ put += 22; favoraveis.push("Tendência principal de baixa."); }
-  if (tendencia === "lateral"){ call -= 15; put -= 15; alertas.push("Mercado lateral ou sem direção definida."); }
+ if(tendencia==="alta"){call+=22;pos.push("Topos e fundos ascendentes.");}
+ if(tendencia==="baixa"){put+=22;pos.push("Topos e fundos descendentes.");}
+ if(tendencia==="lateral"){alt.push("Estrutura sem direção clara.");}
 
-  if (ema === "alta"){ call += 16; favoraveis.push("EMA 9 acima da EMA 21."); }
-  if (ema === "baixa"){ put += 16; favoraveis.push("EMA 9 abaixo da EMA 21."); }
-  if (ema === "cruzada"){ alertas.push("Médias cruzadas, sem direção limpa."); }
+ if(medias==="alta"){call+=16;pos.push("Médias alinhadas para alta.");}
+ if(medias==="baixa"){put+=16;pos.push("Médias alinhadas para baixa.");}
+ if(medias==="cruzadas")alt.push("Médias cruzadas.");
 
-  if (rsi >= 55 && rsi <= 68){ call += 12; favoraveis.push("RSI favorece continuidade compradora."); }
-  else if (rsi >= 32 && rsi <= 45){ put += 12; favoraveis.push("RSI favorece continuidade vendedora."); }
-  else if (rsi > 75){ put += 4; alertas.push("RSI muito alto: risco de correção."); }
-  else if (rsi < 25){ call += 4; alertas.push("RSI muito baixo: possível reação, mas exige confirmação."); }
-  else { alertas.push("RSI sem vantagem clara."); }
+ if(candle==="alta"){call+=16;pos.push("Candle comprador forte.");}
+ if(candle==="baixa"){put+=16;pos.push("Candle vendedor forte.");}
+ if(candle==="rejAlta"){call+=19;pos.push("Rejeição de suporte.");}
+ if(candle==="rejBaixa"){put+=19;pos.push("Rejeição de resistência.");}
+ if(candle==="doji")alt.push("Candle de indecisão.");
 
-  if (macd === "alta"){ call += 12; favoraveis.push("MACD comprador."); }
-  if (macd === "baixa"){ put += 12; favoraveis.push("MACD vendedor."); }
+ if(zona==="suporte"){call+=13;pos.push("Preço perto de suporte.");}
+ if(zona==="resistencia"){put+=13;pos.push("Preço perto de resistência.");}
+ if(zona==="rompeAlta"){call+=12;pos.push("Rompimento para cima.");}
+ if(zona==="rompeBaixa"){put+=12;pos.push("Rompimento para baixo.");}
+ if(zona==="meio")alt.push("Preço no meio do movimento.");
 
-  if (candle === "alta"){ call += 14; favoraveis.push("Último candle fechado mostra força compradora."); }
-  if (candle === "baixa"){ put += 14; favoraveis.push("Último candle fechado mostra força vendedora."); }
-  if (candle === "rejeicaoAlta"){ call += 18; favoraveis.push("Rejeição de suporte visível."); }
-  if (candle === "rejeicaoBaixa"){ put += 18; favoraveis.push("Rejeição de resistência visível."); }
-  if (candle === "indecisao"){ call -= 7; put -= 7; alertas.push("Candle de indecisão."); }
+ if(rsi==="alta"){call+=12;pos.push("RSI favorece compradores.");}
+ if(rsi==="baixa"){put+=12;pos.push("RSI favorece vendedores.");}
+ if(rsi==="sobrecompra")alt.push("RSI em sobrecompra.");
+ if(rsi==="sobrevenda")alt.push("RSI em sobrevenda.");
 
-  if (zona === "suporte"){ call += 12; favoraveis.push("Preço próximo de suporte."); }
-  if (zona === "resistencia"){ put += 12; favoraveis.push("Preço próximo de resistência."); }
-  if (zona === "rompimentoAlta"){ call += 10; favoraveis.push("Possível rompimento para cima."); }
-  if (zona === "rompimentoBaixa"){ put += 10; favoraveis.push("Possível rompimento para baixo."); }
-  if (zona === "meio"){ alertas.push("Preço no meio da zona, sem ponto técnico forte."); }
+ if(macd==="alta"){call+=10;pos.push("MACD comprador.");}
+ if(macd==="baixa"){put+=10;pos.push("MACD vendedor.");}
 
-  if (forca === "forte"){ call += call > put ? 10 : 0; put += put > call ? 10 : 0; }
-  if (forca === "moderada"){ call += call > put ? 5 : 0; put += put > call ? 5 : 0; }
-  if (forca === "fraca"){ alertas.push("Movimento com pouca força."); }
+ if(forca==="forte"){if(call>put)call+=10;else if(put>call)put+=10;pos.push("Movimento com força.");}
+ if(forca==="media"){if(call>put)call+=5;else if(put>call)put+=5;}
+ if(forca==="fraca")alt.push("Movimento fraco.");
 
-  let bloqueio = false;
-  if (mercado === "lateral"){ bloqueio = true; alertas.push("Mercado lateral bloqueia a entrada."); }
-  if (mercado === "esticado"){ bloqueio = true; alertas.push("Movimento muito esticado; entrada pode estar atrasada."); }
-  if (mercado === "volatil"){ bloqueio = true; alertas.push("Volatilidade elevada aumenta o risco."); }
-  if (!noticias){ bloqueio = true; alertas.push("Notícias não foram conferidas."); }
+ let bloqueio=false;
+ if(mercado==="lateral"){bloqueio=true;alt.push("Mercado lateral.");}
+ if(mercado==="esticado"){bloqueio=true;alt.push("Entrada pode estar atrasada.");}
+ if(mercado==="volatil"){bloqueio=true;alt.push("Volatilidade elevada.");}
+ if(!noticias){bloqueio=true;alt.push("Notícias não foram conferidas.");}
+ if(!fechou){bloqueio=true;alt.push("O candle ainda não fechou.");}
 
-  call = Math.max(0, Math.min(100, call));
-  put = Math.max(0, Math.min(100, put));
+ call=Math.min(100,call);put=Math.min(100,put);
+ let decisao="NÃO ENTRAR",nota=Math.max(call,put);
+ if(!bloqueio&&call>=72&&call>=put+18)decisao="CALL";
+ if(!bloqueio&&put>=72&&put>=call+18)decisao="PUT";
+ if(decisao==="NÃO ENTRAR"&&nota>69)nota=69;
 
-  let decisao = "NÃO ENTRAR";
-  let nota = Math.max(call, put);
+ let qualidade="EVITAR";
+ if(decisao!=="NÃO ENTRAR"&&nota>=86)qualidade="EXCELENTE";
+ else if(decisao!=="NÃO ENTRAR"&&nota>=76)qualidade="BOA";
+ else if(nota>=60)qualidade="REGULAR";
 
-  if (!bloqueio && call >= 70 && call >= put + 15) decisao = "CALL";
-  if (!bloqueio && put >= 70 && put >= call + 15) decisao = "PUT";
+ const o=decisao==="CALL"?"Cenário comprador. Aguarde o próximo candle abrir e confirme que a força continua antes do teste em conta demo."
+ :decisao==="PUT"?"Cenário vendedor. Aguarde o próximo candle abrir e confirme que a força continua antes do teste em conta demo."
+ :"Não há confirmação suficiente. Aguarde outro ponto do gráfico.";
 
-  if (decisao === "NÃO ENTRAR" && nota > 69) nota = 69;
+ const d=document.getElementById("decisao");d.textContent=decisao;d.className="big "+(decisao==="CALL"?"call":decisao==="PUT"?"put":"wait");
+ document.getElementById("nota").textContent=nota+"/100";
+ document.getElementById("barra").style.width=nota+"%";
+ document.getElementById("qualidade").textContent=qualidade;
+ document.getElementById("expRes").textContent=t("expiracao");
+ document.getElementById("orientacao").textContent=o;
+ lista("positivos",pos.length?pos:["Nenhum fator forte identificado."]);
+ lista("alertas",alt.length?alt:["Nenhum alerta adicional."]);
 
-  let qualidade = "EVITAR";
-  if (nota >= 85 && decisao !== "NÃO ENTRAR") qualidade = "EXCELENTE";
-  else if (nota >= 75 && decisao !== "NÃO ENTRAR") qualidade = "BOA";
-  else if (nota >= 60) qualidade = "REGULAR";
-
-  const orientacao = decisao === "CALL"
-    ? "Aguardar o fechamento do candle atual e entrar apenas se a força compradora continuar. Teste em conta demo."
-    : decisao === "PUT"
-    ? "Aguardar o fechamento do candle atual e entrar apenas se a força vendedora continuar. Teste em conta demo."
-    : "Não entrar agora. Aguarde nova estrutura, confirmação mais clara ou uma região técnica melhor.";
-
-  const d = document.getElementById("decisao");
-  d.textContent = decisao;
-  d.className = "big " + (decisao === "CALL" ? "call" : decisao === "PUT" ? "put" : "wait");
-
-  document.getElementById("nota").textContent = nota + "/100";
-  document.getElementById("scoreBar").style.width = nota + "%";
-  document.getElementById("qualidade").textContent = qualidade;
-  document.getElementById("expResultado").textContent = document.getElementById("expiracao").value;
-  document.getElementById("orientacao").textContent = orientacao;
-
-  preencherLista("favoraveis", favoraveis.length ? favoraveis : ["Nenhum fator forte identificado."]);
-  preencherLista("alertas", alertas.length ? alertas : ["Nenhum alerta adicional."]);
-
-  ultimoResultado = {
-    data:new Date().toLocaleString("pt-BR"),
-    ativo:document.getElementById("ativo").value,
-    tempo:document.getElementById("tempo").value,
-    decisao, nota, qualidade, orientacao
-  };
-
-  salvarHistorico(ultimoResultado);
-  document.getElementById("resultado").style.display = "block";
-  document.getElementById("resultado").scrollIntoView({behavior:"smooth"});
+ ultimo={data:new Date().toLocaleString("pt-BR"),ativo:t("ativo"),tempo:t("tempo"),decisao,nota,qualidade,orientacao:o};
+ salvar(ultimo);
+ document.getElementById("resultado").style.display="block";
+ document.getElementById("resultado").scrollIntoView({behavior:"smooth"});
 }
 
-function preencherLista(id, dados){
-  const ul = document.getElementById(id);
-  ul.innerHTML = "";
-  dados.forEach(t => {
-    const li = document.createElement("li");
-    li.textContent = t;
-    ul.appendChild(li);
-  });
-}
-
-function copiar(){
-  if (!ultimoResultado) return;
-  const t = `ROB-IA V3 — TESTE
-${ultimoResultado.data}
-Ativo: ${ultimoResultado.ativo}
-Tempo: ${ultimoResultado.tempo}
-Decisão: ${ultimoResultado.decisao}
-Nota: ${ultimoResultado.nota}/100
-Qualidade: ${ultimoResultado.qualidade}
-
-${ultimoResultado.orientacao}
-
-Uso educacional e em conta demo.`;
-  navigator.clipboard.writeText(t).then(() => alert("Análise copiada!"));
-}
-
-function nova(){
-  document.getElementById("resultado").style.display = "none";
-  window.scrollTo({top:0,behavior:"smooth"});
-}
-
-function salvarHistorico(item){
-  const dados = JSON.parse(localStorage.getItem("robiaV3Historico") || "[]");
-  dados.unshift(item);
-  localStorage.setItem("robiaV3Historico", JSON.stringify(dados.slice(0,10)));
-  renderHistorico();
-}
-
-function renderHistorico(){
-  const dados = JSON.parse(localStorage.getItem("robiaV3Historico") || "[]");
-  const box = document.getElementById("historico");
-  if (!dados.length){
-    box.className = "muted";
-    box.textContent = "Nenhum teste salvo.";
-    return;
-  }
-  box.className = "";
-  box.innerHTML = "";
-  dados.forEach(x => {
-    const div = document.createElement("div");
-    div.className = "history-item";
-    const cls = x.decisao === "CALL" ? "call" : x.decisao === "PUT" ? "put" : "wait";
-    div.innerHTML = `<div class="history-top"><b>${esc(x.ativo)} — ${esc(x.tempo)}</b><b class="${cls}">${esc(x.decisao)}</b></div>
-      <div class="muted" style="margin-top:5px">${esc(x.data)} • Nota ${Number(x.nota) || 0}/100 • ${esc(x.qualidade)}</div>`;
-    box.appendChild(div);
-  });
-}
-
-function limparHistorico(){
-  if (!confirm("Apagar o histórico de testes?")) return;
-  localStorage.removeItem("robiaV3Historico");
-  renderHistorico();
-}
-
-function esc(v){
-  return String(v ?? "").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
-}
-
-renderHistorico();
+function lista(id,a){const u=document.getElementById(id);u.innerHTML="";a.forEach(x=>{const l=document.createElement("li");l.textContent=x;u.appendChild(l)})}
+function copiar(){if(!ultimo)return;const x=`ROB-IA V5\n${ultimo.data}\nAtivo: ${ultimo.ativo}\nTempo: ${ultimo.tempo}\nDecisão: ${ultimo.decisao}\nNota: ${ultimo.nota}/100\nQualidade: ${ultimo.qualidade}\n\n${ultimo.orientacao}\n\nTeste apenas em conta demo.`;navigator.clipboard.writeText(x).then(()=>alert("Resultado copiado!"))}
+function nova(){document.getElementById("resultado").style.display="none";window.scrollTo({top:0,behavior:"smooth"})}
+function salvar(x){const a=JSON.parse(localStorage.getItem("robiaV5")||"[]");a.unshift(x);localStorage.setItem("robiaV5",JSON.stringify(a.slice(0,10)));render()}
+function render(){const a=JSON.parse(localStorage.getItem("robiaV5")||"[]"),b=document.getElementById("historico");if(!a.length){b.className="muted";b.textContent="Nenhum teste salvo.";return}b.className="";b.innerHTML="";a.forEach(x=>{const d=document.createElement("div");d.className="history-item";const c=x.decisao==="CALL"?"call":x.decisao==="PUT"?"put":"wait";d.innerHTML=`<div class="history-top"><b>${esc(x.ativo)} — ${esc(x.tempo)}</b><b class="${c}">${esc(x.decisao)}</b></div><div class="muted" style="margin-top:5px">${esc(x.data)} • Nota ${Number(x.nota)||0}/100 • ${esc(x.qualidade)}</div>`;b.appendChild(d)})}
+function limpar(){if(!confirm("Apagar o histórico?"))return;localStorage.removeItem("robiaV5");render()}
+function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]))}
+render();
 </script>
 </body>
 </html>
