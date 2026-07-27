@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#07111f">
-<title>Rob-ia V7 PRO — Sinais Fortes Forex</title>
+<title>Rob-ia V8 PRO — Sinais Fortes Forex</title>
 <style>
 :root{--bg:#07111f;--panel:#0f1b2d;--panel2:#132238;--text:#edf4ff;--muted:#94a8c1;--blue:#38bdf8;--green:#22c55e;--red:#ef4444;--yellow:#f59e0b;--border:#263a55}
 *{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(180deg,#07111f,#0a1728);color:var(--text)}
@@ -31,7 +31,7 @@ details{margin-top:12px;border:1px solid var(--border);border-radius:12px;paddin
 <body>
 <div class="wrap">
 <header>
-  <h1>Rob-ia V7 PRO</h1>
+  <h1>Rob-ia V8 PRO</h1>
   <div class="sub">Leitura multitemporal seletiva para Forex normal. Procura somente alinhamentos fortes em H1, M30 e M15.</div>
   <div class="badges"><span class="badge">Sem OTC</span><span class="badge">Somente candle fechado</span><span class="badge">Nota mínima 80</span><span class="badge">Conta demo</span></div>
 </header>
@@ -52,16 +52,24 @@ details{margin-top:12px;border:1px solid var(--border);border-radius:12px;paddin
     </select></div>
     <div><label for="chartInterval">Tempo do gráfico</label><select id="chartInterval"><option value="15">M15</option><option value="30">M30</option><option value="60">H1</option></select></div>
     <div class="full"><label for="apiKey">Chave da Twelve Data</label><input id="apiKey" type="password" placeholder="Cole sua API key"></div>
-    <div class="full"><label for="relayUrl">URL protegida do Telegram (Cloudflare Worker)</label><input id="relayUrl" type="url" placeholder="https://seu-worker.workers.dev/send"></div>
     <div class="full switchrow"><input id="newsBlock" type="checkbox"><label for="newsBlock" style="margin:0">Bloquear análise por notícia forte agora</label></div>
     <div class="full switchrow"><input id="autoMonitor" type="checkbox"><label for="autoMonitor" style="margin:0">Monitorar automaticamente a cada 5 minutos</label></div>
+    <div class="full"><label for="chatId">Chat ID do Telegram</label><input id="chatId" inputmode="numeric" placeholder="Ex.: 123456789"></div>
     <div class="full"><button id="analyze">Analisar agora</button></div>
-    <div><button id="testTelegram" class="secondary">Testar Telegram</button></div>
-    <div><button id="reloadChart" class="secondary">Atualizar gráfico</button></div>
+    <div><button id="saveConfig" class="secondary">Salvar configuração</button></div>
+    <div><button id="clearConfig" class="danger">Apagar configuração</button></div>
+    <div class="full"><button id="reloadChart" class="secondary">Atualizar gráfico</button></div>
   </div>
 
   <div id="status" class="status">Aguardando análise.</div>
-  <div id="signal" class="signal wait"><div class="small">SINAL ATUAL</div><div class="decision">NÃO ENTRAR</div><div class="score">Nota técnica: --/100</div><div class="small" id="signalTime">Nenhuma análise realizada.</div></div>
+  <div style="margin-top:10px">
+    <div class="small" style="display:flex;justify-content:space-between"><span>Progresso da análise</span><span id="progressText">0%</span></div>
+    <div style="height:10px;background:#091525;border:1px solid var(--border);border-radius:999px;overflow:hidden;margin-top:6px">
+      <div id="progressBar" style="height:100%;width:0%;background:#0ea5e9;transition:width .25s"></div>
+    </div>
+  </div>
+  <div id="signal" class="signal wait"><div class="small">SINAL ATUAL</div><div class="decision">NÃO ENTRAR</div><div class="score">Nota técnica: --/100</div><div class="small" id="scoreGap">Faltam -- pontos para um sinal forte.</div><div class="small" id="signalTime">Nenhuma análise realizada.</div></div>
+  <details open><summary>Filtros da entrada</summary><div id="checklist" class="small" style="margin-top:9px;line-height:1.8">Nenhuma análise realizada.</div></details>
 
   <div class="metrics">
     <div class="metric">H1<b id="h1">--</b></div><div class="metric">M30<b id="m30">--</b></div><div class="metric">M15<b id="m15">--</b></div>
@@ -71,9 +79,9 @@ details{margin-top:12px;border:1px solid var(--border);border-radius:12px;paddin
   <ul id="reasons" class="reason"></ul>
 
   <details><summary>Como a nota é formada</summary><div class="small" style="margin-top:9px">
-    Tendência H1, confirmação M30, gatilho M15, alinhamento das EMAs, força ADX, MACD, RSI, estrutura de máximas/mínimas, candle de confirmação, distância de suporte/resistência e controle de volatilidade. Conflitos reduzem a nota.
+    Tendência H1, confirmação M30, gatilho M15, alinhamento das EMAs, força ADX, MACD, RSI, estrutura de máximas/mínimas, candle fechado, distância de suporte/resistência e controle de volatilidade. Conflitos reduzem a nota.
   </div></details>
-  <div class="notice">O sistema procura qualidade, não quantidade. Mesmo com nota alta, pode perder. Confirme o mesmo par na Avalon e teste somente na demonstração.</div>
+  <div class="notice">O Chat ID fica salvo neste navegador, mas o Telegram só enviará sinais quando conectarmos a versão 24 horas ao servidor. Nunca coloque o token secreto do bot nesta página. Teste as entradas somente na demonstração.</div>
 </aside>
 </div>
 
@@ -86,7 +94,7 @@ details{margin-top:12px;border:1px solid var(--border);border-radius:12px;paddin
 
 <script>
 const $=id=>document.getElementById(id);
-let historyData=JSON.parse(localStorage.getItem('robiaV7History')||'[]');
+let historyData=JSON.parse(localStorage.getItem('robiaV8History')||'[]');
 let monitorTimer=null,lastAlertKey=localStorage.getItem('robiaLastAlert')||'';
 
 function renderChart(){
@@ -154,45 +162,85 @@ function buildSignal(a15,a30,a1h){
 function setSignal(r,p,a15,a30,a1h){
  const b=$('signal');b.className='signal '+(r.decision==='CALL'?'call':r.decision==='PUT'?'put':'wait');
  b.querySelector('.decision').textContent=r.decision;b.querySelector('.score').textContent=`Nota técnica: ${Math.round(r.score)}/100`;
+ const gap=Math.max(0,80-Math.round(r.score));
+ $('scoreGap').textContent=r.decision==='NÃO ENTRAR'?(gap>0?`Faltam ${gap} pontos para o mínimo de 80.`:'A nota passou, mas algum filtro obrigatório falhou.'):'Todos os filtros principais foram aprovados.';
  $('signalTime').textContent=`${p} • ${new Date().toLocaleString('pt-BR')}`;$('h1').textContent=a1h.dir;$('m30').textContent=a30.dir;$('m15').textContent=a15.dir;
  $('rsi').textContent=a15.rsi.toFixed(1);$('adx').textContent=a15.adx.toFixed(1);$('macd').textContent=a15.macd.hist>0?'ALTA':a15.macd.hist<0?'BAIXA':'NEUTRO';
  $('ema').textContent=a15.e9>a15.e21&&a15.e21>a15.e50?'ALTA':a15.e9<a15.e21&&a15.e21<a15.e50?'BAIXA':'MISTO';
  $('atr').textContent=a15.atr.toFixed(3)+'%';$('structure').textContent=a15.structure;$('reasons').innerHTML=r.reasons.map(x=>`<li>${x}</li>`).join('');
-}
-async function sendTelegram(payload){
- const relay=$('relayUrl').value.trim();if(!relay)throw new Error('Informe a URL protegida do Telegram.');
- const res=await fetch(relay,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
- const data=await res.json().catch(()=>({}));if(!res.ok||data.ok===false)throw new Error(data.message||'Falha no envio ao Telegram.');
+ const aligned=a1h.dir===a30.dir&&a30.dir===a15.dir&&a15.dir!=='NEUTRO';
+ const emaAligned=(a15.e9>a15.e21&&a15.e21>a15.e50)||(a15.e9<a15.e21&&a15.e21<a15.e50);
+ const macdOk=(r.decision==='CALL'&&a15.macd.hist>0)||(r.decision==='PUT'&&a15.macd.hist<0)||(r.decision==='NÃO ENTRAR'&&Math.abs(a15.macd.hist)>0);
+ const rsiOk=(a15.rsi>=33&&a15.rsi<=67);
+ const adxOk=a15.adx>=22;
+ const candleOk=a15.candle!=='NEUTRA';
+ const volatilityOk=a15.atr>=0.025&&a15.atr<=0.30;
+ const items=[
+  [aligned,'H1, M30 e M15 alinhados'],
+  [emaAligned,'EMA 9, 21 e 50 alinhadas'],
+  [adxOk,'ADX com força mínima de 22'],
+  [macdOk,'MACD com direção definida'],
+  [rsiOk,'RSI em faixa segura'],
+  [candleOk,'Candle fechado de confirmação'],
+  [volatilityOk,'Volatilidade dentro da faixa'],
+  [r.score>=80,'Nota técnica mínima de 80']
+ ];
+ $('checklist').innerHTML=items.map(([ok,t])=>`<div>${ok?'✅':'❌'} ${t}</div>`).join('');
 }
 function saveSignal(pair,r){
  if(r.decision==='NÃO ENTRAR')return;historyData.unshift({id:Date.now(),time:new Date().toLocaleString('pt-BR'),pair,decision:r.decision,score:Math.round(r.score),result:'Pendente'});
- historyData=historyData.slice(0,60);localStorage.setItem('robiaV7History',JSON.stringify(historyData));renderHistory();
+ historyData=historyData.slice(0,60);localStorage.setItem('robiaV8History',JSON.stringify(historyData));renderHistory();
 }
 async function runAnalysis(auto=false){
  const key=$('apiKey').value.trim(),pair=$('pair').value;if(!key){$('status').textContent='Cole sua chave da Twelve Data.';return}
  if($('newsBlock').checked){$('status').textContent='Análise bloqueada manualmente por notícia forte.';return}
- $('analyze').disabled=true;$('status').textContent='Analisando H1, M30 e M15 com filtros avançados...';
+ $('analyze').disabled=true;setProgress(10,'Preparando análise...');
  try{
+  setProgress(25,'Buscando candles M15, M30 e H1...');
   const[c15,c30,c1h]=await Promise.all([getCandles(pair,'15min',key),getCandles(pair,'30min',key),getCandles(pair,'1h',key)]);
-  const a15=analyzeTF(c15),a30=analyzeTF(c30),a1h=analyzeTF(c1h),r=buildSignal(a15,a30,a1h);setSignal(r,pair,a15,a30,a1h);
+  setProgress(55,'Calculando indicadores...');
+  const a15=analyzeTF(c15),a30=analyzeTF(c30),a1h=analyzeTF(c1h);
+  setProgress(75,'Comparando os três tempos...');
+  const r=buildSignal(a15,a30,a1h);
+  setProgress(90,'Aplicando filtros de segurança...');
+  setSignal(r,pair,a15,a30,a1h);
   if(r.decision!=='NÃO ENTRAR'){
-   const candleKey=`${pair}-${r.decision}-${c15.at(-1).datetime}`;saveSignal(pair,r);
-   if(candleKey!==lastAlertKey&&$('relayUrl').value.trim()){
-    await sendTelegram({type:'signal',pair,direction:r.decision,score:Math.round(r.score),time:new Date().toLocaleString('pt-BR'),validity:'Próximo candle M15',mode:'DEMO'});
-    lastAlertKey=candleKey;localStorage.setItem('robiaLastAlert',candleKey);$('status').textContent='Sinal forte encontrado e enviado ao Telegram. Confirme na Avalon demo.';
-   }else $('status').textContent='Sinal forte encontrado. Confirme na Avalon demo.';
+   saveSignal(pair,r);
+   $('status').textContent='Sinal forte encontrado. Confirme o mesmo par na Avalon demo. O envio ao Telegram será ativado na versão 24 horas.';
   }else $('status').textContent='Nenhum sinal forte agora. O robô aguardará um alinhamento melhor.';
- }catch(e){$('status').textContent='Erro: '+e.message}finally{$('analyze').disabled=false}
+  setProgress(100,'Análise concluída.');
+ }catch(e){$('status').textContent='Erro: '+e.message;setProgress(0,'Falha na análise.')}finally{$('analyze').disabled=false}
+}
+function setProgress(value,text){
+ $('progressBar').style.width=value+'%';$('progressText').textContent=value+'%';
+ if(text)$('status').textContent=text;
+}
+function saveConfig(){
+ const data={apiKey:$('apiKey').value.trim(),chatId:$('chatId').value.trim(),pair:$('pair').value,interval:$('chartInterval').value,newsBlock:$('newsBlock').checked};
+ localStorage.setItem('robiaV8Config',JSON.stringify(data));
+ $('status').textContent='Configuração salva neste navegador.';
+}
+function loadConfig(){
+ const data=JSON.parse(localStorage.getItem('robiaV8Config')||'{}');
+ if(data.apiKey)$('apiKey').value=data.apiKey;if(data.chatId)$('chatId').value=data.chatId;if(data.pair)$('pair').value=data.pair;
+ if(data.interval)$('chartInterval').value=data.interval;if(typeof data.newsBlock==='boolean')$('newsBlock').checked=data.newsBlock;
+}
+function clearConfig(){
+ if(!confirm('Apagar a API, o Chat ID e as preferências salvas neste navegador?'))return;
+ localStorage.removeItem('robiaV8Config');$('apiKey').value='';$('chatId').value='';$('pair').value='EUR/USD';$('chartInterval').value='15';$('newsBlock').checked=false;
+ renderChart();$('status').textContent='Configuração apagada.';
 }
 function renderHistory(){
  $('history').innerHTML=historyData.length?historyData.map(x=>`<tr><td>${x.time}</td><td>${x.pair}</td><td>${x.decision}</td><td>${x.score}</td><td>${x.result==='Pendente'?`<div class="actions"><button class="win" data-id="${x.id}" data-r="Ganhou">Ganhou</button><button class="loss" data-id="${x.id}" data-r="Perdeu">Perdeu</button></div>`:x.result}</td></tr>`).join(''):'<tr><td colspan="5">Nenhum sinal registrado.</td></tr>';
  $('totalSignals').textContent=historyData.length;$('wins').textContent=historyData.filter(x=>x.result==='Ganhou').length;$('losses').textContent=historyData.filter(x=>x.result==='Perdeu').length;
- document.querySelectorAll('[data-r]').forEach(b=>b.addEventListener('click',()=>{historyData=historyData.map(x=>x.id===+b.dataset.id?{...x,result:b.dataset.r}:x);localStorage.setItem('robiaV7History',JSON.stringify(historyData));renderHistory()}));
+ document.querySelectorAll('[data-r]').forEach(b=>b.addEventListener('click',()=>{historyData=historyData.map(x=>x.id===+b.dataset.id?{...x,result:b.dataset.r}:x);localStorage.setItem('robiaV8History',JSON.stringify(historyData));renderHistory()}));
 }
-$('analyze').addEventListener('click',()=>runAnalysis(false));$('testTelegram').addEventListener('click',async()=>{try{await sendTelegram({type:'test',message:'✅ Rob-ia V7 conectada com sucesso.',time:new Date().toLocaleString('pt-BR')});$('status').textContent='Mensagem de teste enviada ao Telegram.'}catch(e){$('status').textContent='Erro no Telegram: '+e.message}});
+$('analyze').addEventListener('click',()=>runAnalysis(false));
+$('saveConfig').addEventListener('click',saveConfig);
+$('clearConfig').addEventListener('click',clearConfig);
 $('autoMonitor').addEventListener('change',e=>{clearInterval(monitorTimer);if(e.target.checked){runAnalysis(true);monitorTimer=setInterval(()=>runAnalysis(true),300000);$('status').textContent='Monitoramento automático ativado. Mantenha esta página aberta.'}else $('status').textContent='Monitoramento automático desligado.'});
 $('reloadChart').addEventListener('click',renderChart);$('pair').addEventListener('change',renderChart);$('chartInterval').addEventListener('change',renderChart);
-renderChart();renderHistory();
+loadConfig();renderChart();renderHistory();
 </script>
 </body>
 </html>
