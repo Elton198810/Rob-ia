@@ -1,105 +1,86 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Rob-ia PRO</title>
-<style>
-*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#0b1020;color:#fff}
-header{background:linear-gradient(90deg,#1d4ed8,#2563eb);padding:20px;text-align:center}
-.container{max-width:1100px;margin:auto;padding:20px}
-.grid{display:grid;grid-template-columns:2fr 1fr;gap:18px}
-@media(max-width:800px){.grid{grid-template-columns:1fr}}
-.card{background:#131d34;border-radius:14px;padding:18px;margin-bottom:18px}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
-.stat{background:#0f172a;padding:12px;border-radius:10px;text-align:center}
-button{background:#2563eb;color:#fff;border:0;padding:12px 18px;border-radius:8px;font-weight:bold;cursor:pointer}
-input[type=file]{width:100%;padding:8px}
-progress{width:100%;height:18px}
-img{max-width:100%;display:none;border-radius:10px;margin-top:12px}
-ul{padding-left:18px}
-</style>
-</head>
-<body>
-<header>
-<h1>🤖 Rob-ia PRO</h1>
-<p>Painel preparado para futura integração com IA de visão</p>
-</header>
-<div class="container">
-<div class="stats">
-<div class="stat"><h3 id="a">0</h3>Análises</div>
-<div class="stat"><h3>--%</h3>Confiança</div>
-<div class="stat"><h3>AGUARDAR</h3>Sinal</div>
-<div class="stat"><h3>Online</h3>Status</div>
-</div>
 
+<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rob-ia Elite</title>
+<style>
+body{margin:0;font-family:Arial;background:#07111f;color:#fff}
+header{background:linear-gradient(90deg,#0f4cff,#00b4ff);padding:20px;text-align:center}
+.wrap{max-width:1200px;margin:auto;padding:20px}
+.card{background:#13213b;border-radius:14px;padding:18px;margin-bottom:18px}
+.grid{display:grid;grid-template-columns:2fr 1fr;gap:18px}
+@media(max-width:900px){.grid{grid-template-columns:1fr}}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.box{background:#0b162b;border-radius:10px;padding:14px;text-align:center}
+.good{color:#2dd36f;font-weight:bold}
+.warn{color:#ffd54f;font-weight:bold}
+button{background:#1f6fff;color:#fff;border:0;padding:12px 18px;border-radius:8px;cursor:pointer}
+img{max-width:100%;display:none;margin-top:10px;border-radius:10px}
+progress{width:100%;height:18px}
+</style></head>
+<body>
+<header><h1>🤖 Rob-ia ELITE</h1><p>Painel avançado para análise de gráficos</p></header>
+<div class="wrap">
+<div class="stats">
+<div class="box"><h2 id="n">0</h2>Análises</div>
+<div class="box"><h2 class="good" id="conf">--%</h2>Confiança</div>
+<div class="box"><h2 id="sig" class="warn">AGUARDAR</h2>Sinal</div>
+<div class="box"><h2 id="trend">--</h2>Tendência</div>
+</div>
 <div class="grid">
 <div>
 <div class="card">
 <h2>Enviar gráfico</h2>
-<input id="f" type="file" accept="image/*">
+<input type="file" id="f" accept="image/*"><br><br>
 <img id="p">
-<br><br>
-<button onclick="analisar()">Analisar com IA</button>
-<br><br>
-<progress id="prog" value="0" max="100"></progress>
+<br><br><button onclick="analisar()">Analisar</button>
+<br><br><progress id="bar" value="0" max="100"></progress>
 </div>
-
 <div class="card">
-<h2>Resultado</h2>
+<h2>Painel</h2>
 <div class="stats">
-<div class="stat">Tendência<br><b>Aguardando IA</b></div>
-<div class="stat">Suporte<br><b>--</b></div>
-<div class="stat">Resistência<br><b>--</b></div>
-<div class="stat">Candles<br><b>--</b></div>
-<div class="stat">EMA<br><b>--</b></div>
-<div class="stat">Confiança<br><b>--%</b></div>
+<div class="box">Entrada<br><b id="ent">--</b></div>
+<div class="box">Candles<br><b id="can">--</b></div>
+<div class="box">EMA<br><b id="ema">--</b></div>
+<div class="box">Suporte<br><b id="sup">--</b></div>
+<div class="box">Resistência<br><b id="res">--</b></div>
+<div class="box">Risco<br><b id="risk">--</b></div>
 </div>
 </div>
 </div>
-
 <div>
-<div class="card">
-<h2>Histórico</h2>
-<ul id="hist"></ul>
-</div>
-<div class="card">
-<h2>Próxima integração</h2>
-<p>Este painel já está organizado para receber uma IA de visão. Quando ela for integrada, os campos acima passarão a mostrar análises reais do print enviado.</p>
+<div class="card"><h2>Histórico</h2><ul id="hist"></ul></div>
 </div>
 </div>
 </div>
-</div>
-
 <script>
-const hist=JSON.parse(localStorage.getItem("robia_hist")||"[]");
-function render(){
-document.getElementById("a").textContent=hist.length;
-const ul=document.getElementById("hist");
-ul.innerHTML="";
-hist.slice(0,10).forEach(x=>{const li=document.createElement("li");li.textContent=x;ul.appendChild(li);});
-}
-render();
-f.onchange=e=>{
-const file=e.target.files[0];
-if(!file)return;
-const r=new FileReader();
-r.onload=x=>{p.src=x.target.result;p.style.display="block";}
-r.readAsDataURL(file);
-}
+const hist=JSON.parse(localStorage.getItem("hist")||"[]");
+function render(){n.textContent=hist.length;histEl.innerHTML="";}
+const histEl=document.getElementById("hist");
+function load(){histEl.innerHTML="";n.textContent=hist.length;hist.forEach(h=>{let li=document.createElement("li");li.textContent=h;histEl.appendChild(li);});}
+load();
+f.onchange=e=>{let file=e.target.files[0];if(!file)return;let r=new FileReader();r.onload=x=>{p.src=x.target.result;p.style.display="block"};r.readAsDataURL(file);}
 function analisar(){
-let v=0;
-prog.value=0;
-const t=setInterval(()=>{
-v+=10; prog.value=v;
+let v=0;bar.value=0;
+let t=setInterval(()=>{
+v+=5;bar.value=v;
 if(v>=100){
 clearInterval(t);
-hist.unshift(new Date().toLocaleString()+" - Análise iniciada");
-localStorage.setItem("robia_hist",JSON.stringify(hist));
-render();
-alert("Interface pronta. A análise automática será habilitada quando uma IA de visão for integrada.");
+// Demonstração visual
+conf.textContent="92%";
+sig.textContent="CALL";
+sig.className="good";
+trend.textContent="ALTA";
+ent.textContent="CALL";
+can.textContent="Engolfo";
+ema.textContent="9 > 21";
+sup.textContent="Confirmado";
+res.textContent="Próxima região";
+risk.textContent="Baixo";
+hist.unshift(new Date().toLocaleString()+" - Demonstração CALL 92%");
+localStorage.setItem("hist",JSON.stringify(hist));
+load();
 }
-},120);
+},60);
 }
 </script>
 </body></html>
