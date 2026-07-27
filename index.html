@@ -1,331 +1,198 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#0f172a">
-  <title>Rob-ia V6 Demo — Forex Multitemporal</title>
-  <style>
-    :root{
-      --bg:#07111f;--panel:#0f1b2d;--panel2:#132238;--text:#e8eef7;--muted:#93a4ba;
-      --blue:#38bdf8;--green:#22c55e;--red:#ef4444;--yellow:#f59e0b;--border:#24354d;
-    }
-    *{box-sizing:border-box}
-    body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(180deg,#07111f,#0b1728);color:var(--text)}
-    .wrap{max-width:1180px;margin:auto;padding:14px}
-    header{padding:18px 0}
-    h1{margin:0;font-size:26px}
-    .sub{color:var(--muted);margin-top:6px;line-height:1.45}
-    .badge{display:inline-block;margin-top:10px;padding:7px 10px;border:1px solid var(--border);border-radius:999px;background:#0c192b;color:#cbd5e1;font-size:13px}
-    .grid{display:grid;grid-template-columns:1.35fr .65fr;gap:14px}
-    .card{background:rgba(15,27,45,.96);border:1px solid var(--border);border-radius:16px;padding:14px}
-    .card h2{margin:0 0 12px;font-size:18px}
-    label{display:block;color:#cbd5e1;font-size:13px;margin-bottom:6px}
-    input,select,button{width:100%;border-radius:11px;border:1px solid var(--border);padding:12px;background:#091525;color:var(--text);font-size:15px}
-    button{cursor:pointer;font-weight:700;background:#0ea5e9;border-color:#0ea5e9;color:white}
-    button.secondary{background:#17263a;border-color:#30445f}
-    button:disabled{opacity:.55;cursor:not-allowed}
-    .controls{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-    .full{grid-column:1/-1}
-    #chart{height:520px;border-radius:12px;overflow:hidden;background:#091525}
-    .signal{border-radius:14px;padding:16px;text-align:center;border:1px solid var(--border);background:#0a1728}
-    .signal .decision{font-size:28px;font-weight:900;margin:8px 0}
-    .signal.call{border-color:#166534;background:rgba(22,101,52,.2)}
-    .signal.put{border-color:#991b1b;background:rgba(153,27,27,.2)}
-    .signal.wait{border-color:#92400e;background:rgba(146,64,14,.16)}
-    .score{font-size:16px;color:#dbeafe}
-    .small{font-size:12px;color:var(--muted);line-height:1.45}
-    .metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
-    .metric{background:#0a1728;border:1px solid var(--border);border-radius:12px;padding:10px;text-align:center}
-    .metric b{display:block;font-size:17px;margin-top:5px}
-    .status{margin-top:10px;padding:10px;border-radius:10px;background:#0a1728;border:1px solid var(--border);color:#cbd5e1;font-size:13px}
-    .reason{margin:12px 0 0;padding-left:18px;color:#dbeafe;line-height:1.55}
-    table{width:100%;border-collapse:collapse;font-size:13px}
-    th,td{padding:10px 7px;border-bottom:1px solid var(--border);text-align:left}
-    th{color:#a8bad0}
-    .actions{display:flex;gap:8px}
-    .actions button{padding:8px;font-size:12px}
-    .win{background:#15803d!important;border-color:#15803d!important}
-    .loss{background:#b91c1c!important;border-color:#b91c1c!important}
-    .notice{margin-top:14px;padding:12px;border-radius:12px;border:1px solid #854d0e;background:rgba(133,77,14,.15);color:#fde68a;font-size:13px;line-height:1.5}
-    @media(max-width:850px){
-      .grid{grid-template-columns:1fr}
-      #chart{height:430px}
-    }
-    @media(max-width:520px){
-      .controls{grid-template-columns:1fr}
-      .metrics{grid-template-columns:1fr 1fr}
-      h1{font-size:22px}
-      #chart{height:390px}
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#07111f">
+<title>Rob-ia V7 PRO — Sinais Fortes Forex</title>
+<style>
+:root{--bg:#07111f;--panel:#0f1b2d;--panel2:#132238;--text:#edf4ff;--muted:#94a8c1;--blue:#38bdf8;--green:#22c55e;--red:#ef4444;--yellow:#f59e0b;--border:#263a55}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(180deg,#07111f,#0a1728);color:var(--text)}
+.wrap{max-width:1220px;margin:auto;padding:14px}header{padding:18px 0}h1{margin:0;font-size:27px}.sub{color:var(--muted);margin-top:7px;line-height:1.5}
+.badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:11px}.badge{padding:7px 10px;border:1px solid var(--border);border-radius:999px;background:#0b192b;font-size:13px;color:#d5e2f3}
+.grid{display:grid;grid-template-columns:1.35fr .65fr;gap:14px}.card{background:rgba(15,27,45,.97);border:1px solid var(--border);border-radius:16px;padding:14px}
+.card h2{margin:0 0 12px;font-size:18px}label{display:block;color:#d3deec;font-size:13px;margin-bottom:6px}
+input,select,button{width:100%;border-radius:11px;border:1px solid var(--border);padding:11px 12px;background:#091525;color:var(--text);font-size:15px}
+button{cursor:pointer;font-weight:700;background:#0ea5e9;border-color:#0ea5e9}button.secondary{background:#18283d;border-color:#344b69}button.danger{background:#b91c1c;border-color:#b91c1c}
+button:disabled{opacity:.55;cursor:not-allowed}.controls{display:grid;grid-template-columns:1fr 1fr;gap:10px}.full{grid-column:1/-1}
+.switchrow{display:flex;align-items:center;gap:9px;background:#091525;border:1px solid var(--border);border-radius:11px;padding:10px 12px}.switchrow input{width:auto}
+#chart{height:540px;border-radius:12px;overflow:hidden;background:#091525}.status{margin-top:10px;padding:10px;border-radius:10px;background:#091525;border:1px solid var(--border);font-size:13px;color:#d2deed;line-height:1.45}
+.signal{margin-top:12px;border-radius:14px;padding:16px;text-align:center;border:1px solid var(--border);background:#0a1728}.signal .decision{font-size:29px;font-weight:900;margin:8px 0}
+.signal.call{border-color:#166534;background:rgba(22,101,52,.22)}.signal.put{border-color:#991b1b;background:rgba(153,27,27,.22)}.signal.wait{border-color:#92400e;background:rgba(146,64,14,.17)}
+.score{font-size:16px}.small{font-size:12px;color:var(--muted);line-height:1.45}.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.metric{background:#0a1728;border:1px solid var(--border);border-radius:12px;padding:10px;text-align:center;font-size:13px}.metric b{display:block;font-size:16px;margin-top:5px}
+.reason{margin:12px 0 0;padding-left:18px;line-height:1.55;color:#dce7f5}.notice{margin-top:14px;padding:12px;border-radius:12px;border:1px solid #854d0e;background:rgba(133,77,14,.16);color:#fde68a;font-size:13px;line-height:1.5}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:10px 7px;border-bottom:1px solid var(--border);text-align:left}th{color:#a9bbd1}
+.actions{display:flex;gap:7px}.actions button{padding:7px;font-size:12px}.win{background:#15803d!important;border-color:#15803d!important}.loss{background:#b91c1c!important;border-color:#b91c1c!important}
+details{margin-top:12px;border:1px solid var(--border);border-radius:12px;padding:10px;background:#0a1728}summary{cursor:pointer;font-weight:700}
+@media(max-width:880px){.grid{grid-template-columns:1fr}#chart{height:440px}}@media(max-width:520px){.controls{grid-template-columns:1fr}.metrics{grid-template-columns:1fr 1fr}#chart{height:390px}h1{font-size:22px}}
+</style>
 </head>
 <body>
 <div class="wrap">
-  <header>
-    <h1>Rob-ia V6 Demo</h1>
-    <div class="sub">Análise automática de Forex normal em M15, M30 e H1. Sem OTC e sem executar operações.</div>
-    <span class="badge">Modo de teste • use somente conta demo</span>
-  </header>
+<header>
+  <h1>Rob-ia V7 PRO</h1>
+  <div class="sub">Leitura multitemporal seletiva para Forex normal. Procura somente alinhamentos fortes em H1, M30 e M15.</div>
+  <div class="badges"><span class="badge">Sem OTC</span><span class="badge">Somente candle fechado</span><span class="badge">Nota mínima 80</span><span class="badge">Conta demo</span></div>
+</header>
 
-  <div class="grid">
-    <section class="card">
-      <h2>Gráfico do mercado</h2>
-      <div id="chart"></div>
-    </section>
+<div class="grid">
+<section class="card">
+  <h2>Gráfico do mercado</h2>
+  <div id="chart"></div>
+</section>
 
-    <aside class="card">
-      <h2>Configuração</h2>
-      <div class="controls">
-        <div>
-          <label for="pair">Par</label>
-          <select id="pair">
-            <option value="EUR/USD" data-tv="FX:EURUSD">EUR/USD</option>
-            <option value="GBP/USD" data-tv="FX:GBPUSD">GBP/USD</option>
-            <option value="USD/JPY" data-tv="FX:USDJPY">USD/JPY</option>
-            <option value="AUD/USD" data-tv="FX:AUDUSD">AUD/USD</option>
-            <option value="USD/CAD" data-tv="FX:USDCAD">USD/CAD</option>
-            <option value="USD/CHF" data-tv="FX:USDCHF">USD/CHF</option>
-          </select>
-        </div>
-        <div>
-          <label for="chartInterval">Tempo do gráfico</label>
-          <select id="chartInterval">
-            <option value="15">M15</option>
-            <option value="30">M30</option>
-            <option value="60">H1</option>
-          </select>
-        </div>
-        <div class="full">
-          <label for="apiKey">Chave gratuita da Twelve Data</label>
-          <input id="apiKey" type="password" placeholder="Cole sua API key aqui">
-        </div>
-        <div class="full">
-          <button id="analyze">Analisar agora</button>
-        </div>
-        <div class="full">
-          <button id="reloadChart" class="secondary">Atualizar gráfico</button>
-        </div>
-      </div>
-
-      <div id="status" class="status">Aguardando análise.</div>
-
-      <div id="signal" class="signal wait" style="margin-top:12px">
-        <div class="small">SINAL ATUAL</div>
-        <div class="decision">NÃO ENTRAR</div>
-        <div class="score">Nota técnica: --/100</div>
-        <div class="small" id="signalTime">Nenhuma análise realizada.</div>
-      </div>
-
-      <div class="metrics">
-        <div class="metric">M15<b id="m15">--</b></div>
-        <div class="metric">M30<b id="m30">--</b></div>
-        <div class="metric">H1<b id="h1">--</b></div>
-        <div class="metric">RSI M15<b id="rsi">--</b></div>
-        <div class="metric">EMA 9/21<b id="ema">--</b></div>
-        <div class="metric">Volatilidade<b id="vol">--</b></div>
-      </div>
-
-      <ul id="reasons" class="reason"></ul>
-
-      <div class="notice">
-        A cotação pode diferir alguns pontos da Avalon. Confira o mesmo par e aguarde a abertura do candle na própria plataforma antes de qualquer teste.
-      </div>
-    </aside>
+<aside class="card">
+  <h2>Configuração</h2>
+  <div class="controls">
+    <div><label for="pair">Par</label><select id="pair">
+      <option value="EUR/USD" data-tv="FX:EURUSD">EUR/USD</option><option value="GBP/USD" data-tv="FX:GBPUSD">GBP/USD</option>
+      <option value="USD/JPY" data-tv="FX:USDJPY">USD/JPY</option><option value="AUD/USD" data-tv="FX:AUDUSD">AUD/USD</option>
+      <option value="USD/CAD" data-tv="FX:USDCAD">USD/CAD</option><option value="USD/CHF" data-tv="FX:USDCHF">USD/CHF</option>
+    </select></div>
+    <div><label for="chartInterval">Tempo do gráfico</label><select id="chartInterval"><option value="15">M15</option><option value="30">M30</option><option value="60">H1</option></select></div>
+    <div class="full"><label for="apiKey">Chave da Twelve Data</label><input id="apiKey" type="password" placeholder="Cole sua API key"></div>
+    <div class="full"><label for="relayUrl">URL protegida do Telegram (Cloudflare Worker)</label><input id="relayUrl" type="url" placeholder="https://seu-worker.workers.dev/send"></div>
+    <div class="full switchrow"><input id="newsBlock" type="checkbox"><label for="newsBlock" style="margin:0">Bloquear análise por notícia forte agora</label></div>
+    <div class="full switchrow"><input id="autoMonitor" type="checkbox"><label for="autoMonitor" style="margin:0">Monitorar automaticamente a cada 5 minutos</label></div>
+    <div class="full"><button id="analyze">Analisar agora</button></div>
+    <div><button id="testTelegram" class="secondary">Testar Telegram</button></div>
+    <div><button id="reloadChart" class="secondary">Atualizar gráfico</button></div>
   </div>
 
-  <section class="card" style="margin-top:14px">
-    <h2>Histórico da demonstração</h2>
-    <div style="overflow:auto">
-      <table>
-        <thead><tr><th>Horário</th><th>Par</th><th>Sinal</th><th>Nota</th><th>Resultado</th></tr></thead>
-        <tbody id="history"></tbody>
-      </table>
-    </div>
-    <div class="metrics" style="max-width:500px">
-      <div class="metric">Sinais<b id="totalSignals">0</b></div>
-      <div class="metric">Vitórias<b id="wins">0</b></div>
-      <div class="metric">Derrotas<b id="losses">0</b></div>
-    </div>
-  </section>
+  <div id="status" class="status">Aguardando análise.</div>
+  <div id="signal" class="signal wait"><div class="small">SINAL ATUAL</div><div class="decision">NÃO ENTRAR</div><div class="score">Nota técnica: --/100</div><div class="small" id="signalTime">Nenhuma análise realizada.</div></div>
+
+  <div class="metrics">
+    <div class="metric">H1<b id="h1">--</b></div><div class="metric">M30<b id="m30">--</b></div><div class="metric">M15<b id="m15">--</b></div>
+    <div class="metric">RSI M15<b id="rsi">--</b></div><div class="metric">ADX M15<b id="adx">--</b></div><div class="metric">MACD M15<b id="macd">--</b></div>
+    <div class="metric">EMA 9/21/50<b id="ema">--</b></div><div class="metric">ATR<b id="atr">--</b></div><div class="metric">Estrutura<b id="structure">--</b></div>
+  </div>
+  <ul id="reasons" class="reason"></ul>
+
+  <details><summary>Como a nota é formada</summary><div class="small" style="margin-top:9px">
+    Tendência H1, confirmação M30, gatilho M15, alinhamento das EMAs, força ADX, MACD, RSI, estrutura de máximas/mínimas, candle de confirmação, distância de suporte/resistência e controle de volatilidade. Conflitos reduzem a nota.
+  </div></details>
+  <div class="notice">O sistema procura qualidade, não quantidade. Mesmo com nota alta, pode perder. Confirme o mesmo par na Avalon e teste somente na demonstração.</div>
+</aside>
+</div>
+
+<section class="card" style="margin-top:14px">
+<h2>Histórico da demonstração</h2>
+<div style="overflow:auto"><table><thead><tr><th>Horário</th><th>Par</th><th>Sinal</th><th>Nota</th><th>Resultado</th></tr></thead><tbody id="history"></tbody></table></div>
+<div class="metrics" style="max-width:500px"><div class="metric">Sinais<b id="totalSignals">0</b></div><div class="metric">Vitórias<b id="wins">0</b></div><div class="metric">Derrotas<b id="losses">0</b></div></div>
+</section>
 </div>
 
 <script>
-const $ = id => document.getElementById(id);
-let historyData = JSON.parse(localStorage.getItem('robiaHistory') || '[]');
+const $=id=>document.getElementById(id);
+let historyData=JSON.parse(localStorage.getItem('robiaV7History')||'[]');
+let monitorTimer=null,lastAlertKey=localStorage.getItem('robiaLastAlert')||'';
 
 function renderChart(){
-  const pairSelect = $('pair');
-  const tv = pairSelect.options[pairSelect.selectedIndex].dataset.tv;
-  const interval = $('chartInterval').value;
-  $('chart').innerHTML = '';
-  const container = document.createElement('div');
-  container.className = 'tradingview-widget-container';
-  container.style.height = '100%';
-  container.style.width = '100%';
-  const widget = document.createElement('div');
-  widget.className = 'tradingview-widget-container__widget';
-  widget.style.height = '100%';
-  widget.style.width = '100%';
-  const script = document.createElement('script');
-  script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js';
-  script.async = true;
-  script.innerHTML = JSON.stringify({
-    autosize:true, symbol:tv, interval, timezone:'America/Sao_Paulo',
-    theme:'dark', style:'1', locale:'br', allow_symbol_change:false,
-    hide_side_toolbar:true, withdateranges:true, details:false,
-    calendar:false, studies:['STD;EMA','STD;RSI']
-  });
-  container.appendChild(widget);
-  container.appendChild(script);
-  $('chart').appendChild(container);
+ const opt=$('pair').options[$('pair').selectedIndex],tv=opt.dataset.tv,interval=$('chartInterval').value;
+ $('chart').innerHTML='';const c=document.createElement('div');c.className='tradingview-widget-container';c.style.cssText='height:100%;width:100%';
+ const w=document.createElement('div');w.className='tradingview-widget-container__widget';w.style.cssText='height:100%;width:100%';
+ const s=document.createElement('script');s.src='https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js';s.async=true;
+ s.innerHTML=JSON.stringify({autosize:true,symbol:tv,interval,timezone:'America/Sao_Paulo',theme:'dark',style:'1',locale:'br',allow_symbol_change:false,hide_side_toolbar:true,withdateranges:true,details:false,calendar:false,studies:['STD;EMA','STD;RSI','STD;MACD']});
+ c.append(w,s);$('chart').appendChild(c);
 }
-
-function ema(values, period){
-  const k = 2/(period+1);
-  let result = values[0];
-  for(let i=1;i<values.length;i++) result = values[i]*k + result*(1-k);
-  return result;
+function ema(v,p){const k=2/(p+1);let e=v[0];for(let i=1;i<v.length;i++)e=v[i]*k+e*(1-k);return e}
+function emaSeries(v,p){const k=2/(p+1),out=[];let e=v[0];for(let i=0;i<v.length;i++){e=i? v[i]*k+e*(1-k):v[i];out.push(e)}return out}
+function rsi(v,p=14){if(v.length<=p)return 50;let g=0,l=0;for(let i=v.length-p;i<v.length;i++){const d=v[i]-v[i-1];if(d>0)g+=d;else l-=d}if(!l)return 100;const rs=(g/p)/(l/p);return 100-100/(1+rs)}
+function trueRanges(c){return c.map((x,i)=>i===0?x.high-x.low:Math.max(x.high-x.low,Math.abs(x.high-c[i-1].close),Math.abs(x.low-c[i-1].close)))}
+function atr(c,p=14){const tr=trueRanges(c).slice(-p);return tr.reduce((a,b)=>a+b,0)/tr.length}
+function adx(c,p=14){
+ if(c.length<p*2+2)return 0;let tr=[],plus=[],minus=[];
+ for(let i=1;i<c.length;i++){const up=c[i].high-c[i-1].high,down=c[i-1].low-c[i].low;plus.push(up>down&&up>0?up:0);minus.push(down>up&&down>0?down:0);tr.push(Math.max(c[i].high-c[i].low,Math.abs(c[i].high-c[i-1].close),Math.abs(c[i].low-c[i-1].close)))}
+ const dx=[];for(let i=p;i<tr.length;i++){const ts=tr.slice(i-p,i).reduce((a,b)=>a+b,0);const ps=plus.slice(i-p,i).reduce((a,b)=>a+b,0);const ms=minus.slice(i-p,i).reduce((a,b)=>a+b,0);const pdi=100*ps/ts,mdi=100*ms/ts;dx.push(100*Math.abs(pdi-mdi)/(pdi+mdi||1))}
+ return dx.slice(-p).reduce((a,b)=>a+b,0)/Math.min(p,dx.length)
 }
-
-function rsi(values, period=14){
-  if(values.length <= period) return 50;
-  let gains=0, losses=0;
-  for(let i=values.length-period;i<values.length;i++){
-    const d=values[i]-values[i-1];
-    if(d>0) gains+=d; else losses-=d;
-  }
-  if(losses===0) return 100;
-  const rs=(gains/period)/(losses/period);
-  return 100-(100/(1+rs));
+function macd(v){const e12=emaSeries(v,12),e26=emaSeries(v,26),m=v.map((_,i)=>e12[i]-e26[i]),sig=emaSeries(m,9);return {line:m.at(-1),signal:sig.at(-1),hist:m.at(-1)-sig.at(-1),prevHist:m.at(-2)-sig.at(-2)}}
+function structure(c){
+ const r=c.slice(-12),highs=r.map(x=>x.high),lows=r.map(x=>x.low);
+ const h1=Math.max(...highs.slice(0,6)),h2=Math.max(...highs.slice(6)),l1=Math.min(...lows.slice(0,6)),l2=Math.min(...lows.slice(6));
+ if(h2>h1&&l2>l1)return'ALTA';if(h2<h1&&l2<l1)return'BAIXA';return'NEUTRA'
 }
-
-function atrLike(candles, period=14){
-  const slice=candles.slice(-period);
-  const ranges=slice.map(c=>(c.high-c.low)/c.close*100);
-  return ranges.reduce((a,b)=>a+b,0)/ranges.length;
+function candleSignal(c){const x=c.at(-1),body=Math.abs(x.close-x.open),range=x.high-x.low||1,upper=x.high-Math.max(x.open,x.close),lower=Math.min(x.open,x.close)-x.low;
+ if(x.close>x.open&&body/range>.55&&upper/range<.25)return'ALTA';
+ if(x.close<x.open&&body/range>.55&&lower/range<.25)return'BAIXA';
+ return'NEUTRA'
 }
-
-async function getCandles(pair, interval, key){
-  const url=`https://api.twelvedata.com/time_series?symbol=${encodeURIComponent(pair)}&interval=${interval}&outputsize=120&apikey=${encodeURIComponent(key)}`;
-  const res=await fetch(url);
-  const data=await res.json();
-  if(!res.ok || data.status==='error' || !data.values) throw new Error(data.message || 'Falha ao buscar candles.');
-  return data.values.reverse().map(v=>({
-    datetime:v.datetime, open:+v.open, high:+v.high, low:+v.low, close:+v.close
-  }));
+async function getCandles(pair,interval,key){
+ const url=`https://api.twelvedata.com/time_series?symbol=${encodeURIComponent(pair)}&interval=${interval}&outputsize=180&apikey=${encodeURIComponent(key)}`;
+ const res=await fetch(url),data=await res.json();if(!res.ok||data.status==='error'||!data.values)throw new Error(data.message||'Falha ao buscar candles.');
+ return data.values.reverse().map(v=>({datetime:v.datetime,open:+v.open,high:+v.high,low:+v.low,close:+v.close}));
 }
-
-function analyzeTimeframe(candles){
-  const closes=candles.map(c=>c.close);
-  const e9=ema(closes.slice(-60),9);
-  const e21=ema(closes.slice(-80),21);
-  const e50=ema(closes,50);
-  const last=closes.at(-1);
-  const momentum=last-closes.at(-4);
-  let direction='NEUTRO';
-  if(last>e9 && e9>e21 && e21>e50 && momentum>0) direction='ALTA';
-  if(last<e9 && e9<e21 && e21<e50 && momentum<0) direction='BAIXA';
-  return {direction,last,e9,e21,e50,rsi:rsi(closes),vol:atrLike(candles)};
+function analyzeTF(c){
+ const closes=c.map(x=>x.close),last=closes.at(-1),e9=ema(closes.slice(-80),9),e21=ema(closes.slice(-100),21),e50=ema(closes,50),m=macd(closes),a=atr(c),aPct=a/last*100,st=structure(c),cs=candleSignal(c),adxv=adx(c);
+ let dir='NEUTRO';if(last>e9&&e9>e21&&e21>e50&&st!=='BAIXA')dir='ALTA';if(last<e9&&e9<e21&&e21<e50&&st!=='ALTA')dir='BAIXA';
+ const recent=c.slice(-30),support=Math.min(...recent.map(x=>x.low)),resistance=Math.max(...recent.map(x=>x.high));
+ return{dir,last,e9,e21,e50,rsi:rsi(closes),macd:m,atr:aPct,adx:adxv,structure:st,candle:cs,support,resistance}
 }
-
 function buildSignal(a15,a30,a1h){
-  let call=0, put=0, reasons=[];
-  for(const [name,a,weight] of [['H1',a1h,30],['M30',a30,25],['M15',a15,20]]){
-    if(a.direction==='ALTA'){call+=weight; reasons.push(`${name} confirma tendência de alta.`)}
-    else if(a.direction==='BAIXA'){put+=weight; reasons.push(`${name} confirma tendência de baixa.`)}
-    else reasons.push(`${name} está sem direção clara.`)
-  }
-  if(a15.rsi>=52 && a15.rsi<=68){call+=10; reasons.push('RSI M15 favorece compra sem sobrecompra extrema.')}
-  else if(a15.rsi>=32 && a15.rsi<=48){put+=10; reasons.push('RSI M15 favorece venda sem sobrevenda extrema.')}
-  else reasons.push('RSI M15 não oferece confirmação limpa.');
-
-  if(a15.vol<0.025){call-=10;put-=10;reasons.push('Volatilidade muito baixa; mercado pode estar travado.')}
-  if(a15.vol>0.35){call-=10;put-=10;reasons.push('Volatilidade elevada; risco de movimento brusco.')}
-
-  const diff=Math.abs(call-put);
-  let decision='NÃO ENTRAR', score=Math.max(call,put);
-  if(call>=65 && call-put>=25) decision='CALL';
-  if(put>=65 && put-call>=25) decision='PUT';
-  if(diff<25) reasons.push('Os sinais compradores e vendedores estão muito próximos.');
-
-  return {decision,score:Math.max(0,Math.min(100,score)),reasons};
+ let call=0,put=0,reasons=[];
+ const add=(side,pts,msg)=>{if(side==='CALL')call+=pts;else put+=pts;reasons.push(msg)};
+ if(a1h.dir==='ALTA')add('CALL',25,'H1 mantém tendência principal de alta.');else if(a1h.dir==='BAIXA')add('PUT',25,'H1 mantém tendência principal de baixa.');else reasons.push('H1 sem tendência suficientemente limpa.');
+ if(a30.dir==='ALTA')add('CALL',20,'M30 confirma a alta.');else if(a30.dir==='BAIXA')add('PUT',20,'M30 confirma a baixa.');else reasons.push('M30 não confirmou direção.');
+ if(a15.dir==='ALTA')add('CALL',15,'M15 alinhado para compra.');else if(a15.dir==='BAIXA')add('PUT',15,'M15 alinhado para venda.');else reasons.push('M15 ainda sem alinhamento completo.');
+ if(a15.structure==='ALTA')add('CALL',8,'Máximas e mínimas recentes ascendentes.');else if(a15.structure==='BAIXA')add('PUT',8,'Máximas e mínimas recentes descendentes.');
+ if(a15.candle==='ALTA')add('CALL',7,'Último candle fechado confirma pressão compradora.');else if(a15.candle==='BAIXA')add('PUT',7,'Último candle fechado confirma pressão vendedora.');
+ if(a15.macd.hist>0&&a15.macd.hist>a15.macd.prevHist)add('CALL',8,'MACD ganha força compradora.');else if(a15.macd.hist<0&&a15.macd.hist<a15.macd.prevHist)add('PUT',8,'MACD ganha força vendedora.');else reasons.push('MACD sem aceleração clara.');
+ if(a15.rsi>=52&&a15.rsi<=67)add('CALL',7,'RSI em faixa compradora saudável.');else if(a15.rsi>=33&&a15.rsi<=48)add('PUT',7,'RSI em faixa vendedora saudável.');else reasons.push('RSI fora da faixa ideal.');
+ if(a15.adx>=22){if(call>put)call+=7;else if(put>call)put+=7;reasons.push('ADX confirma força de tendência.')}else reasons.push('ADX baixo: tendência pode estar fraca.');
+ const distSup=(a15.last-a15.support)/a15.last*100,distRes=(a15.resistance-a15.last)/a15.last*100;
+ if(call>put&&distRes<0.05){call-=15;reasons.push('Preço muito perto de resistência: compra penalizada.')}
+ if(put>call&&distSup<0.05){put-=15;reasons.push('Preço muito perto de suporte: venda penalizada.')}
+ if(a15.atr<0.025){call-=10;put-=10;reasons.push('Volatilidade muito baixa.')}if(a15.atr>0.30){call-=10;put-=10;reasons.push('Volatilidade muito alta.')}
+ const alignment=(a1h.dir===a30.dir&&a30.dir===a15.dir&&a15.dir!=='NEUTRO');
+ let decision='NÃO ENTRAR',score=Math.max(call,put);
+ if(alignment&&call>=80&&call-put>=30)decision='CALL';if(alignment&&put>=80&&put-call>=30)decision='PUT';
+ if(!alignment)reasons.push('H1, M30 e M15 não estão totalmente alinhados.');
+ return{decision,score:Math.max(0,Math.min(100,score)),reasons}
 }
-
-function setSignal(result,pair,a15,a30,a1h){
-  const box=$('signal');
-  box.className='signal '+(result.decision==='CALL'?'call':result.decision==='PUT'?'put':'wait');
-  box.querySelector('.decision').textContent=result.decision;
-  box.querySelector('.score').textContent=`Nota técnica: ${Math.round(result.score)}/100`;
-  $('signalTime').textContent=`${pair} • ${new Date().toLocaleString('pt-BR')}`;
-  $('m15').textContent=a15.direction;
-  $('m30').textContent=a30.direction;
-  $('h1').textContent=a1h.direction;
-  $('rsi').textContent=a15.rsi.toFixed(1);
-  $('ema').textContent=a15.e9>a15.e21?'ALTA':a15.e9<a15.e21?'BAIXA':'IGUAL';
-  $('vol').textContent=a15.vol.toFixed(3)+'%';
-  $('reasons').innerHTML=result.reasons.map(r=>`<li>${r}</li>`).join('');
+function setSignal(r,p,a15,a30,a1h){
+ const b=$('signal');b.className='signal '+(r.decision==='CALL'?'call':r.decision==='PUT'?'put':'wait');
+ b.querySelector('.decision').textContent=r.decision;b.querySelector('.score').textContent=`Nota técnica: ${Math.round(r.score)}/100`;
+ $('signalTime').textContent=`${p} • ${new Date().toLocaleString('pt-BR')}`;$('h1').textContent=a1h.dir;$('m30').textContent=a30.dir;$('m15').textContent=a15.dir;
+ $('rsi').textContent=a15.rsi.toFixed(1);$('adx').textContent=a15.adx.toFixed(1);$('macd').textContent=a15.macd.hist>0?'ALTA':a15.macd.hist<0?'BAIXA':'NEUTRO';
+ $('ema').textContent=a15.e9>a15.e21&&a15.e21>a15.e50?'ALTA':a15.e9<a15.e21&&a15.e21<a15.e50?'BAIXA':'MISTO';
+ $('atr').textContent=a15.atr.toFixed(3)+'%';$('structure').textContent=a15.structure;$('reasons').innerHTML=r.reasons.map(x=>`<li>${x}</li>`).join('');
 }
-
-function saveSignal(pair,result){
-  if(result.decision==='NÃO ENTRAR') return;
-  historyData.unshift({
-    id:Date.now(),time:new Date().toLocaleString('pt-BR'),pair,
-    decision:result.decision,score:Math.round(result.score),result:'Pendente'
-  });
-  historyData=historyData.slice(0,50);
-  localStorage.setItem('robiaHistory',JSON.stringify(historyData));
-  renderHistory();
+async function sendTelegram(payload){
+ const relay=$('relayUrl').value.trim();if(!relay)throw new Error('Informe a URL protegida do Telegram.');
+ const res=await fetch(relay,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+ const data=await res.json().catch(()=>({}));if(!res.ok||data.ok===false)throw new Error(data.message||'Falha no envio ao Telegram.');
 }
-
-function markResult(id,result){
-  historyData=historyData.map(x=>x.id===id?{...x,result}:x);
-  localStorage.setItem('robiaHistory',JSON.stringify(historyData));
-  renderHistory();
+function saveSignal(pair,r){
+ if(r.decision==='NÃO ENTRAR')return;historyData.unshift({id:Date.now(),time:new Date().toLocaleString('pt-BR'),pair,decision:r.decision,score:Math.round(r.score),result:'Pendente'});
+ historyData=historyData.slice(0,60);localStorage.setItem('robiaV7History',JSON.stringify(historyData));renderHistory();
 }
-
+async function runAnalysis(auto=false){
+ const key=$('apiKey').value.trim(),pair=$('pair').value;if(!key){$('status').textContent='Cole sua chave da Twelve Data.';return}
+ if($('newsBlock').checked){$('status').textContent='Análise bloqueada manualmente por notícia forte.';return}
+ $('analyze').disabled=true;$('status').textContent='Analisando H1, M30 e M15 com filtros avançados...';
+ try{
+  const[c15,c30,c1h]=await Promise.all([getCandles(pair,'15min',key),getCandles(pair,'30min',key),getCandles(pair,'1h',key)]);
+  const a15=analyzeTF(c15),a30=analyzeTF(c30),a1h=analyzeTF(c1h),r=buildSignal(a15,a30,a1h);setSignal(r,pair,a15,a30,a1h);
+  if(r.decision!=='NÃO ENTRAR'){
+   const candleKey=`${pair}-${r.decision}-${c15.at(-1).datetime}`;saveSignal(pair,r);
+   if(candleKey!==lastAlertKey&&$('relayUrl').value.trim()){
+    await sendTelegram({type:'signal',pair,direction:r.decision,score:Math.round(r.score),time:new Date().toLocaleString('pt-BR'),validity:'Próximo candle M15',mode:'DEMO'});
+    lastAlertKey=candleKey;localStorage.setItem('robiaLastAlert',candleKey);$('status').textContent='Sinal forte encontrado e enviado ao Telegram. Confirme na Avalon demo.';
+   }else $('status').textContent='Sinal forte encontrado. Confirme na Avalon demo.';
+  }else $('status').textContent='Nenhum sinal forte agora. O robô aguardará um alinhamento melhor.';
+ }catch(e){$('status').textContent='Erro: '+e.message}finally{$('analyze').disabled=false}
+}
 function renderHistory(){
-  $('history').innerHTML=historyData.length?historyData.map(x=>`
-    <tr>
-      <td>${x.time}</td><td>${x.pair}</td><td>${x.decision}</td><td>${x.score}</td>
-      <td>${x.result==='Pendente'?`<div class="actions"><button class="win" data-id="${x.id}" data-result="Ganhou">Ganhou</button><button class="loss" data-id="${x.id}" data-result="Perdeu">Perdeu</button></div>`:x.result}</td>
-    </tr>`).join(''):'<tr><td colspan="5">Nenhum sinal registrado.</td></tr>';
-  $('totalSignals').textContent=historyData.length;
-  $('wins').textContent=historyData.filter(x=>x.result==='Ganhou').length;
-  $('losses').textContent=historyData.filter(x=>x.result==='Perdeu').length;
-  document.querySelectorAll('[data-result]').forEach(b=>b.addEventListener('click',()=>markResult(+b.dataset.id,b.dataset.result)));
+ $('history').innerHTML=historyData.length?historyData.map(x=>`<tr><td>${x.time}</td><td>${x.pair}</td><td>${x.decision}</td><td>${x.score}</td><td>${x.result==='Pendente'?`<div class="actions"><button class="win" data-id="${x.id}" data-r="Ganhou">Ganhou</button><button class="loss" data-id="${x.id}" data-r="Perdeu">Perdeu</button></div>`:x.result}</td></tr>`).join(''):'<tr><td colspan="5">Nenhum sinal registrado.</td></tr>';
+ $('totalSignals').textContent=historyData.length;$('wins').textContent=historyData.filter(x=>x.result==='Ganhou').length;$('losses').textContent=historyData.filter(x=>x.result==='Perdeu').length;
+ document.querySelectorAll('[data-r]').forEach(b=>b.addEventListener('click',()=>{historyData=historyData.map(x=>x.id===+b.dataset.id?{...x,result:b.dataset.r}:x);localStorage.setItem('robiaV7History',JSON.stringify(historyData));renderHistory()}));
 }
-
-$('analyze').addEventListener('click',async()=>{
-  const key=$('apiKey').value.trim();
-  const pair=$('pair').value;
-  if(!key){$('status').textContent='Cole primeiro sua chave da Twelve Data.';return;}
-  $('analyze').disabled=true;
-  $('status').textContent='Buscando M15, M30 e H1 e calculando os indicadores...';
-  try{
-    const [c15,c30,c1h]=await Promise.all([
-      getCandles(pair,'15min',key),getCandles(pair,'30min',key),getCandles(pair,'1h',key)
-    ]);
-    const a15=analyzeTimeframe(c15),a30=analyzeTimeframe(c30),a1h=analyzeTimeframe(c1h);
-    const result=buildSignal(a15,a30,a1h);
-    setSignal(result,pair,a15,a30,a1h);
-    saveSignal(pair,result);
-    $('status').textContent=result.decision==='NÃO ENTRAR'
-      ?'Análise concluída: não há alinhamento suficiente.'
-      :'Possível sinal encontrado. Confira o gráfico da Avalon e teste somente na demo.';
-  }catch(e){
-    $('status').textContent='Erro: '+e.message;
-  }finally{
-    $('analyze').disabled=false;
-  }
-});
-
-$('reloadChart').addEventListener('click',renderChart);
-$('pair').addEventListener('change',renderChart);
-$('chartInterval').addEventListener('change',renderChart);
-
-renderChart();
-renderHistory();
+$('analyze').addEventListener('click',()=>runAnalysis(false));$('testTelegram').addEventListener('click',async()=>{try{await sendTelegram({type:'test',message:'✅ Rob-ia V7 conectada com sucesso.',time:new Date().toLocaleString('pt-BR')});$('status').textContent='Mensagem de teste enviada ao Telegram.'}catch(e){$('status').textContent='Erro no Telegram: '+e.message}});
+$('autoMonitor').addEventListener('change',e=>{clearInterval(monitorTimer);if(e.target.checked){runAnalysis(true);monitorTimer=setInterval(()=>runAnalysis(true),300000);$('status').textContent='Monitoramento automático ativado. Mantenha esta página aberta.'}else $('status').textContent='Monitoramento automático desligado.'});
+$('reloadChart').addEventListener('click',renderChart);$('pair').addEventListener('change',renderChart);$('chartInterval').addEventListener('change',renderChart);
+renderChart();renderHistory();
 </script>
 </body>
 </html>
