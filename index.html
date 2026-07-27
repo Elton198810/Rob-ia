@@ -3,50 +3,76 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#0b1020">
-<title>Rob-ia — Análise Real V2</title>
+<meta name="theme-color" content="#080d18">
+<title>Rob-ia V3 — Binárias Grátis</title>
 <style>
 :root{
-  --bg:#070b16;--card:#111a2e;--card2:#0b1324;--border:#263653;
-  --text:#f8fafc;--muted:#94a3b8;--blue:#1d8cff;--green:#22c55e;
+  --bg:#060a13;--card:#101a2c;--card2:#0a1323;--border:#263a5e;
+  --text:#f8fafc;--muted:#94a3b8;--blue:#16a3ff;--green:#22c55e;
   --red:#ef4444;--yellow:#facc15;--orange:#fb923c;
 }
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:radial-gradient(circle at top,#17213b 0,#070b16 42%);color:var(--text);min-height:100vh}
-header{padding:20px 16px;background:rgba(8,13,27,.92);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10;backdrop-filter:blur(8px)}
-header .wrap{max-width:1040px;margin:auto}
-header h1{margin:0;font-size:clamp(25px,5vw,38px)}
-header p{margin:7px 0 0}
-main{max-width:1040px;margin:auto;padding:16px}
-.card{background:rgba(17,26,46,.96);border:1px solid var(--border);border-radius:16px;padding:17px;margin-bottom:15px;box-shadow:0 14px 34px rgba(0,0,0,.18)}
-label{display:block;margin:12px 0 6px;font-weight:800}
-input,select,button,textarea{width:100%;padding:13px;border-radius:10px;border:1px solid #334766;background:#091225;color:#fff;font-size:16px}
+body{
+  margin:0;font-family:Arial,sans-serif;color:var(--text);min-height:100vh;
+  background:radial-gradient(circle at top,#182746 0,#080d18 42%,#050810 100%);
+}
+header{
+  padding:18px 15px;background:rgba(6,10,19,.94);border-bottom:1px solid var(--border);
+  position:sticky;top:0;z-index:10;backdrop-filter:blur(8px)
+}
+.wrap{max-width:1050px;margin:auto}
+h1{margin:0;font-size:clamp(25px,5vw,38px)}
+header p{margin:7px 0 0;color:var(--muted)}
+main{max-width:1050px;margin:auto;padding:14px}
+.card{
+  background:rgba(16,26,44,.97);border:1px solid var(--border);border-radius:16px;
+  padding:16px;margin-bottom:14px;box-shadow:0 14px 35px rgba(0,0,0,.22)
+}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(205px,1fr));gap:11px}
+label{display:block;margin:11px 0 6px;font-weight:800}
+input,select,textarea,button{
+  width:100%;padding:13px;border-radius:10px;border:1px solid #365075;
+  background:#081225;color:#fff;font-size:16px
+}
 textarea{resize:vertical}
-button{border:0;font-weight:800;cursor:pointer;margin-top:12px;background:linear-gradient(90deg,#1288ff,#17b8ff);color:white}
-button.secondary{background:#182640;border:1px solid #385176}
-button.danger{background:#451a1f;border:1px solid #7f1d1d}
-button:disabled{opacity:.55;cursor:not-allowed}
-img{display:none;max-width:100%;max-height:520px;margin-top:12px;border-radius:12px;border:1px solid #334155}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:11px}
-.box{background:var(--card2);border:1px solid #293a5b;padding:14px;border-radius:12px}
-.big{font-size:27px;font-weight:900;margin-top:5px}
+button{
+  border:0;font-weight:900;cursor:pointer;margin-top:13px;
+  background:linear-gradient(90deg,#148cff,#16c2ff)
+}
+button.secondary{background:#182844;border:1px solid #38577f}
+button.danger{background:#481a20;border:1px solid #7f1d1d}
+.preview{
+  display:none;max-width:100%;max-height:450px;margin-top:10px;border-radius:12px;
+  border:1px solid #344b6f
+}
+.badge{
+  display:inline-block;margin:0 5px 7px 0;padding:5px 9px;border-radius:999px;
+  background:#17243e;border:1px solid #365075;color:#dbeafe;font-size:13px
+}
+.notice{
+  margin-top:12px;padding:12px;border-radius:10px;background:#3b2606;
+  border:1px solid #92400e;color:#fde68a;line-height:1.45
+}
+.info{
+  margin-top:12px;padding:12px;border-radius:10px;background:#09233c;
+  border:1px solid #155e75;color:#cffafe;line-height:1.45
+}
+.result{display:none}
+.box{background:var(--card2);border:1px solid #2a4065;padding:14px;border-radius:12px}
+.big{font-size:29px;font-weight:950;margin-top:5px}
 .call{color:var(--green)}.put{color:var(--red)}.wait{color:var(--yellow)}
-small,.muted{color:var(--muted)}
-#resultado,#erro,#carregando,#historicoCard{display:none}
-#erro{background:#3b151b;border-color:#7f1d1d}
-#carregando{padding:12px;border-radius:10px;background:#0b2a46;color:#dbeafe;font-weight:700}
+.muted{color:var(--muted)}
+.score-wrap{height:18px;background:#07101f;border:1px solid #2b4166;border-radius:999px;overflow:hidden;margin-top:8px}
+.score-bar{height:100%;width:0;background:linear-gradient(90deg,#ef4444,#facc15,#22c55e);transition:.4s}
 ul{line-height:1.55;padding-left:20px}
-pre{white-space:pre-wrap;font-family:inherit;line-height:1.55;margin-bottom:0}
-.notice{padding:12px;border:1px solid #854d0e;background:#3a2505;border-radius:10px;color:#fde68a;margin-top:12px}
-.success{padding:11px;border:1px solid #166534;background:#0c2d1b;border-radius:10px;color:#bbf7d0}
-.row-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
-.badge{display:inline-block;padding:5px 9px;border-radius:999px;background:#17233c;border:1px solid #334a70;color:#cbd5e1;font-size:13px}
-.history-item{background:#0a1325;border:1px solid #273a5c;padding:12px;border-radius:10px;margin-top:9px}
-.history-top{display:flex;justify-content:space-between;gap:10px;align-items:center}
-.toggle-line{display:flex;gap:10px;align-items:flex-start;margin-top:12px}
-.toggle-line input{width:auto;margin-top:3px}
+.history-item{background:#091326;border:1px solid #2a4065;border-radius:10px;padding:11px;margin-top:9px}
+.history-top{display:flex;justify-content:space-between;gap:10px}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+small{color:var(--muted)}
+.inline-check{display:flex;gap:10px;align-items:flex-start;margin-top:12px}
+.inline-check input{width:auto;margin-top:3px}
 @media(max-width:600px){
-  main{padding:10px}.card{padding:14px}.row-actions{grid-template-columns:1fr}
+  main{padding:9px}.card{padding:13px}.actions{grid-template-columns:1fr}
   header{position:static}.big{font-size:24px}
 }
 </style>
@@ -54,435 +80,380 @@ pre{white-space:pre-wrap;font-family:inherit;line-height:1.55;margin-bottom:0}
 <body>
 <header>
   <div class="wrap">
-    <h1>🤖 Rob-ia — Análise Real V2</h1>
-    <p class="muted">Análise conservadora de prints, com foco principal em M15.</p>
+    <h1>🤖 Rob-ia V3 — Binárias Grátis</h1>
+    <p>Análise técnica por regras, sem chave de API e sem cobrança.</p>
   </div>
 </header>
 
 <main>
   <section class="card">
-    <span class="badge">Versão 2</span>
+    <span class="badge">100% grátis</span>
+    <span class="badge">Sem API</span>
     <span class="badge">Foco M15</span>
-    <span class="badge">Histórico local</span>
+    <span class="badge">Modo teste</span>
 
-    <label for="apiKey">Chave da API OpenAI</label>
-    <input id="apiKey" type="password" autocomplete="off" placeholder="Cole sua chave somente durante o uso">
-    <small>A chave não é salva pelo Rob-ia. Nunca publique sua chave no GitHub.</small>
+    <div class="info">
+      Esta versão não “enxerga” o print com inteligência artificial. O print serve como referência visual.
+      Você informa abaixo o que aparece no gráfico, e o Rob-ia calcula o sinal por regras técnicas.
+    </div>
 
     <div class="grid">
       <div>
         <label for="ativo">Ativo/par</label>
         <select id="ativo">
-          <option value="">Selecione o ativo</option>
-          <optgroup label="Forex — principais">
-            <option>EUR/USD</option><option>GBP/USD</option><option>USD/JPY</option>
-            <option>AUD/USD</option><option>USD/CAD</option><option>USD/CHF</option>
-            <option>NZD/USD</option>
-          </optgroup>
-          <optgroup label="Forex — cruzados">
-            <option>EUR/JPY</option><option>GBP/JPY</option><option>EUR/GBP</option>
-            <option>AUD/JPY</option><option>EUR/AUD</option>
-          </optgroup>
-          <optgroup label="Cripto">
-            <option>BTC/USDT</option><option>ETH/USDT</option><option>BNB/USDT</option>
-            <option>SOL/USDT</option><option>XRP/USDT</option>
-          </optgroup>
-          <option value="OUTRO">Outro ativo</option>
+          <option>EUR/USD</option><option>GBP/USD</option><option>USD/JPY</option>
+          <option>AUD/USD</option><option>USD/CAD</option><option>USD/CHF</option>
+          <option>EUR/JPY</option><option>GBP/JPY</option><option>EUR/GBP</option>
         </select>
       </div>
       <div>
-        <label for="timeframe">Tempo gráfico</label>
-        <select id="timeframe">
-          <option>M1</option><option>M5</option><option selected>M15</option>
-          <option>M30</option><option>H1</option><option>H4</option><option>D1</option>
+        <label for="tempo">Tempo gráfico</label>
+        <select id="tempo">
+          <option>M5</option><option selected>M15</option><option>M30</option><option>H1</option>
+        </select>
+      </div>
+      <div>
+        <label for="expiracao">Expiração de teste</label>
+        <select id="expiracao">
+          <option>1 candle</option><option selected>2 candles</option><option>3 candles</option>
         </select>
       </div>
     </div>
 
-    <div id="outroAtivoBox" style="display:none">
-      <label for="outroAtivo">Digite o ativo</label>
-      <input id="outroAtivo" placeholder="Ex.: EUR/NZD">
+    <label for="imagem">Print do gráfico (opcional)</label>
+    <input id="imagem" type="file" accept="image/*">
+    <img id="preview" class="preview" alt="Prévia do gráfico">
+
+    <h2>Leitura do gráfico</h2>
+
+    <div class="grid">
+      <div>
+        <label for="tendencia">Tendência principal</label>
+        <select id="tendencia">
+          <option value="alta">Alta</option>
+          <option value="baixa">Baixa</option>
+          <option value="lateral" selected>Lateral/indefinida</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="ema">Posição das EMAs</label>
+        <select id="ema">
+          <option value="alta">EMA 9 acima da 21</option>
+          <option value="baixa">EMA 9 abaixo da 21</option>
+          <option value="cruzada" selected>Cruzadas/sem direção</option>
+          <option value="nao">Não uso EMAs</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="rsi">RSI aproximado</label>
+        <input id="rsi" type="number" min="0" max="100" value="50">
+      </div>
+
+      <div>
+        <label for="macd">MACD</label>
+        <select id="macd">
+          <option value="alta">Comprador</option>
+          <option value="baixa">Vendedor</option>
+          <option value="neutro" selected>Neutro/sem leitura</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="candle">Último candle fechado</label>
+        <select id="candle">
+          <option value="alta">Forte comprador</option>
+          <option value="baixa">Forte vendedor</option>
+          <option value="rejeicaoAlta">Rejeição de suporte</option>
+          <option value="rejeicaoBaixa">Rejeição de resistência</option>
+          <option value="indecisao" selected>Indecisão/Doji</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="zona">Preço está perto de</label>
+        <select id="zona">
+          <option value="suporte">Suporte</option>
+          <option value="resistencia">Resistência</option>
+          <option value="rompimentoAlta">Rompimento para cima</option>
+          <option value="rompimentoBaixa">Rompimento para baixo</option>
+          <option value="meio" selected>Meio da zona</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="forca">Força do movimento</label>
+        <select id="forca">
+          <option value="forte">Forte</option>
+          <option value="moderada">Moderada</option>
+          <option value="fraca" selected>Fraca</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="mercado">Condição do mercado</label>
+        <select id="mercado">
+          <option value="normal">Movimento normal</option>
+          <option value="lateral" selected>Lateral</option>
+          <option value="esticado">Muito esticado</option>
+          <option value="volatil">Muito volátil</option>
+        </select>
+      </div>
     </div>
 
-    <label for="imagem">Print do gráfico</label>
-    <input id="imagem" type="file" accept="image/*">
-    <div id="qualidadeImagem" class="muted" style="margin-top:8px"></div>
-    <img id="preview" alt="Prévia do gráfico">
-
-    <label for="contexto">Observação opcional</label>
-    <textarea id="contexto" rows="3" placeholder="Ex.: estou procurando entrada nos próximos candles; operação de curto prazo"></textarea>
-
-    <div class="toggle-line">
-      <input id="noticiasConfirmadas" type="checkbox">
-      <label for="noticiasConfirmadas" style="margin:0;font-weight:700">
-        Já conferi que não há notícia econômica importante próxima para este ativo.
-      </label>
+    <div class="inline-check">
+      <input id="noticias" type="checkbox">
+      <label for="noticias" style="margin:0">Conferi que não há notícia econômica importante próxima.</label>
     </div>
 
     <div class="notice">
-      ⚠️ Esta versão não consulta notícias em tempo real. Antes de operar, confira o calendário econômico. Se a caixa acima não estiver marcada, o Rob-ia será ainda mais conservador.
+      ⚠️ Use primeiro em conta demo. Opções binárias têm risco elevado e nenhuma análise garante resultado.
+      Não aumente a entrada para recuperar perdas.
     </div>
 
-    <button id="analisarBtn" onclick="analisar()">Analisar gráfico com IA</button>
-    <p id="carregando">⏳ Analisando estrutura, tendência, qualidade do print e possíveis riscos...</p>
+    <button onclick="analisar()">Gerar análise gratuita</button>
   </section>
 
-  <section id="erro" class="card"></section>
-
-  <section id="resultado" class="card">
-    <h2 style="margin-top:0">Resultado da análise</h2>
+  <section id="resultado" class="card result">
+    <h2 style="margin-top:0">Resultado do teste</h2>
 
     <div class="grid">
-      <div class="box"><div class="muted">Decisão</div><div id="decisao" class="big wait">NÃO ENTRAR</div></div>
-      <div class="box"><div class="muted">Confiança técnica</div><div id="confianca" class="big">--%</div></div>
-      <div class="box"><div class="muted">Tendência</div><div id="tendencia" class="big">--</div></div>
-      <div class="box"><div class="muted">Risco</div><div id="risco" class="big">--</div></div>
-    </div>
-
-    <div class="grid" style="margin-top:11px">
-      <div class="box"><b>Qualidade do print</b><p id="qualidade">--</p></div>
-      <div class="box"><b>Força da tendência</b><p id="forca">--</p></div>
-      <div class="box"><b>Suporte</b><p id="suporte">--</p></div>
-      <div class="box"><b>Resistência</b><p id="resistencia">--</p></div>
-      <div class="box"><b>Padrão observado</b><p id="padrao">--</p></div>
-      <div class="box"><b>Momento ideal</b><p id="momento">--</p></div>
-    </div>
-
-    <div class="box" style="margin-top:11px">
-      <b>Leitura completa</b>
-      <pre id="analiseCompleta">--</pre>
-    </div>
-
-    <div class="grid" style="margin-top:11px">
       <div class="box">
-        <b>Condições para validar</b>
-        <ul id="confirmacoes"></ul>
+        <div class="muted">Decisão</div>
+        <div id="decisao" class="big wait">NÃO ENTRAR</div>
       </div>
       <div class="box">
-        <b>Motivos para não entrar</b>
+        <div class="muted">Nota técnica</div>
+        <div id="nota" class="big">0/100</div>
+        <div class="score-wrap"><div id="scoreBar" class="score-bar"></div></div>
+      </div>
+      <div class="box">
+        <div class="muted">Qualidade</div>
+        <div id="qualidade" class="big">EVITAR</div>
+      </div>
+      <div class="box">
+        <div class="muted">Expiração de teste</div>
+        <div id="expResultado" class="big">--</div>
+      </div>
+    </div>
+
+    <div class="grid" style="margin-top:11px">
+      <div class="box">
+        <b>Motivos favoráveis</b>
+        <ul id="favoraveis"></ul>
+      </div>
+      <div class="box">
+        <b>Alertas</b>
         <ul id="alertas"></ul>
       </div>
     </div>
 
-    <div class="row-actions">
-      <button class="secondary" onclick="copiarResultado()">📋 Copiar resultado</button>
-      <button class="secondary" onclick="novaAnalise()">🔄 Nova análise</button>
+    <div class="box" style="margin-top:11px">
+      <b>Orientação</b>
+      <p id="orientacao"></p>
     </div>
 
-    <p class="muted">A análise é probabilística e pode errar. Use conta demo, limite de risco e não opere apenas por um único sinal.</p>
+    <div class="actions">
+      <button class="secondary" onclick="copiar()">📋 Copiar análise</button>
+      <button class="secondary" onclick="nova()">🔄 Nova análise</button>
+    </div>
   </section>
 
   <section class="card">
     <div class="history-top">
-      <h2 style="margin:0">Últimas análises</h2>
+      <h2 style="margin:0">Histórico de testes</h2>
       <button class="danger" style="width:auto;margin:0;padding:9px 12px" onclick="limparHistorico()">Limpar</button>
     </div>
-    <div id="historicoVazio" class="muted" style="margin-top:10px">Nenhuma análise salva neste aparelho.</div>
-    <div id="historicoCard"></div>
+    <div id="historico" class="muted" style="margin-top:9px">Nenhum teste salvo.</div>
   </section>
 </main>
 
 <script>
-let imagemBase64 = "";
-let ultimaAnalise = null;
-
-const ativoSelect = document.getElementById("ativo");
-ativoSelect.addEventListener("change", () => {
-  document.getElementById("outroAtivoBox").style.display =
-    ativoSelect.value === "OUTRO" ? "block" : "none";
-});
+let ultimoResultado = null;
 
 document.getElementById("imagem").addEventListener("change", e => {
   const file = e.target.files[0];
   if (!file) return;
-
-  if (!file.type.startsWith("image/")) {
-    mostrarErro("Escolha um arquivo de imagem válido.");
-    return;
-  }
-
-  if (file.size > 10 * 1024 * 1024) {
-    mostrarErro("A imagem está muito pesada. Use um print com menos de 10 MB.");
-    return;
-  }
-
   const reader = new FileReader();
   reader.onload = ev => {
-    imagemBase64 = ev.target.result;
     const img = document.getElementById("preview");
-    img.onload = () => {
-      const px = img.naturalWidth * img.naturalHeight;
-      const qualidade = px >= 1400000 ? "Boa qualidade para análise"
-        : px >= 700000 ? "Qualidade razoável; tente manter candles e preços legíveis"
-        : "Imagem pequena; use um print mais nítido e aproximado";
-      document.getElementById("qualidadeImagem").textContent =
-        `Imagem: ${img.naturalWidth} × ${img.naturalHeight}px — ${qualidade}.`;
-    };
-    img.src = imagemBase64;
+    img.src = ev.target.result;
     img.style.display = "block";
   };
   reader.readAsDataURL(file);
 });
 
-function mostrarErro(msg){
-  const el = document.getElementById("erro");
-  el.textContent = "⚠️ " + msg;
-  el.style.display = "block";
-  el.scrollIntoView({behavior:"smooth", block:"center"});
+function item(texto, tipo){
+  return {texto, tipo};
 }
 
-function limparErro(){
-  document.getElementById("erro").style.display = "none";
+function analisar(){
+  const tendencia = document.getElementById("tendencia").value;
+  const ema = document.getElementById("ema").value;
+  const rsi = Number(document.getElementById("rsi").value);
+  const macd = document.getElementById("macd").value;
+  const candle = document.getElementById("candle").value;
+  const zona = document.getElementById("zona").value;
+  const forca = document.getElementById("forca").value;
+  const mercado = document.getElementById("mercado").value;
+  const noticias = document.getElementById("noticias").checked;
+
+  let call = 0, put = 0;
+  const favoraveis = [], alertas = [];
+
+  if (tendencia === "alta"){ call += 22; favoraveis.push("Tendência principal de alta."); }
+  if (tendencia === "baixa"){ put += 22; favoraveis.push("Tendência principal de baixa."); }
+  if (tendencia === "lateral"){ call -= 15; put -= 15; alertas.push("Mercado lateral ou sem direção definida."); }
+
+  if (ema === "alta"){ call += 16; favoraveis.push("EMA 9 acima da EMA 21."); }
+  if (ema === "baixa"){ put += 16; favoraveis.push("EMA 9 abaixo da EMA 21."); }
+  if (ema === "cruzada"){ alertas.push("Médias cruzadas, sem direção limpa."); }
+
+  if (rsi >= 55 && rsi <= 68){ call += 12; favoraveis.push("RSI favorece continuidade compradora."); }
+  else if (rsi >= 32 && rsi <= 45){ put += 12; favoraveis.push("RSI favorece continuidade vendedora."); }
+  else if (rsi > 75){ put += 4; alertas.push("RSI muito alto: risco de correção."); }
+  else if (rsi < 25){ call += 4; alertas.push("RSI muito baixo: possível reação, mas exige confirmação."); }
+  else { alertas.push("RSI sem vantagem clara."); }
+
+  if (macd === "alta"){ call += 12; favoraveis.push("MACD comprador."); }
+  if (macd === "baixa"){ put += 12; favoraveis.push("MACD vendedor."); }
+
+  if (candle === "alta"){ call += 14; favoraveis.push("Último candle fechado mostra força compradora."); }
+  if (candle === "baixa"){ put += 14; favoraveis.push("Último candle fechado mostra força vendedora."); }
+  if (candle === "rejeicaoAlta"){ call += 18; favoraveis.push("Rejeição de suporte visível."); }
+  if (candle === "rejeicaoBaixa"){ put += 18; favoraveis.push("Rejeição de resistência visível."); }
+  if (candle === "indecisao"){ call -= 7; put -= 7; alertas.push("Candle de indecisão."); }
+
+  if (zona === "suporte"){ call += 12; favoraveis.push("Preço próximo de suporte."); }
+  if (zona === "resistencia"){ put += 12; favoraveis.push("Preço próximo de resistência."); }
+  if (zona === "rompimentoAlta"){ call += 10; favoraveis.push("Possível rompimento para cima."); }
+  if (zona === "rompimentoBaixa"){ put += 10; favoraveis.push("Possível rompimento para baixo."); }
+  if (zona === "meio"){ alertas.push("Preço no meio da zona, sem ponto técnico forte."); }
+
+  if (forca === "forte"){ call += call > put ? 10 : 0; put += put > call ? 10 : 0; }
+  if (forca === "moderada"){ call += call > put ? 5 : 0; put += put > call ? 5 : 0; }
+  if (forca === "fraca"){ alertas.push("Movimento com pouca força."); }
+
+  let bloqueio = false;
+  if (mercado === "lateral"){ bloqueio = true; alertas.push("Mercado lateral bloqueia a entrada."); }
+  if (mercado === "esticado"){ bloqueio = true; alertas.push("Movimento muito esticado; entrada pode estar atrasada."); }
+  if (mercado === "volatil"){ bloqueio = true; alertas.push("Volatilidade elevada aumenta o risco."); }
+  if (!noticias){ bloqueio = true; alertas.push("Notícias não foram conferidas."); }
+
+  call = Math.max(0, Math.min(100, call));
+  put = Math.max(0, Math.min(100, put));
+
+  let decisao = "NÃO ENTRAR";
+  let nota = Math.max(call, put);
+
+  if (!bloqueio && call >= 70 && call >= put + 15) decisao = "CALL";
+  if (!bloqueio && put >= 70 && put >= call + 15) decisao = "PUT";
+
+  if (decisao === "NÃO ENTRAR" && nota > 69) nota = 69;
+
+  let qualidade = "EVITAR";
+  if (nota >= 85 && decisao !== "NÃO ENTRAR") qualidade = "EXCELENTE";
+  else if (nota >= 75 && decisao !== "NÃO ENTRAR") qualidade = "BOA";
+  else if (nota >= 60) qualidade = "REGULAR";
+
+  const orientacao = decisao === "CALL"
+    ? "Aguardar o fechamento do candle atual e entrar apenas se a força compradora continuar. Teste em conta demo."
+    : decisao === "PUT"
+    ? "Aguardar o fechamento do candle atual e entrar apenas se a força vendedora continuar. Teste em conta demo."
+    : "Não entrar agora. Aguarde nova estrutura, confirmação mais clara ou uma região técnica melhor.";
+
+  const d = document.getElementById("decisao");
+  d.textContent = decisao;
+  d.className = "big " + (decisao === "CALL" ? "call" : decisao === "PUT" ? "put" : "wait");
+
+  document.getElementById("nota").textContent = nota + "/100";
+  document.getElementById("scoreBar").style.width = nota + "%";
+  document.getElementById("qualidade").textContent = qualidade;
+  document.getElementById("expResultado").textContent = document.getElementById("expiracao").value;
+  document.getElementById("orientacao").textContent = orientacao;
+
+  preencherLista("favoraveis", favoraveis.length ? favoraveis : ["Nenhum fator forte identificado."]);
+  preencherLista("alertas", alertas.length ? alertas : ["Nenhum alerta adicional."]);
+
+  ultimoResultado = {
+    data:new Date().toLocaleString("pt-BR"),
+    ativo:document.getElementById("ativo").value,
+    tempo:document.getElementById("tempo").value,
+    decisao, nota, qualidade, orientacao
+  };
+
+  salvarHistorico(ultimoResultado);
+  document.getElementById("resultado").style.display = "block";
+  document.getElementById("resultado").scrollIntoView({behavior:"smooth"});
 }
 
-function lista(id, itens){
+function preencherLista(id, dados){
   const ul = document.getElementById(id);
   ul.innerHTML = "";
-  const dados = Array.isArray(itens) && itens.length ? itens : ["Nenhuma informação fornecida."];
-  dados.forEach(item => {
+  dados.forEach(t => {
     const li = document.createElement("li");
-    li.textContent = item;
+    li.textContent = t;
     ul.appendChild(li);
   });
 }
 
-function extrairTextoResposta(data){
-  if (data.output_text) return data.output_text;
-  const partes = [];
-  for (const item of (data.output || [])){
-    for (const c of (item.content || [])){
-      if (c.type === "output_text" && c.text) partes.push(c.text);
-    }
-  }
-  return partes.join("\n");
+function copiar(){
+  if (!ultimoResultado) return;
+  const t = `ROB-IA V3 — TESTE
+${ultimoResultado.data}
+Ativo: ${ultimoResultado.ativo}
+Tempo: ${ultimoResultado.tempo}
+Decisão: ${ultimoResultado.decisao}
+Nota: ${ultimoResultado.nota}/100
+Qualidade: ${ultimoResultado.qualidade}
+
+${ultimoResultado.orientacao}
+
+Uso educacional e em conta demo.`;
+  navigator.clipboard.writeText(t).then(() => alert("Análise copiada!"));
 }
 
-function extrairJSON(texto){
-  const limpo = String(texto || "").replace(/```json/gi,"").replace(/```/g,"").trim();
-  try { return JSON.parse(limpo); } catch(e){}
-  const inicio = limpo.indexOf("{");
-  const fim = limpo.lastIndexOf("}");
-  if (inicio >= 0 && fim > inicio) return JSON.parse(limpo.slice(inicio, fim + 1));
-  throw new Error("A IA não retornou um resultado estruturado.");
-}
-
-function obterAtivo(){
-  if (ativoSelect.value === "OUTRO") {
-    return document.getElementById("outroAtivo").value.trim();
-  }
-  return ativoSelect.value.trim();
-}
-
-async function analisar(){
-  limparErro();
-
-  const apiKey = document.getElementById("apiKey").value.trim();
-  const ativo = obterAtivo();
-  const timeframe = document.getElementById("timeframe").value;
-  const contexto = document.getElementById("contexto").value.trim() || "nenhuma observação adicional";
-  const noticiasOk = document.getElementById("noticiasConfirmadas").checked;
-
-  if (!apiKey) return mostrarErro("Cole sua chave da API OpenAI.");
-  if (!ativo) return mostrarErro("Selecione ou digite um ativo.");
-  if (!imagemBase64) return mostrarErro("Escolha um print do gráfico.");
-
-  const btn = document.getElementById("analisarBtn");
-  btn.disabled = true;
-  document.getElementById("carregando").style.display = "block";
+function nova(){
   document.getElementById("resultado").style.display = "none";
-
-  const prompt = `
-Você é um analista técnico extremamente conservador.
-Analise SOMENTE o que estiver claramente visível no print.
-
-Ativo/par: ${ativo}
-Tempo gráfico: ${timeframe}
-Contexto do usuário: ${contexto}
-Usuário confirmou ausência de notícia econômica importante próxima: ${noticiasOk ? "SIM" : "NÃO"}
-
-Regras obrigatórias:
-1. Identifique tendência, estrutura, topos, fundos, suporte, resistência, rompimento e rejeição.
-2. Só cite candle, padrão, indicador ou média se estiver claramente visível.
-3. Decida entre CALL, PUT ou NÃO ENTRAR.
-4. Prefira NÃO ENTRAR quando houver lateralização, print ruim, candle já muito esticado, entrada atrasada, pouca confirmação ou dúvida.
-5. Se o usuário NÃO confirmou as notícias, acrescente isso como risco e seja mais conservador.
-6. Para M15, procure alinhamento com a estrutura principal e confirmação do fechamento do candle.
-7. Nunca invente preços, níveis ou indicadores invisíveis.
-8. Confiança técnica mede apenas a força das evidências visíveis; não representa chance garantida de lucro.
-9. Não use linguagem de certeza.
-10. Mesmo quando houver CALL ou PUT, descreva uma confirmação que ainda deve ocorrer antes da entrada.
-11. Se a confiança for menor que 70, a decisão deve ser NÃO ENTRAR.
-12. Se o risco for alto, a decisão deve ser NÃO ENTRAR.
-
-Responda SOMENTE em JSON válido:
-{
-  "decisao": "CALL|PUT|NÃO ENTRAR",
-  "confianca": 0,
-  "tendencia": "alta|baixa|lateral|indefinida",
-  "risco": "baixo|médio|alto",
-  "qualidade_print": "boa|razoável|ruim",
-  "forca_tendencia": "forte|moderada|fraca|indefinida",
-  "suporte": "texto curto sem inventar preço",
-  "resistencia": "texto curto sem inventar preço",
-  "padrao": "texto curto",
-  "momento": "aguardar confirmação|não operar|entrada somente após confirmação",
-  "analise_completa": "explicação técnica clara em português",
-  "confirmacoes": ["condição 1","condição 2","condição 3"],
-  "alertas": ["alerta 1","alerta 2"]
-}`;
-
-  try{
-    const resposta = await fetch("https://api.openai.com/v1/responses", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer " + apiKey
-      },
-      body: JSON.stringify({
-        model: "gpt-5",
-        input: [{
-          role: "user",
-          content: [
-            { type: "input_text", text: prompt },
-            { type: "input_image", image_url: imagemBase64, detail: "high" }
-          ]
-        }]
-      })
-    });
-
-    const data = await resposta.json();
-    if (!resposta.ok) {
-      throw new Error(data?.error?.message || "Erro ao acessar a API.");
-    }
-
-    const texto = extrairTextoResposta(data);
-    const r = extrairJSON(texto);
-
-    let decisao = String(r.decisao || "NÃO ENTRAR").toUpperCase();
-    const confianca = Math.max(0, Math.min(100, Number(r.confianca) || 0));
-    const risco = String(r.risco || "alto").toLowerCase();
-
-    if (confianca < 70 || risco === "alto") decisao = "NÃO ENTRAR";
-    if (!["CALL","PUT","NÃO ENTRAR"].includes(decisao)) decisao = "NÃO ENTRAR";
-
-    const decisaoEl = document.getElementById("decisao");
-    decisaoEl.textContent = decisao;
-    decisaoEl.className = "big " + (decisao === "CALL" ? "call" : decisao === "PUT" ? "put" : "wait");
-
-    document.getElementById("confianca").textContent = confianca + "%";
-    document.getElementById("tendencia").textContent = r.tendencia || "--";
-    document.getElementById("risco").textContent = r.risco || "--";
-    document.getElementById("qualidade").textContent = r.qualidade_print || "--";
-    document.getElementById("forca").textContent = r.forca_tendencia || "--";
-    document.getElementById("suporte").textContent = r.suporte || "--";
-    document.getElementById("resistencia").textContent = r.resistencia || "--";
-    document.getElementById("padrao").textContent = r.padrao || "--";
-    document.getElementById("momento").textContent = r.momento || "--";
-    document.getElementById("analiseCompleta").textContent = r.analise_completa || "--";
-    lista("confirmacoes", r.confirmacoes);
-    lista("alertas", r.alertas);
-
-    ultimaAnalise = {
-      data: new Date().toLocaleString("pt-BR"),
-      ativo, timeframe, decisao, confianca,
-      tendencia: r.tendencia || "--",
-      risco: r.risco || "--",
-      analise: r.analise_completa || "--"
-    };
-
-    salvarHistorico(ultimaAnalise);
-    document.getElementById("resultado").style.display = "block";
-    document.getElementById("resultado").scrollIntoView({behavior:"smooth"});
-
-  }catch(err){
-    mostrarErro("Não foi possível analisar: " + err.message);
-  }finally{
-    btn.disabled = false;
-    document.getElementById("carregando").style.display = "none";
-  }
-}
-
-function textoResultado(){
-  if (!ultimaAnalise) return "";
-  return `ROB-IA — ANÁLISE
-Data: ${ultimaAnalise.data}
-Ativo: ${ultimaAnalise.ativo}
-Tempo: ${ultimaAnalise.timeframe}
-Decisão: ${ultimaAnalise.decisao}
-Confiança técnica: ${ultimaAnalise.confianca}%
-Tendência: ${ultimaAnalise.tendencia}
-Risco: ${ultimaAnalise.risco}
-
-${ultimaAnalise.analise}
-
-Aviso: análise probabilística, sem garantia de resultado.`;
-}
-
-async function copiarResultado(){
-  if (!ultimaAnalise) return mostrarErro("Ainda não existe resultado para copiar.");
-  try{
-    await navigator.clipboard.writeText(textoResultado());
-    alert("Resultado copiado!");
-  }catch(e){
-    mostrarErro("Não foi possível copiar automaticamente.");
-  }
-}
-
-function novaAnalise(){
-  document.getElementById("resultado").style.display = "none";
-  document.getElementById("imagem").value = "";
-  document.getElementById("preview").style.display = "none";
-  document.getElementById("qualidadeImagem").textContent = "";
-  imagemBase64 = "";
   window.scrollTo({top:0,behavior:"smooth"});
 }
 
 function salvarHistorico(item){
-  const atual = JSON.parse(localStorage.getItem("robiaHistorico") || "[]");
-  atual.unshift(item);
-  localStorage.setItem("robiaHistorico", JSON.stringify(atual.slice(0,8)));
+  const dados = JSON.parse(localStorage.getItem("robiaV3Historico") || "[]");
+  dados.unshift(item);
+  localStorage.setItem("robiaV3Historico", JSON.stringify(dados.slice(0,10)));
   renderHistorico();
 }
 
 function renderHistorico(){
-  const dados = JSON.parse(localStorage.getItem("robiaHistorico") || "[]");
-  const card = document.getElementById("historicoCard");
-  const vazio = document.getElementById("historicoVazio");
-  card.innerHTML = "";
-
+  const dados = JSON.parse(localStorage.getItem("robiaV3Historico") || "[]");
+  const box = document.getElementById("historico");
   if (!dados.length){
-    card.style.display = "none";
-    vazio.style.display = "block";
+    box.className = "muted";
+    box.textContent = "Nenhum teste salvo.";
     return;
   }
-
-  vazio.style.display = "none";
-  card.style.display = "block";
-
-  dados.forEach(item => {
+  box.className = "";
+  box.innerHTML = "";
+  dados.forEach(x => {
     const div = document.createElement("div");
     div.className = "history-item";
-    const classe = item.decisao === "CALL" ? "call" : item.decisao === "PUT" ? "put" : "wait";
-    div.innerHTML = `
-      <div class="history-top">
-        <b>${escapeHtml(item.ativo)} — ${escapeHtml(item.timeframe)}</b>
-        <span class="${classe}"><b>${escapeHtml(item.decisao)}</b></span>
-      </div>
-      <div class="muted" style="margin-top:6px">${escapeHtml(item.data)} • Confiança ${Number(item.confianca) || 0}% • Risco ${escapeHtml(item.risco)}</div>`;
-    card.appendChild(div);
+    const cls = x.decisao === "CALL" ? "call" : x.decisao === "PUT" ? "put" : "wait";
+    div.innerHTML = `<div class="history-top"><b>${esc(x.ativo)} — ${esc(x.tempo)}</b><b class="${cls}">${esc(x.decisao)}</b></div>
+      <div class="muted" style="margin-top:5px">${esc(x.data)} • Nota ${Number(x.nota) || 0}/100 • ${esc(x.qualidade)}</div>`;
+    box.appendChild(div);
   });
 }
 
 function limparHistorico(){
-  if (!confirm("Apagar todo o histórico deste aparelho?")) return;
-  localStorage.removeItem("robiaHistorico");
+  if (!confirm("Apagar o histórico de testes?")) return;
+  localStorage.removeItem("robiaV3Historico");
   renderHistorico();
 }
 
-function escapeHtml(valor){
-  return String(valor ?? "").replace(/[&<>"']/g, c => ({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
-  }[c]));
+function esc(v){
+  return String(v ?? "").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
 }
 
 renderHistorico();
