@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#07111f">
-<title>Rob-ia V12 ULTRA — Sinais Fortes Forex</title>
+<title>Rob-ia V13 STABLE — Sinais Fortes Forex</title>
 <style>
 :root{--bg:#07111f;--panel:#0f1b2d;--panel2:#132238;--text:#edf4ff;--muted:#94a8c1;--blue:#38bdf8;--green:#22c55e;--red:#ef4444;--yellow:#f59e0b;--border:#263a55}
 *{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(180deg,#07111f,#0a1728);color:var(--text)}
@@ -26,15 +26,16 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:10px 7px;
 .actions{display:flex;gap:7px}.actions button{padding:7px;font-size:12px}.win{background:#15803d!important;border-color:#15803d!important}.loss{background:#b91c1c!important;border-color:#b91c1c!important}
 details{margin-top:12px;border:1px solid var(--border);border-radius:12px;padding:10px;background:#0a1728}summary{cursor:pointer;font-weight:700}
 .tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.tabbtn{width:auto;padding:9px 13px;background:#14243a;border-color:#2d4564}.tabbtn.active{background:#0ea5e9;border-color:#0ea5e9}.tabpane{display:none}.tabpane.active{display:block}.pill{display:inline-block;padding:5px 8px;border-radius:999px;border:1px solid var(--border);font-size:12px;margin:2px}.ok{color:#86efac}.bad{color:#fca5a5}.warn{color:#fde68a}
+.health{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.healthitem{padding:10px;border-radius:12px;border:1px solid var(--border);background:#0a1728;text-align:center;font-size:12px}.healthitem b{display:block;margin-top:5px;font-size:14px}.logbox{max-height:210px;overflow:auto;background:#081321;border:1px solid var(--border);border-radius:12px;padding:10px;font-family:monospace;font-size:12px;line-height:1.5}.countdown{font-size:19px;font-weight:800;margin-top:6px}@media(max-width:650px){.health{grid-template-columns:1fr 1fr}}
 @media(max-width:880px){.grid{grid-template-columns:1fr}#chart{height:440px}}@media(max-width:520px){.controls{grid-template-columns:1fr}.metrics{grid-template-columns:1fr 1fr}#chart{height:390px}h1{font-size:22px}}
 </style>
 </head>
 <body>
 <div class="wrap">
 <header>
-  <h1>Rob-ia V12 ULTRA</h1>
-  <div class="sub">Leitura multitemporal seletiva para Forex normal. Versão consolidada com análise avançada, alertas, corretora, ranking, histórico e preparação para servidor 24 horas.</div>
-  <div class="badges"><span class="badge">Sem OTC</span><span class="badge">Somente candle fechado</span><span class="badge">Alerta mínimo 85</span><span class="badge">8 ativos</span><span class="badge">Modo conservador</span><span class="badge">Price Action</span><span class="badge">Varredura contínua</span><span class="badge">Link da corretora</span><span class="badge">Pacote completo</span><span class="badge">Conta demo</span></div>
+  <h1>Rob-ia V13 STABLE</h1>
+  <div class="sub">Leitura multitemporal seletiva para Forex normal. Versão estável com diagnóstico, controle de API, validade do sinal, testes de alerta e monitoramento mais seguro.</div>
+  <div class="badges"><span class="badge">Sem OTC</span><span class="badge">Somente candle fechado</span><span class="badge">Alerta mínimo 85</span><span class="badge">8 ativos</span><span class="badge">Modo conservador</span><span class="badge">Price Action</span><span class="badge">Varredura contínua</span><span class="badge">Link da corretora</span><span class="badge">Pacote completo</span><span class="badge">Diagnóstico</span><span class="badge">Controle de API</span><span class="badge">Conta demo</span></div>
 </header>
 
 <div class="grid">
@@ -76,6 +77,12 @@ details{margin-top:12px;border:1px solid var(--border);border-radius:12px;paddin
       <option value="3" selected>3 sinais</option>
       <option value="5">5 sinais</option>
     </select></div>
+    <div><label for="apiDailyLimit">Limite diário de chamadas API</label><select id="apiDailyLimit">
+      <option value="300">300 chamadas</option>
+      <option value="500" selected>500 chamadas</option>
+      <option value="750">750 chamadas</option>
+    </select></div>
+    <div class="switchrow"><input id="autoSave" type="checkbox" checked><label for="autoSave" style="margin:0">Salvar alterações automaticamente</label></div>
     <div class="full switchrow"><input id="soundAlert" type="checkbox" checked><label for="soundAlert" style="margin:0">Tocar alerta sonoro no notebook</label></div>
     <div class="full switchrow"><input id="browserNotify" type="checkbox" checked><label for="browserNotify" style="margin:0">Mostrar notificação no navegador</label></div>
     <div class="full"><label for="riskMode">Modo de análise</label><select id="riskMode">
@@ -98,6 +105,9 @@ details{margin-top:12px;border:1px solid var(--border);border-radius:12px;paddin
     <div><button id="clearConfig" class="danger">Apagar configuração</button></div>
     <div><button id="openBroker" class="secondary">Abrir corretora</button></div>
     <div><button id="previewTelegram" class="secondary">Prévia do Telegram</button></div>
+    <div><button id="testSound" class="secondary">Testar som</button></div>
+    <div><button id="testNotification" class="secondary">Testar notificação</button></div>
+    <div class="full"><button id="runDiagnostic" class="secondary">Executar diagnóstico</button></div>
     <div class="full"><button id="reloadChart" class="secondary">Atualizar gráfico</button></div>
   </div>
 
@@ -108,7 +118,7 @@ details{margin-top:12px;border:1px solid var(--border);border-radius:12px;paddin
       <div id="progressBar" style="height:100%;width:0%;background:#0ea5e9;transition:width .25s"></div>
     </div>
   </div>
-  <div id="signal" class="signal wait"><div class="small">SINAL ATUAL</div><div class="decision">NÃO ENTRAR</div><div class="score">Nota técnica: --/100</div><div class="small" id="scoreGap">Faltam -- pontos para um sinal forte.</div><div class="small" id="signalTime">Nenhuma análise realizada.</div></div>
+  <div id="signal" class="signal wait"><div class="small">SINAL ATUAL</div><div class="decision">NÃO ENTRAR</div><div class="score">Nota técnica: --/100</div><div class="small" id="scoreGap">Faltam -- pontos para um sinal forte.</div><div class="small" id="signalTime">Nenhuma análise realizada.</div><div class="countdown" id="signalCountdown">Sem validade ativa</div></div>
   <details open><summary>Filtros da entrada</summary><div id="checklist" class="small" style="margin-top:9px;line-height:1.8">Nenhuma análise realizada.</div></details>
 
   <div class="metrics">
@@ -125,6 +135,22 @@ details{margin-top:12px;border:1px solid var(--border);border-radius:12px;paddin
   <div class="notice">O alerta sonoro, a notificação e a varredura contínua funcionam com a página aberta. Esta versão já prepara a mensagem e o link da corretora. Para enviar de verdade pelo Telegram com o notebook desligado, o próximo passo será publicar o motor em um servidor. Nunca coloque o token secreto do bot nesta página. Teste as entradas somente na demonstração.</div>
 </aside>
 </div>
+
+<section class="card" style="margin-top:14px">
+<h2>Diagnóstico do sistema</h2>
+<div class="health">
+  <div class="healthitem">API<b id="healthApi">Não testada</b></div>
+  <div class="healthitem">Notificação<b id="healthNotify">Não testada</b></div>
+  <div class="healthitem">Configuração<b id="healthConfig">Pendente</b></div>
+  <div class="healthitem">Monitor<b id="healthMonitor">Parado</b></div>
+</div>
+<div class="metrics" style="margin-top:10px">
+  <div class="metric">Chamadas API hoje<b id="apiCallsToday">0</b></div>
+  <div class="metric">Limite configurado<b id="apiLimitView">500</b></div>
+  <div class="metric">Uso do limite<b id="apiUsagePct">0%</b></div>
+</div>
+<div id="systemLog" class="logbox" style="margin-top:10px">Sistema iniciado.</div>
+</section>
 
 <section class="card" style="margin-top:14px">
 <h2>Mensagem preparada para o Telegram</h2>
@@ -173,7 +199,7 @@ details{margin-top:12px;border:1px solid var(--border);border-radius:12px;paddin
 
 <script>
 const $=id=>document.getElementById(id);
-let historyData=JSON.parse(localStorage.getItem('robiaV12History')||'[]');
+let historyData=JSON.parse(localStorage.getItem('robiaV13History')||'[]');
 let monitorTimer=null,lastAlertKey=localStorage.getItem('robiaLastAlert')||'';
 const ASSETS=[
  {pair:'BTC/USD',market:'Cripto 24h'},{pair:'ETH/USD',market:'Cripto 24h'},
@@ -204,8 +230,46 @@ async function notifyBrowser(title,body){
 function todayKey(){
  const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 }
+
+function apiUsage(){
+ const saved=JSON.parse(localStorage.getItem('robiaV13ApiUsage')||'{}');
+ return saved.day===todayKey()?saved:{day:todayKey(),count:0};
+}
+function addApiCalls(n){
+ const u=apiUsage();u.count+=n;localStorage.setItem('robiaV13ApiUsage',JSON.stringify(u));updateApiUsage();
+}
+function canUseApi(n=1){
+ const u=apiUsage(),limit=Number($('apiDailyLimit')?.value||500);
+ return u.count+n<=limit;
+}
+function updateApiUsage(){
+ const u=apiUsage(),limit=Number($('apiDailyLimit')?.value||500),pct=Math.min(100,Math.round((u.count/limit)*100));
+ if($('apiCallsToday'))$('apiCallsToday').textContent=u.count;
+ if($('apiLimitView'))$('apiLimitView').textContent=limit;
+ if($('apiUsagePct'))$('apiUsagePct').textContent=pct+'%';
+}
+function logSystem(msg){
+ const box=$('systemLog');if(!box)return;
+ const time=new Date().toLocaleTimeString('pt-BR');
+ box.innerHTML=`[${time}] ${msg}<br>`+box.innerHTML;
+}
+let countdownTimer=null,signalExpiresAt=0;
+function startSignalCountdown(minutes=15){
+ clearInterval(countdownTimer);signalExpiresAt=Date.now()+minutes*60000;
+ const tick=()=>{
+  const left=signalExpiresAt-Date.now();
+  if(left<=0){clearInterval(countdownTimer);$('signalCountdown').textContent='Sinal expirado';return}
+  const m=Math.floor(left/60000),s=Math.floor((left%60000)/1000);
+  $('signalCountdown').textContent=`Validade: ${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+ };
+ tick();countdownTimer=setInterval(tick,1000);
+}
+function clearSignalCountdown(){
+ clearInterval(countdownTimer);signalExpiresAt=0;
+ if($('signalCountdown'))$('signalCountdown').textContent='Sem validade ativa';
+}
 function alertLog(){
- return JSON.parse(localStorage.getItem('robiaV12AlertLog')||'[]');
+ return JSON.parse(localStorage.getItem('robiaV13AlertLog')||'[]');
 }
 function canAlert(pair){
  const log=alertLog().filter(x=>x.day===todayKey());
@@ -219,7 +283,7 @@ function canAlert(pair){
 function registerAlert(pair){
  const log=alertLog().filter(x=>x.day===todayKey());
  log.push({pair,time:Date.now(),day:todayKey()});
- localStorage.setItem('robiaV12AlertLog',JSON.stringify(log.slice(-50)));
+ localStorage.setItem('robiaV13AlertLog',JSON.stringify(log.slice(-50)));
  updateAlertStats();
 }
 function updateAlertStats(){
@@ -229,7 +293,7 @@ function updateAlertStats(){
 }
 function buildTelegramText(pair,r){
  const url=$('brokerUrl')?.value.trim();
- return `🚨 ROB-IA V12 — SINAL FORTE
+ return `🚨 ROB-IA V13 — SINAL FORTE
 Ativo: ${pair}
 Direção: ${r.decision}
 Nota: ${Math.round(r.score)}/100
@@ -279,8 +343,9 @@ function candleSignal(c){const x=c.at(-1),body=Math.abs(x.close-x.open),range=x.
  return'NEUTRA'
 }
 async function getCandles(pair,interval,key){
+ if(!canUseApi(1))throw new Error('Limite diário de chamadas API atingido.');
  const url=`https://api.twelvedata.com/time_series?symbol=${encodeURIComponent(pair)}&interval=${interval}&outputsize=180&apikey=${encodeURIComponent(key)}`;
- const res=await fetch(url),data=await res.json();if(!res.ok||data.status==='error'||!data.values)throw new Error(data.message||'Falha ao buscar candles.');
+ const res=await fetch(url),data=await res.json();addApiCalls(1);if(!res.ok||data.status==='error'||!data.values)throw new Error(data.message||'Falha ao buscar candles.');
  return data.values.reverse().map(v=>({datetime:v.datetime,open:+v.open,high:+v.high,low:+v.low,close:+v.close,volume:+(v.volume||0)}));
 }
 function analyzeTF(c){
@@ -496,7 +561,7 @@ function setSignal(r,p,a15,a30,a1h){
 }
 function saveSignal(pair,r){
  if(r.decision==='NÃO ENTRAR')return;historyData.unshift({id:Date.now(),time:new Date().toLocaleString('pt-BR'),pair,decision:r.decision,score:Math.round(r.score),result:'Pendente'});
- historyData=historyData.slice(0,60);localStorage.setItem('robiaV12History',JSON.stringify(historyData));renderHistory();
+ historyData=historyData.slice(0,60);localStorage.setItem('robiaV13History',JSON.stringify(historyData));renderHistory();
 }
 async function runAnalysis(auto=false){
  const key=$('apiKey').value.trim(),pair=$('pair').value;if(!key){$('status').textContent='Cole sua chave da Twelve Data.';return}
@@ -504,7 +569,7 @@ async function runAnalysis(auto=false){
  const sess=sessionStatus(pair);if(!sess.ok){$('status').textContent=`Análise bloqueada: ${sess.label}.`;return}
  $('analyze').disabled=true;setProgress(10,'Preparando análise...');
  try{
-  setProgress(25,'Buscando candles M15, M30 e H1...');
+  setProgress(25,'Buscando candles M15, M30 e H1...');logSystem(`Análise iniciada para ${pair}.`);
   const[c15,c30,c1h]=await Promise.all([getCandles(pair,'15min',key),getCandles(pair,'30min',key),getCandles(pair,'1h',key)]);
   setProgress(55,'Calculando indicadores...');
   const a15=analyzeTF(c15),a30=analyzeTF(c30),a1h=analyzeTF(c1h);
@@ -513,14 +578,14 @@ async function runAnalysis(auto=false){
   setProgress(90,'Aplicando filtros de segurança...');
   setSignal(r,pair,a15,a30,a1h);
   if(r.decision!=='NÃO ENTRAR'){
-   updateTelegramPreview(pair,r);
+   startSignalCountdown(15);updateTelegramPreview(pair,r);
    const gate=canAlert(pair);
    if(gate.ok){
-    saveSignal(pair,r);registerAlert(pair);playAlert();notifyBrowser('Rob-ia V12 — Sinal forte',`${pair} • ${r.decision} • ${Math.round(r.score)}/100`);
+    saveSignal(pair,r);registerAlert(pair);playAlert();notifyBrowser('Rob-ia V13 — Sinal forte',`${pair} • ${r.decision} • ${Math.round(r.score)}/100`);
     $('status').textContent='Sinal forte encontrado. Confirme na conta demo.';
    }else $('status').textContent='Sinal forte detectado, mas alerta bloqueado: '+gate.reason;
-  }else $('status').textContent='Nenhum sinal forte agora. O robô aguardará um alinhamento melhor.';
-  setProgress(100,'Análise concluída.');
+  }else {clearSignalCountdown();$('status').textContent='Nenhum sinal forte agora. O robô aguardará um alinhamento melhor.';}
+  setProgress(100,'Análise concluída.');logSystem(`Análise concluída para ${pair}: ${r.decision} ${Math.round(r.score)}/100.`);
  }catch(e){$('status').textContent='Erro: '+e.message;setProgress(0,'Falha na análise.')}finally{$('analyze').disabled=false}
 }
 function setProgress(value,text){
@@ -528,18 +593,18 @@ function setProgress(value,text){
  if(text)$('status').textContent=text;
 }
 function saveConfig(){
- const data={apiKey:$('apiKey').value.trim(),chatId:$('chatId').value.trim(),pair:$('pair').value,interval:$('chartInterval').value,newsBlock:$('newsBlock').checked,soundAlert:$('soundAlert').checked,browserNotify:$('browserNotify').checked,riskMode:$('riskMode').value,scanInterval:$('scanInterval').value,sessionFilter:$('sessionFilter').value,continuousScan:$('continuousScan').checked,brokerUrl:$('brokerUrl').value.trim(),cooldown:$('cooldown').value,dailyLimit:$('dailyLimit').value};
- localStorage.setItem('robiaV12Config',JSON.stringify(data));
+ const data={apiKey:$('apiKey').value.trim(),chatId:$('chatId').value.trim(),pair:$('pair').value,interval:$('chartInterval').value,newsBlock:$('newsBlock').checked,soundAlert:$('soundAlert').checked,browserNotify:$('browserNotify').checked,riskMode:$('riskMode').value,scanInterval:$('scanInterval').value,sessionFilter:$('sessionFilter').value,continuousScan:$('continuousScan').checked,brokerUrl:$('brokerUrl').value.trim(),cooldown:$('cooldown').value,dailyLimit:$('dailyLimit').value,apiDailyLimit:$('apiDailyLimit').value,autoSave:$('autoSave').checked};
+ localStorage.setItem('robiaV13Config',JSON.stringify(data));
  $('status').textContent='Configuração salva neste navegador.';
 }
 function loadConfig(){
- const data=JSON.parse(localStorage.getItem('robiaV12Config')||'{}');
+ const data=JSON.parse(localStorage.getItem('robiaV13Config')||'{}');
  if(data.apiKey)$('apiKey').value=data.apiKey;if(data.chatId)$('chatId').value=data.chatId;if(data.pair)$('pair').value=data.pair;
- if(data.interval)$('chartInterval').value=data.interval;if(typeof data.newsBlock==='boolean')$('newsBlock').checked=data.newsBlock;if(typeof data.soundAlert==='boolean')$('soundAlert').checked=data.soundAlert;if(typeof data.browserNotify==='boolean')$('browserNotify').checked=data.browserNotify;if(data.riskMode)$('riskMode').value=data.riskMode;if(data.scanInterval)$('scanInterval').value=data.scanInterval;if(data.sessionFilter)$('sessionFilter').value=data.sessionFilter;if(typeof data.continuousScan==='boolean')$('continuousScan').checked=data.continuousScan;if(data.brokerUrl)$('brokerUrl').value=data.brokerUrl;if(data.cooldown)$('cooldown').value=data.cooldown;if(data.dailyLimit)$('dailyLimit').value=data.dailyLimit;
+ if(data.interval)$('chartInterval').value=data.interval;if(typeof data.newsBlock==='boolean')$('newsBlock').checked=data.newsBlock;if(typeof data.soundAlert==='boolean')$('soundAlert').checked=data.soundAlert;if(typeof data.browserNotify==='boolean')$('browserNotify').checked=data.browserNotify;if(data.riskMode)$('riskMode').value=data.riskMode;if(data.scanInterval)$('scanInterval').value=data.scanInterval;if(data.sessionFilter)$('sessionFilter').value=data.sessionFilter;if(typeof data.continuousScan==='boolean')$('continuousScan').checked=data.continuousScan;if(data.brokerUrl)$('brokerUrl').value=data.brokerUrl;if(data.cooldown)$('cooldown').value=data.cooldown;if(data.dailyLimit)$('dailyLimit').value=data.dailyLimit;if(data.apiDailyLimit)$('apiDailyLimit').value=data.apiDailyLimit;if(typeof data.autoSave==='boolean')$('autoSave').checked=data.autoSave;
 }
 function clearConfig(){
  if(!confirm('Apagar a API, o Chat ID e as preferências salvas neste navegador?'))return;
- localStorage.removeItem('robiaV12Config');$('apiKey').value='';$('chatId').value='';$('pair').value='EUR/USD';$('chartInterval').value='15';$('newsBlock').checked=false;$('soundAlert').checked=true;$('browserNotify').checked=true;$('riskMode').value='conservative';$('scanInterval').value='300000';$('sessionFilter').value='auto';$('continuousScan').checked=false;$('brokerUrl').value='';$('cooldown').value='60';$('dailyLimit').value='3';stopContinuous();
+ localStorage.removeItem('robiaV13Config');$('apiKey').value='';$('chatId').value='';$('pair').value='EUR/USD';$('chartInterval').value='15';$('newsBlock').checked=false;$('soundAlert').checked=true;$('browserNotify').checked=true;$('riskMode').value='conservative';$('scanInterval').value='300000';$('sessionFilter').value='auto';$('continuousScan').checked=false;$('brokerUrl').value='';$('cooldown').value='60';$('dailyLimit').value='3';$('apiDailyLimit').value='500';$('autoSave').checked=true;stopContinuous();
  renderChart();$('status').textContent='Configuração apagada.';
 }
 
@@ -579,15 +644,15 @@ async function scanAllAssets(){
    $('pair').value=best.pair;renderChart();
   }
   if(strong.length){
-   const allowed=strong.filter(x=>canAlert(x.pair).ok);
+   startSignalCountdown(15);const allowed=strong.filter(x=>canAlert(x.pair).ok);
    updateTelegramPreview(strong[0].pair,strong[0].r);
    if(allowed.length){
     allowed.forEach(x=>{saveSignal(x.pair,x.r);registerAlert(x.pair)});
-    playAlert();notifyBrowser('Rob-ia V12 — Sinal forte',`${allowed[0].pair} • ${allowed[0].r.decision} • ${Math.round(allowed[0].r.score)}/100`);
+    playAlert();notifyBrowser('Rob-ia V13 — Sinal forte',`${allowed[0].pair} • ${allowed[0].r.decision} • ${Math.round(allowed[0].r.score)}/100`);
     $('status').textContent=`${allowed.length} sinal(is) forte(s) liberado(s). Confira na conta demo.`;
    }else $('status').textContent='Sinal técnico encontrado, mas bloqueado pelo limite diário ou intervalo de segurança.';
-  }else $('status').textContent='Varredura concluída: nenhum sinal forte agora.';
-  setProgress(100,'Varredura concluída.');
+  }else {clearSignalCountdown();$('status').textContent='Varredura concluída: nenhum sinal forte agora.';}
+  setProgress(100,'Varredura concluída.');logSystem('Varredura dos 8 ativos concluída.');
  }catch(e){
   $('status').textContent='Erro na varredura: '+e.message;setProgress(0,'Falha na varredura.');
  }finally{$('scanAll').disabled=false;$('analyze').disabled=false}
@@ -601,7 +666,7 @@ function renderHistory(){
  if($('winRate'))$('winRate').textContent=evaluated?Math.round((winsCount/evaluated)*100)+'%':'0%';
  if($('evaluated'))$('evaluated').textContent=evaluated;
  if($('pending'))$('pending').textContent=historyData.filter(x=>x.result==='Pendente').length;
- document.querySelectorAll('[data-r]').forEach(b=>b.addEventListener('click',()=>{historyData=historyData.map(x=>x.id===+b.dataset.id?{...x,result:b.dataset.r}:x);localStorage.setItem('robiaV12History',JSON.stringify(historyData));renderHistory()}));
+ document.querySelectorAll('[data-r]').forEach(b=>b.addEventListener('click',()=>{historyData=historyData.map(x=>x.id===+b.dataset.id?{...x,result:b.dataset.r}:x);localStorage.setItem('robiaV13History',JSON.stringify(historyData));renderHistory()}));
 }
 
 let continuousTimer=null,nextScanTimer=null;
@@ -612,13 +677,13 @@ function updateNextScan(ms){
 function stopContinuous(){
  clearInterval(continuousTimer);clearInterval(nextScanTimer);
  continuousTimer=null;nextScanTimer=null;
- if($('monitorState'))$('monitorState').textContent='Parado';
+ if($('monitorState'))$('monitorState').textContent='Parado';if($('healthMonitor'))$('healthMonitor').textContent='Parado';
  if($('nextScan'))$('nextScan').textContent='--';
 }
 function startContinuous(){
  stopContinuous();
  const ms=Number($('scanInterval').value||300000);
- if($('monitorState'))$('monitorState').textContent='Ativo';
+ if($('monitorState'))$('monitorState').textContent='Ativo';if($('healthMonitor'))$('healthMonitor').textContent='Ativo';
  scanAllAssets();
  updateNextScan(ms);
  continuousTimer=setInterval(()=>{scanAllAssets();updateNextScan(ms)},ms);
@@ -630,6 +695,28 @@ $('scanInterval').addEventListener('change',()=>{if($('continuousScan').checked)
 $('saveConfig').addEventListener('click',saveConfig);
 $('clearConfig').addEventListener('click',clearConfig);
 $('autoMonitor').addEventListener('change',e=>{clearInterval(monitorTimer);if(e.target.checked){runAnalysis(true);monitorTimer=setInterval(()=>runAnalysis(true),300000);$('status').textContent='Monitoramento automático ativado. Mantenha esta página aberta.'}else $('status').textContent='Monitoramento automático desligado.'});
+
+$('testSound').addEventListener('click',()=>{playAlert();$('status').textContent='Som de teste executado.';logSystem('Teste de som executado.');});
+$('testNotification').addEventListener('click',async()=>{await notifyBrowser('Rob-ia V13','Notificação de teste funcionando.');$('status').textContent='Teste de notificação solicitado.';logSystem('Teste de notificação solicitado.');});
+$('runDiagnostic').addEventListener('click',async()=>{
+ const key=$('apiKey').value.trim();
+ $('healthConfig').textContent=key&&$('chatId').value.trim()?'Completa':'Incompleta';
+ $('healthNotify').textContent=!('Notification' in window)?'Indisponível':Notification.permission;
+ $('healthMonitor').textContent=$('continuousScan').checked?'Ativo':'Parado';
+ if(!key){$('healthApi').textContent='Sem chave';$('status').textContent='Diagnóstico: falta a chave da API.';return}
+ try{
+  $('healthApi').textContent='Testando...';
+  await getCandles($('pair').value,'15min',key);
+  $('healthApi').textContent='Funcionando';
+  $('status').textContent='Diagnóstico concluído com sucesso.';
+  logSystem('Diagnóstico concluído: API funcionando.');
+ }catch(e){
+  $('healthApi').textContent='Falhou';
+  $('status').textContent='Diagnóstico: '+e.message;
+  logSystem('Falha no diagnóstico: '+e.message);
+ }
+ updateApiUsage();
+});
 $('openBroker').addEventListener('click',()=>{
  const url=$('brokerUrl').value.trim();
  if(!url){$('status').textContent='Cole e salve o link da corretora primeiro.';return}
@@ -644,22 +731,29 @@ $('previewTelegram').addEventListener('click',()=>{
  $('telegramPreview').scrollIntoView({behavior:'smooth',block:'center'});
 });
 $('exportConfig').addEventListener('click',()=>{
- const cfg=JSON.parse(localStorage.getItem('robiaV12Config')||'{}');
- downloadJSON('rob-ia-v12-configuracao.json',{type:'config',version:12,data:cfg});
+ const cfg=JSON.parse(localStorage.getItem('robiaV13Config')||'{}');
+ downloadJSON('rob-ia-v13-configuracao.json',{type:'config',version:13,data:cfg});
 });
-$('exportHistory').addEventListener('click',()=>downloadJSON('rob-ia-v12-historico.json',{type:'history',version:12,data:historyData}));
+$('exportHistory').addEventListener('click',()=>downloadJSON('rob-ia-v13-historico.json',{type:'history',version:13,data:historyData}));
 $('importFile').addEventListener('change',async e=>{
  const file=e.target.files?.[0];if(!file)return;
  try{
   const obj=JSON.parse(await file.text());
-  if(obj.type==='config'){localStorage.setItem('robiaV12Config',JSON.stringify(obj.data||{}));loadConfig();renderChart();$('status').textContent='Configuração importada.'}
-  else if(obj.type==='history'){historyData=Array.isArray(obj.data)?obj.data:[];localStorage.setItem('robiaV12History',JSON.stringify(historyData));renderHistory();$('status').textContent='Histórico importado.'}
+  if(obj.type==='config'){localStorage.setItem('robiaV13Config',JSON.stringify(obj.data||{}));loadConfig();renderChart();$('status').textContent='Configuração importada.'}
+  else if(obj.type==='history'){historyData=Array.isArray(obj.data)?obj.data:[];localStorage.setItem('robiaV13History',JSON.stringify(historyData));renderHistory();$('status').textContent='Histórico importado.'}
   else throw new Error('Backup não reconhecido.');
  }catch(err){$('status').textContent='Erro ao importar: '+err.message}
  e.target.value='';
 });
 $('reloadChart').addEventListener('click',renderChart);$('pair').addEventListener('change',renderChart);$('chartInterval').addEventListener('change',renderChart);
-loadConfig();renderChart();renderHistory();updateAlertStats();if($('continuousScan').checked)startContinuous();
+
+document.querySelectorAll('input,select').forEach(el=>{
+ el.addEventListener('change',()=>{
+  if($('autoSave')?.checked&&el.id!=='importFile'){saveConfig();logSystem('Configuração salva automaticamente.')}
+  updateApiUsage();
+ });
+});
+loadConfig();renderChart();renderHistory();updateAlertStats();updateApiUsage();if($('continuousScan').checked)startContinuous();
 </script>
 </body>
 </html>
