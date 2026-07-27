@@ -1,94 +1,105 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Rob-ia V3</title>
+<title>Rob-ia PRO</title>
 <style>
-body{margin:0;background:#08111f;color:#fff;font-family:Arial}
-header{background:#101a2d;padding:18px;text-align:center}
-.container{max-width:950px;margin:auto;padding:18px}
-.card{background:#16233b;border-radius:14px;padding:16px;margin:16px 0}
-input,button{padding:12px;border-radius:8px;border:none}
-input{width:100%;box-sizing:border-box;margin:8px 0}
-button{background:#2563eb;color:#fff;font-weight:bold;cursor:pointer}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
-.box{background:#0f172a;padding:12px;border-radius:10px}
-#app{display:none}
-img{max-width:100%;display:none;border-radius:10px;margin-top:10px}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#0b1020;color:#fff}
+header{background:linear-gradient(90deg,#1d4ed8,#2563eb);padding:20px;text-align:center}
+.container{max-width:1100px;margin:auto;padding:20px}
+.grid{display:grid;grid-template-columns:2fr 1fr;gap:18px}
+@media(max-width:800px){.grid{grid-template-columns:1fr}}
+.card{background:#131d34;border-radius:14px;padding:18px;margin-bottom:18px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.stat{background:#0f172a;padding:12px;border-radius:10px;text-align:center}
+button{background:#2563eb;color:#fff;border:0;padding:12px 18px;border-radius:8px;font-weight:bold;cursor:pointer}
+input[type=file]{width:100%;padding:8px}
+progress{width:100%;height:18px}
+img{max-width:100%;display:none;border-radius:10px;margin-top:12px}
+ul{padding-left:18px}
 </style>
 </head>
 <body>
-<header><h1>🤖 Rob-ia V3</h1><p>Painel com login e histórico local</p></header>
-
+<header>
+<h1>🤖 Rob-ia PRO</h1>
+<p>Painel preparado para futura integração com IA de visão</p>
+</header>
 <div class="container">
-<div id="login" class="card">
-<h2>Entrar</h2>
-<input id="nome" placeholder="Seu nome">
-<button onclick="entrar()">Acessar</button>
+<div class="stats">
+<div class="stat"><h3 id="a">0</h3>Análises</div>
+<div class="stat"><h3>--%</h3>Confiança</div>
+<div class="stat"><h3>AGUARDAR</h3>Sinal</div>
+<div class="stat"><h3>Online</h3>Status</div>
 </div>
 
-<div id="app">
+<div class="grid">
+<div>
 <div class="card">
-<h2 id="boas"></h2>
-<input type="file" id="arq" accept="image/*">
-<img id="prev">
+<h2>Enviar gráfico</h2>
+<input id="f" type="file" accept="image/*">
+<img id="p">
 <br><br>
 <button onclick="analisar()">Analisar com IA</button>
+<br><br>
+<progress id="prog" value="0" max="100"></progress>
 </div>
 
 <div class="card">
-<div class="grid">
-<div class="box"><b>Sinal</b><br><span id="sinal">AGUARDAR</span></div>
-<div class="box"><b>Confiança</b><br>--%</div>
-<div class="box"><b>Histórico</b><br><span id="total">0</span> análises</div>
+<h2>Resultado</h2>
+<div class="stats">
+<div class="stat">Tendência<br><b>Aguardando IA</b></div>
+<div class="stat">Suporte<br><b>--</b></div>
+<div class="stat">Resistência<br><b>--</b></div>
+<div class="stat">Candles<br><b>--</b></div>
+<div class="stat">EMA<br><b>--</b></div>
+<div class="stat">Confiança<br><b>--%</b></div>
+</div>
 </div>
 </div>
 
+<div>
 <div class="card">
-<h3>Últimas análises</h3>
+<h2>Histórico</h2>
 <ul id="hist"></ul>
+</div>
+<div class="card">
+<h2>Próxima integração</h2>
+<p>Este painel já está organizado para receber uma IA de visão. Quando ela for integrada, os campos acima passarão a mostrar análises reais do print enviado.</p>
+</div>
 </div>
 </div>
 </div>
 
 <script>
-function entrar(){
- let n=nome.value.trim()||"Operador";
- localStorage.setItem("robia_nome",n);
- login.style.display="none";
- app.style.display="block";
- boas.innerText="Bem-vindo, "+n;
- carregar();
+const hist=JSON.parse(localStorage.getItem("robia_hist")||"[]");
+function render(){
+document.getElementById("a").textContent=hist.length;
+const ul=document.getElementById("hist");
+ul.innerHTML="";
+hist.slice(0,10).forEach(x=>{const li=document.createElement("li");li.textContent=x;ul.appendChild(li);});
 }
-if(localStorage.getItem("robia_nome")){
- nome.value=localStorage.getItem("robia_nome");
- entrar();
-}
-arq.onchange=e=>{
- let f=e.target.files[0];
- if(!f)return;
- let r=new FileReader();
- r.onload=x=>{prev.src=x.target.result;prev.style.display="block";}
- r.readAsDataURL(f);
+render();
+f.onchange=e=>{
+const file=e.target.files[0];
+if(!file)return;
+const r=new FileReader();
+r.onload=x=>{p.src=x.target.result;p.style.display="block";}
+r.readAsDataURL(file);
 }
 function analisar(){
- let h=JSON.parse(localStorage.getItem("robia_hist")||"[]");
- h.unshift(new Date().toLocaleString()+" - Análise iniciada");
- localStorage.setItem("robia_hist",JSON.stringify(h));
- carregar();
+let v=0;
+prog.value=0;
+const t=setInterval(()=>{
+v+=10; prog.value=v;
+if(v>=100){
+clearInterval(t);
+hist.unshift(new Date().toLocaleString()+" - Análise iniciada");
+localStorage.setItem("robia_hist",JSON.stringify(hist));
+render();
+alert("Interface pronta. A análise automática será habilitada quando uma IA de visão for integrada.");
 }
-function carregar(){
- let h=JSON.parse(localStorage.getItem("robia_hist")||"[]");
- total.innerText=h.length;
- hist.innerHTML="";
- h.slice(0,10).forEach(v=>{
-  let li=document.createElement("li");
-  li.textContent=v;
-  hist.appendChild(li);
- });
+},120);
 }
 </script>
-</body>
-</html>
+</body></html>
