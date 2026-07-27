@@ -1,112 +1,223 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Rob-ia — Análise Real</title>
+<meta name="theme-color" content="#0b1020">
+<title>Rob-ia — Análise Real V2</title>
 <style>
+:root{
+  --bg:#070b16;--card:#111a2e;--card2:#0b1324;--border:#263653;
+  --text:#f8fafc;--muted:#94a3b8;--blue:#1d8cff;--green:#22c55e;
+  --red:#ef4444;--yellow:#facc15;--orange:#fb923c;
+}
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#0b1020;color:#f8fafc}
-header{padding:16px;background:#111827;border-bottom:1px solid #263248}
-main{max-width:980px;margin:auto;padding:16px}
-.card{background:#151f35;border:1px solid #263248;border-radius:12px;padding:16px;margin-bottom:14px}
-label{display:block;margin:10px 0 6px;font-weight:700}
-input,select,button,textarea{width:100%;padding:12px;border-radius:8px;border:1px solid #334155;background:#0f172a;color:#fff}
-button{background:#2563eb;border:0;font-weight:700;cursor:pointer;margin-top:12px}
+body{margin:0;font-family:Arial,sans-serif;background:radial-gradient(circle at top,#17213b 0,#070b16 42%);color:var(--text);min-height:100vh}
+header{padding:20px 16px;background:rgba(8,13,27,.92);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10;backdrop-filter:blur(8px)}
+header .wrap{max-width:1040px;margin:auto}
+header h1{margin:0;font-size:clamp(25px,5vw,38px)}
+header p{margin:7px 0 0}
+main{max-width:1040px;margin:auto;padding:16px}
+.card{background:rgba(17,26,46,.96);border:1px solid var(--border);border-radius:16px;padding:17px;margin-bottom:15px;box-shadow:0 14px 34px rgba(0,0,0,.18)}
+label{display:block;margin:12px 0 6px;font-weight:800}
+input,select,button,textarea{width:100%;padding:13px;border-radius:10px;border:1px solid #334766;background:#091225;color:#fff;font-size:16px}
+textarea{resize:vertical}
+button{border:0;font-weight:800;cursor:pointer;margin-top:12px;background:linear-gradient(90deg,#1288ff,#17b8ff);color:white}
+button.secondary{background:#182640;border:1px solid #385176}
+button.danger{background:#451a1f;border:1px solid #7f1d1d}
 button:disabled{opacity:.55;cursor:not-allowed}
-img{display:none;max-width:100%;max-height:520px;margin-top:12px;border-radius:10px;border:1px solid #334155}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
-.box{background:#0f172a;border:1px solid #29364d;padding:14px;border-radius:10px}
-.big{font-size:28px;font-weight:800}
-.call{color:#22c55e}.put{color:#ef4444}.wait{color:#facc15}
-small,.muted{color:#94a3b8}
-#resultado{display:none}
-#erro{display:none;background:#3f151a;border-color:#7f1d1d}
-#carregando{display:none}
-ul{line-height:1.55}
-pre{white-space:pre-wrap;font-family:inherit}
+img{display:none;max-width:100%;max-height:520px;margin-top:12px;border-radius:12px;border:1px solid #334155}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:11px}
+.box{background:var(--card2);border:1px solid #293a5b;padding:14px;border-radius:12px}
+.big{font-size:27px;font-weight:900;margin-top:5px}
+.call{color:var(--green)}.put{color:var(--red)}.wait{color:var(--yellow)}
+small,.muted{color:var(--muted)}
+#resultado,#erro,#carregando,#historicoCard{display:none}
+#erro{background:#3b151b;border-color:#7f1d1d}
+#carregando{padding:12px;border-radius:10px;background:#0b2a46;color:#dbeafe;font-weight:700}
+ul{line-height:1.55;padding-left:20px}
+pre{white-space:pre-wrap;font-family:inherit;line-height:1.55;margin-bottom:0}
+.notice{padding:12px;border:1px solid #854d0e;background:#3a2505;border-radius:10px;color:#fde68a;margin-top:12px}
+.success{padding:11px;border:1px solid #166534;background:#0c2d1b;border-radius:10px;color:#bbf7d0}
+.row-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.badge{display:inline-block;padding:5px 9px;border-radius:999px;background:#17233c;border:1px solid #334a70;color:#cbd5e1;font-size:13px}
+.history-item{background:#0a1325;border:1px solid #273a5c;padding:12px;border-radius:10px;margin-top:9px}
+.history-top{display:flex;justify-content:space-between;gap:10px;align-items:center}
+.toggle-line{display:flex;gap:10px;align-items:flex-start;margin-top:12px}
+.toggle-line input{width:auto;margin-top:3px}
+@media(max-width:600px){
+  main{padding:10px}.card{padding:14px}.row-actions{grid-template-columns:1fr}
+  header{position:static}.big{font-size:24px}
+}
 </style>
 </head>
 <body>
 <header>
-  <h1 style="margin:0">🤖 Rob-ia — Análise Real</h1>
-  <p class="muted" style="margin:6px 0 0">Envia o print para uma IA de visão analisar tendência, contexto e possíveis cenários.</p>
+  <div class="wrap">
+    <h1>🤖 Rob-ia — Análise Real V2</h1>
+    <p class="muted">Análise conservadora de prints, com foco principal em M15.</p>
+  </div>
 </header>
 
 <main>
   <section class="card">
+    <span class="badge">Versão 2</span>
+    <span class="badge">Foco M15</span>
+    <span class="badge">Histórico local</span>
+
     <label for="apiKey">Chave da API OpenAI</label>
-    <input id="apiKey" type="password" placeholder="Cole sua chave aqui somente durante o uso">
-    <small>A chave não fica gravada no site nem no histórico do navegador.</small>
+    <input id="apiKey" type="password" autocomplete="off" placeholder="Cole sua chave somente durante o uso">
+    <small>A chave não é salva pelo Rob-ia. Nunca publique sua chave no GitHub.</small>
 
-    <label for="ativo">Ativo/par</label>
-    <input id="ativo" placeholder="Ex.: EUR/USD, BTC/USDT">
+    <div class="grid">
+      <div>
+        <label for="ativo">Ativo/par</label>
+        <select id="ativo">
+          <option value="">Selecione o ativo</option>
+          <optgroup label="Forex — principais">
+            <option>EUR/USD</option><option>GBP/USD</option><option>USD/JPY</option>
+            <option>AUD/USD</option><option>USD/CAD</option><option>USD/CHF</option>
+            <option>NZD/USD</option>
+          </optgroup>
+          <optgroup label="Forex — cruzados">
+            <option>EUR/JPY</option><option>GBP/JPY</option><option>EUR/GBP</option>
+            <option>AUD/JPY</option><option>EUR/AUD</option>
+          </optgroup>
+          <optgroup label="Cripto">
+            <option>BTC/USDT</option><option>ETH/USDT</option><option>BNB/USDT</option>
+            <option>SOL/USDT</option><option>XRP/USDT</option>
+          </optgroup>
+          <option value="OUTRO">Outro ativo</option>
+        </select>
+      </div>
+      <div>
+        <label for="timeframe">Tempo gráfico</label>
+        <select id="timeframe">
+          <option>M1</option><option>M5</option><option selected>M15</option>
+          <option>M30</option><option>H1</option><option>H4</option><option>D1</option>
+        </select>
+      </div>
+    </div>
 
-    <label for="timeframe">Tempo gráfico</label>
-    <select id="timeframe">
-      <option>M1</option><option>M5</option><option>M15</option>
-      <option>M30</option><option>H1</option><option>H4</option><option>D1</option>
-    </select>
+    <div id="outroAtivoBox" style="display:none">
+      <label for="outroAtivo">Digite o ativo</label>
+      <input id="outroAtivo" placeholder="Ex.: EUR/NZD">
+    </div>
 
     <label for="imagem">Print do gráfico</label>
     <input id="imagem" type="file" accept="image/*">
+    <div id="qualidadeImagem" class="muted" style="margin-top:8px"></div>
     <img id="preview" alt="Prévia do gráfico">
 
     <label for="contexto">Observação opcional</label>
     <textarea id="contexto" rows="3" placeholder="Ex.: estou procurando entrada nos próximos candles; operação de curto prazo"></textarea>
 
+    <div class="toggle-line">
+      <input id="noticiasConfirmadas" type="checkbox">
+      <label for="noticiasConfirmadas" style="margin:0;font-weight:700">
+        Já conferi que não há notícia econômica importante próxima para este ativo.
+      </label>
+    </div>
+
+    <div class="notice">
+      ⚠️ Esta versão não consulta notícias em tempo real. Antes de operar, confira o calendário econômico. Se a caixa acima não estiver marcada, o Rob-ia será ainda mais conservador.
+    </div>
+
     <button id="analisarBtn" onclick="analisar()">Analisar gráfico com IA</button>
-    <p id="carregando">⏳ Analisando o gráfico com cuidado...</p>
+    <p id="carregando">⏳ Analisando estrutura, tendência, qualidade do print e possíveis riscos...</p>
   </section>
 
   <section id="erro" class="card"></section>
 
   <section id="resultado" class="card">
-    <h2>Resultado da análise</h2>
+    <h2 style="margin-top:0">Resultado da análise</h2>
+
     <div class="grid">
-      <div class="box"><div class="muted">Decisão</div><div id="decisao" class="big wait">AGUARDAR</div></div>
+      <div class="box"><div class="muted">Decisão</div><div id="decisao" class="big wait">NÃO ENTRAR</div></div>
       <div class="box"><div class="muted">Confiança técnica</div><div id="confianca" class="big">--%</div></div>
       <div class="box"><div class="muted">Tendência</div><div id="tendencia" class="big">--</div></div>
       <div class="box"><div class="muted">Risco</div><div id="risco" class="big">--</div></div>
     </div>
 
-    <div class="grid" style="margin-top:10px">
+    <div class="grid" style="margin-top:11px">
+      <div class="box"><b>Qualidade do print</b><p id="qualidade">--</p></div>
+      <div class="box"><b>Força da tendência</b><p id="forca">--</p></div>
       <div class="box"><b>Suporte</b><p id="suporte">--</p></div>
       <div class="box"><b>Resistência</b><p id="resistencia">--</p></div>
       <div class="box"><b>Padrão observado</b><p id="padrao">--</p></div>
       <div class="box"><b>Momento ideal</b><p id="momento">--</p></div>
     </div>
 
-    <div class="box" style="margin-top:10px">
+    <div class="box" style="margin-top:11px">
       <b>Leitura completa</b>
       <pre id="analiseCompleta">--</pre>
     </div>
 
-    <div class="box" style="margin-top:10px">
-      <b>Condições para validar a entrada</b>
-      <ul id="confirmacoes"></ul>
+    <div class="grid" style="margin-top:11px">
+      <div class="box">
+        <b>Condições para validar</b>
+        <ul id="confirmacoes"></ul>
+      </div>
+      <div class="box">
+        <b>Motivos para não entrar</b>
+        <ul id="alertas"></ul>
+      </div>
     </div>
 
-    <div class="box" style="margin-top:10px">
-      <b>Motivos para não entrar</b>
-      <ul id="alertas"></ul>
+    <div class="row-actions">
+      <button class="secondary" onclick="copiarResultado()">📋 Copiar resultado</button>
+      <button class="secondary" onclick="novaAnalise()">🔄 Nova análise</button>
     </div>
 
-    <p class="muted">A análise é probabilística e pode errar. Use conta demo, controle de risco e nunca opere apenas por um único sinal.</p>
+    <p class="muted">A análise é probabilística e pode errar. Use conta demo, limite de risco e não opere apenas por um único sinal.</p>
+  </section>
+
+  <section class="card">
+    <div class="history-top">
+      <h2 style="margin:0">Últimas análises</h2>
+      <button class="danger" style="width:auto;margin:0;padding:9px 12px" onclick="limparHistorico()">Limpar</button>
+    </div>
+    <div id="historicoVazio" class="muted" style="margin-top:10px">Nenhuma análise salva neste aparelho.</div>
+    <div id="historicoCard"></div>
   </section>
 </main>
 
 <script>
 let imagemBase64 = "";
+let ultimaAnalise = null;
+
+const ativoSelect = document.getElementById("ativo");
+ativoSelect.addEventListener("change", () => {
+  document.getElementById("outroAtivoBox").style.display =
+    ativoSelect.value === "OUTRO" ? "block" : "none";
+});
 
 document.getElementById("imagem").addEventListener("change", e => {
   const file = e.target.files[0];
   if (!file) return;
+
+  if (!file.type.startsWith("image/")) {
+    mostrarErro("Escolha um arquivo de imagem válido.");
+    return;
+  }
+
+  if (file.size > 10 * 1024 * 1024) {
+    mostrarErro("A imagem está muito pesada. Use um print com menos de 10 MB.");
+    return;
+  }
+
   const reader = new FileReader();
   reader.onload = ev => {
     imagemBase64 = ev.target.result;
     const img = document.getElementById("preview");
+    img.onload = () => {
+      const px = img.naturalWidth * img.naturalHeight;
+      const qualidade = px >= 1400000 ? "Boa qualidade para análise"
+        : px >= 700000 ? "Qualidade razoável; tente manter candles e preços legíveis"
+        : "Imagem pequena; use um print mais nítido e aproximado";
+      document.getElementById("qualidadeImagem").textContent =
+        `Imagem: ${img.naturalWidth} × ${img.naturalHeight}px — ${qualidade}.`;
+    };
     img.src = imagemBase64;
     img.style.display = "block";
   };
@@ -115,8 +226,9 @@ document.getElementById("imagem").addEventListener("change", e => {
 
 function mostrarErro(msg){
   const el = document.getElementById("erro");
-  el.textContent = msg;
+  el.textContent = "⚠️ " + msg;
   el.style.display = "block";
+  el.scrollIntoView({behavior:"smooth", block:"center"});
 }
 
 function limparErro(){
@@ -126,7 +238,8 @@ function limparErro(){
 function lista(id, itens){
   const ul = document.getElementById(id);
   ul.innerHTML = "";
-  (itens || []).forEach(item => {
+  const dados = Array.isArray(itens) && itens.length ? itens : ["Nenhuma informação fornecida."];
+  dados.forEach(item => {
     const li = document.createElement("li");
     li.textContent = item;
     ul.appendChild(li);
@@ -145,7 +258,7 @@ function extrairTextoResposta(data){
 }
 
 function extrairJSON(texto){
-  const limpo = texto.replace(/```json/gi,"").replace(/```/g,"").trim();
+  const limpo = String(texto || "").replace(/```json/gi,"").replace(/```/g,"").trim();
   try { return JSON.parse(limpo); } catch(e){}
   const inicio = limpo.indexOf("{");
   const fim = limpo.lastIndexOf("}");
@@ -153,14 +266,24 @@ function extrairJSON(texto){
   throw new Error("A IA não retornou um resultado estruturado.");
 }
 
+function obterAtivo(){
+  if (ativoSelect.value === "OUTRO") {
+    return document.getElementById("outroAtivo").value.trim();
+  }
+  return ativoSelect.value.trim();
+}
+
 async function analisar(){
   limparErro();
+
   const apiKey = document.getElementById("apiKey").value.trim();
-  const ativo = document.getElementById("ativo").value.trim() || "não informado";
+  const ativo = obterAtivo();
   const timeframe = document.getElementById("timeframe").value;
   const contexto = document.getElementById("contexto").value.trim() || "nenhuma observação adicional";
+  const noticiasOk = document.getElementById("noticiasConfirmadas").checked;
 
   if (!apiKey) return mostrarErro("Cole sua chave da API OpenAI.");
+  if (!ativo) return mostrarErro("Selecione ou digite um ativo.");
   if (!imagemBase64) return mostrarErro("Escolha um print do gráfico.");
 
   const btn = document.getElementById("analisarBtn");
@@ -169,34 +292,42 @@ async function analisar(){
   document.getElementById("resultado").style.display = "none";
 
   const prompt = `
-Você é um analista técnico conservador. Analise APENAS o que está visível no print.
+Você é um analista técnico extremamente conservador.
+Analise SOMENTE o que estiver claramente visível no print.
+
 Ativo/par: ${ativo}
-Tempo gráfico informado: ${timeframe}
+Tempo gráfico: ${timeframe}
 Contexto do usuário: ${contexto}
+Usuário confirmou ausência de notícia econômica importante próxima: ${noticiasOk ? "SIM" : "NÃO"}
 
-Sua missão:
-1. identificar tendência e estrutura de mercado;
-2. observar topos, fundos, suporte, resistência, rompimento ou rejeição;
-3. identificar candles/padrões apenas se realmente estiverem visíveis;
-4. avaliar médias/indicadores somente quando aparecerem claramente no print;
-5. decidir entre CALL, PUT ou AGUARDAR;
-6. preferir AGUARDAR quando a imagem estiver ruim, o mercado estiver lateral, faltar confirmação ou a vantagem estiver pequena;
-7. nunca inventar preço, indicador ou padrão invisível;
-8. "confiança" significa força da evidência técnica do print, não garantia de acerto;
-9. não use linguagem de certeza.
+Regras obrigatórias:
+1. Identifique tendência, estrutura, topos, fundos, suporte, resistência, rompimento e rejeição.
+2. Só cite candle, padrão, indicador ou média se estiver claramente visível.
+3. Decida entre CALL, PUT ou NÃO ENTRAR.
+4. Prefira NÃO ENTRAR quando houver lateralização, print ruim, candle já muito esticado, entrada atrasada, pouca confirmação ou dúvida.
+5. Se o usuário NÃO confirmou as notícias, acrescente isso como risco e seja mais conservador.
+6. Para M15, procure alinhamento com a estrutura principal e confirmação do fechamento do candle.
+7. Nunca invente preços, níveis ou indicadores invisíveis.
+8. Confiança técnica mede apenas a força das evidências visíveis; não representa chance garantida de lucro.
+9. Não use linguagem de certeza.
+10. Mesmo quando houver CALL ou PUT, descreva uma confirmação que ainda deve ocorrer antes da entrada.
+11. Se a confiança for menor que 70, a decisão deve ser NÃO ENTRAR.
+12. Se o risco for alto, a decisão deve ser NÃO ENTRAR.
 
-Responda SOMENTE em JSON válido neste formato:
+Responda SOMENTE em JSON válido:
 {
-  "decisao": "CALL|PUT|AGUARDAR",
+  "decisao": "CALL|PUT|NÃO ENTRAR",
   "confianca": 0,
   "tendencia": "alta|baixa|lateral|indefinida",
   "risco": "baixo|médio|alto",
-  "suporte": "texto curto",
-  "resistencia": "texto curto",
+  "qualidade_print": "boa|razoável|ruim",
+  "forca_tendencia": "forte|moderada|fraca|indefinida",
+  "suporte": "texto curto sem inventar preço",
+  "resistencia": "texto curto sem inventar preço",
   "padrao": "texto curto",
-  "momento": "agora|aguardar confirmação|não operar",
+  "momento": "aguardar confirmação|não operar|entrada somente após confirmação",
   "analise_completa": "explicação técnica clara em português",
-  "confirmacoes": ["condição 1","condição 2"],
+  "confirmacoes": ["condição 1","condição 2","condição 3"],
   "alertas": ["alerta 1","alerta 2"]
 }`;
 
@@ -220,22 +351,29 @@ Responda SOMENTE em JSON válido neste formato:
     });
 
     const data = await resposta.json();
-    if (!resposta.ok){
+    if (!resposta.ok) {
       throw new Error(data?.error?.message || "Erro ao acessar a API.");
     }
 
     const texto = extrairTextoResposta(data);
     const r = extrairJSON(texto);
 
-    const decisao = String(r.decisao || "AGUARDAR").toUpperCase();
+    let decisao = String(r.decisao || "NÃO ENTRAR").toUpperCase();
+    const confianca = Math.max(0, Math.min(100, Number(r.confianca) || 0));
+    const risco = String(r.risco || "alto").toLowerCase();
+
+    if (confianca < 70 || risco === "alto") decisao = "NÃO ENTRAR";
+    if (!["CALL","PUT","NÃO ENTRAR"].includes(decisao)) decisao = "NÃO ENTRAR";
+
     const decisaoEl = document.getElementById("decisao");
     decisaoEl.textContent = decisao;
     decisaoEl.className = "big " + (decisao === "CALL" ? "call" : decisao === "PUT" ? "put" : "wait");
 
-    document.getElementById("confianca").textContent =
-      Math.max(0, Math.min(100, Number(r.confianca) || 0)) + "%";
+    document.getElementById("confianca").textContent = confianca + "%";
     document.getElementById("tendencia").textContent = r.tendencia || "--";
     document.getElementById("risco").textContent = r.risco || "--";
+    document.getElementById("qualidade").textContent = r.qualidade_print || "--";
+    document.getElementById("forca").textContent = r.forca_tendencia || "--";
     document.getElementById("suporte").textContent = r.suporte || "--";
     document.getElementById("resistencia").textContent = r.resistencia || "--";
     document.getElementById("padrao").textContent = r.padrao || "--";
@@ -243,8 +381,19 @@ Responda SOMENTE em JSON válido neste formato:
     document.getElementById("analiseCompleta").textContent = r.analise_completa || "--";
     lista("confirmacoes", r.confirmacoes);
     lista("alertas", r.alertas);
+
+    ultimaAnalise = {
+      data: new Date().toLocaleString("pt-BR"),
+      ativo, timeframe, decisao, confianca,
+      tendencia: r.tendencia || "--",
+      risco: r.risco || "--",
+      analise: r.analise_completa || "--"
+    };
+
+    salvarHistorico(ultimaAnalise);
     document.getElementById("resultado").style.display = "block";
     document.getElementById("resultado").scrollIntoView({behavior:"smooth"});
+
   }catch(err){
     mostrarErro("Não foi possível analisar: " + err.message);
   }finally{
@@ -252,6 +401,91 @@ Responda SOMENTE em JSON válido neste formato:
     document.getElementById("carregando").style.display = "none";
   }
 }
+
+function textoResultado(){
+  if (!ultimaAnalise) return "";
+  return `ROB-IA — ANÁLISE
+Data: ${ultimaAnalise.data}
+Ativo: ${ultimaAnalise.ativo}
+Tempo: ${ultimaAnalise.timeframe}
+Decisão: ${ultimaAnalise.decisao}
+Confiança técnica: ${ultimaAnalise.confianca}%
+Tendência: ${ultimaAnalise.tendencia}
+Risco: ${ultimaAnalise.risco}
+
+${ultimaAnalise.analise}
+
+Aviso: análise probabilística, sem garantia de resultado.`;
+}
+
+async function copiarResultado(){
+  if (!ultimaAnalise) return mostrarErro("Ainda não existe resultado para copiar.");
+  try{
+    await navigator.clipboard.writeText(textoResultado());
+    alert("Resultado copiado!");
+  }catch(e){
+    mostrarErro("Não foi possível copiar automaticamente.");
+  }
+}
+
+function novaAnalise(){
+  document.getElementById("resultado").style.display = "none";
+  document.getElementById("imagem").value = "";
+  document.getElementById("preview").style.display = "none";
+  document.getElementById("qualidadeImagem").textContent = "";
+  imagemBase64 = "";
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function salvarHistorico(item){
+  const atual = JSON.parse(localStorage.getItem("robiaHistorico") || "[]");
+  atual.unshift(item);
+  localStorage.setItem("robiaHistorico", JSON.stringify(atual.slice(0,8)));
+  renderHistorico();
+}
+
+function renderHistorico(){
+  const dados = JSON.parse(localStorage.getItem("robiaHistorico") || "[]");
+  const card = document.getElementById("historicoCard");
+  const vazio = document.getElementById("historicoVazio");
+  card.innerHTML = "";
+
+  if (!dados.length){
+    card.style.display = "none";
+    vazio.style.display = "block";
+    return;
+  }
+
+  vazio.style.display = "none";
+  card.style.display = "block";
+
+  dados.forEach(item => {
+    const div = document.createElement("div");
+    div.className = "history-item";
+    const classe = item.decisao === "CALL" ? "call" : item.decisao === "PUT" ? "put" : "wait";
+    div.innerHTML = `
+      <div class="history-top">
+        <b>${escapeHtml(item.ativo)} — ${escapeHtml(item.timeframe)}</b>
+        <span class="${classe}"><b>${escapeHtml(item.decisao)}</b></span>
+      </div>
+      <div class="muted" style="margin-top:6px">${escapeHtml(item.data)} • Confiança ${Number(item.confianca) || 0}% • Risco ${escapeHtml(item.risco)}</div>`;
+    card.appendChild(div);
+  });
+}
+
+function limparHistorico(){
+  if (!confirm("Apagar todo o histórico deste aparelho?")) return;
+  localStorage.removeItem("robiaHistorico");
+  renderHistorico();
+}
+
+function escapeHtml(valor){
+  return String(valor ?? "").replace(/[&<>"']/g, c => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+  }[c]));
+}
+
+renderHistorico();
 </script>
 </body>
 </html>
