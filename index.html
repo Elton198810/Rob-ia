@@ -1,49 +1,94 @@
 
-<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8">
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Rob-ia V2</title>
+<title>Rob-ia V3</title>
 <style>
-body{margin:0;font-family:Arial;background:#0b1220;color:#fff}
-header{padding:18px;background:#111827;text-align:center}
-.wrap{max-width:900px;margin:auto;padding:20px}
-.card{background:#182235;border-radius:14px;padding:18px;margin:14px 0}
-.drop{border:2px dashed #4f86ff;padding:30px;text-align:center;border-radius:12px}
-button{background:#2563eb;color:#fff;border:0;padding:12px 18px;border-radius:8px;font-weight:bold;cursor:pointer}
-img{max-width:100%;display:none;border-radius:10px;margin-top:15px}
+body{margin:0;background:#08111f;color:#fff;font-family:Arial}
+header{background:#101a2d;padding:18px;text-align:center}
+.container{max-width:950px;margin:auto;padding:18px}
+.card{background:#16233b;border-radius:14px;padding:16px;margin:16px 0}
+input,button{padding:12px;border-radius:8px;border:none}
+input{width:100%;box-sizing:border-box;margin:8px 0}
+button{background:#2563eb;color:#fff;font-weight:bold;cursor:pointer}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
-.small{background:#0f172a;padding:12px;border-radius:10px}
-#res{display:none}
-</style></head><body>
-<header><h1>🤖 Rob-ia V2</h1><p>Interface pronta para futura IA de visão</p></header>
-<div class="wrap">
+.box{background:#0f172a;padding:12px;border-radius:10px}
+#app{display:none}
+img{max-width:100%;display:none;border-radius:10px;margin-top:10px}
+</style>
+</head>
+<body>
+<header><h1>🤖 Rob-ia V3</h1><p>Painel com login e histórico local</p></header>
+
+<div class="container">
+<div id="login" class="card">
+<h2>Entrar</h2>
+<input id="nome" placeholder="Seu nome">
+<button onclick="entrar()">Acessar</button>
+</div>
+
+<div id="app">
 <div class="card">
-<div class="drop">
-<input id="file" type="file" accept="image/*">
-<img id="preview">
-</div><br>
+<h2 id="boas"></h2>
+<input type="file" id="arq" accept="image/*">
+<img id="prev">
+<br><br>
 <button onclick="analisar()">Analisar com IA</button>
 </div>
 
-<div id="res" class="card">
-<h2>Resultado</h2>
+<div class="card">
 <div class="grid">
-<div class="small"><b>Sinal</b><br>AGUARDAR</div>
-<div class="small"><b>Confiança</b><br>--%</div>
-<div class="small"><b>Tendência</b><br>Aguardando IA</div>
-<div class="small"><b>EMA</b><br>--</div>
-<div class="small"><b>Suporte</b><br>--</div>
-<div class="small"><b>Resistência</b><br>--</div>
-</div>
-<p style="margin-top:16px">Esta V2 entrega a interface. A interpretação automática do gráfico será adicionada quando uma IA de visão for integrada.</p>
+<div class="box"><b>Sinal</b><br><span id="sinal">AGUARDAR</span></div>
+<div class="box"><b>Confiança</b><br>--%</div>
+<div class="box"><b>Histórico</b><br><span id="total">0</span> análises</div>
 </div>
 </div>
+
+<div class="card">
+<h3>Últimas análises</h3>
+<ul id="hist"></ul>
+</div>
+</div>
+</div>
+
 <script>
-file.onchange=e=>{
- const f=e.target.files[0]; if(!f)return;
- const r=new FileReader();
- r.onload=x=>{preview.src=x.target.result;preview.style.display='block';};
+function entrar(){
+ let n=nome.value.trim()||"Operador";
+ localStorage.setItem("robia_nome",n);
+ login.style.display="none";
+ app.style.display="block";
+ boas.innerText="Bem-vindo, "+n;
+ carregar();
+}
+if(localStorage.getItem("robia_nome")){
+ nome.value=localStorage.getItem("robia_nome");
+ entrar();
+}
+arq.onchange=e=>{
+ let f=e.target.files[0];
+ if(!f)return;
+ let r=new FileReader();
+ r.onload=x=>{prev.src=x.target.result;prev.style.display="block";}
  r.readAsDataURL(f);
 }
-function analisar(){document.getElementById('res').style.display='block';}
+function analisar(){
+ let h=JSON.parse(localStorage.getItem("robia_hist")||"[]");
+ h.unshift(new Date().toLocaleString()+" - Análise iniciada");
+ localStorage.setItem("robia_hist",JSON.stringify(h));
+ carregar();
+}
+function carregar(){
+ let h=JSON.parse(localStorage.getItem("robia_hist")||"[]");
+ total.innerText=h.length;
+ hist.innerHTML="";
+ h.slice(0,10).forEach(v=>{
+  let li=document.createElement("li");
+  li.textContent=v;
+  hist.appendChild(li);
+ });
+}
 </script>
-</body></html>
+</body>
+</html>
