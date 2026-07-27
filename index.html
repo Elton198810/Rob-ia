@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#07111f">
-<title>Rob-ia V9 PRO — Sinais Fortes Forex</title>
+<title>Rob-ia V10 PRO — Sinais Fortes Forex</title>
 <style>
 :root{--bg:#07111f;--panel:#0f1b2d;--panel2:#132238;--text:#edf4ff;--muted:#94a8c1;--blue:#38bdf8;--green:#22c55e;--red:#ef4444;--yellow:#f59e0b;--border:#263a55}
 *{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(180deg,#07111f,#0a1728);color:var(--text)}
@@ -31,9 +31,9 @@ details{margin-top:12px;border:1px solid var(--border);border-radius:12px;paddin
 <body>
 <div class="wrap">
 <header>
-  <h1>Rob-ia V9 PRO</h1>
-  <div class="sub">Leitura multitemporal seletiva para Forex normal. Compara Forex e criptomoedas em H1, M30 e M15 e procura apenas sinais fortes.</div>
-  <div class="badges"><span class="badge">Sem OTC</span><span class="badge">Somente candle fechado</span><span class="badge">Alerta mínimo 85</span><span class="badge">8 ativos</span><span class="badge">Conta demo</span></div>
+  <h1>Rob-ia V10 PRO</h1>
+  <div class="sub">Leitura multitemporal seletiva para Forex normal. Motor de análise avançado com confirmação multitemporal, controle de risco e ranking automático.</div>
+  <div class="badges"><span class="badge">Sem OTC</span><span class="badge">Somente candle fechado</span><span class="badge">Alerta mínimo 85</span><span class="badge">8 ativos</span><span class="badge">Modo conservador</span><span class="badge">Conta demo</span></div>
 </header>
 
 <div class="grid">
@@ -65,6 +65,11 @@ details{margin-top:12px;border:1px solid var(--border);border-radius:12px;paddin
     <div class="full switchrow"><input id="autoMonitor" type="checkbox"><label for="autoMonitor" style="margin:0">Monitorar automaticamente a cada 5 minutos</label></div>
     <div class="full"><label for="chatId">Chat ID do Telegram</label><input id="chatId" inputmode="numeric" placeholder="Ex.: 123456789"></div>
     <div class="full switchrow"><input id="soundAlert" type="checkbox" checked><label for="soundAlert" style="margin:0">Tocar alerta sonoro no notebook</label></div>
+    <div class="full switchrow"><input id="browserNotify" type="checkbox" checked><label for="browserNotify" style="margin:0">Mostrar notificação no navegador</label></div>
+    <div class="full"><label for="riskMode">Modo de análise</label><select id="riskMode">
+      <option value="conservative">Conservador — poucos sinais</option>
+      <option value="balanced">Equilibrado</option>
+    </select></div>
     <div class="full"><button id="analyze">Analisar ativo escolhido</button></div>
     <div class="full"><button id="scanAll" class="secondary">Varrer os 8 ativos</button></div>
     <div><button id="saveConfig" class="secondary">Salvar configuração</button></div>
@@ -97,8 +102,20 @@ details{margin-top:12px;border:1px solid var(--border);border-radius:12px;paddin
 </div>
 
 <section class="card" style="margin-top:14px">
+<h2>Painel de desempenho</h2>
+<div class="metrics">
+  <div class="metric">Taxa de acerto<b id="winRate">0%</b></div>
+  <div class="metric">Sinais avaliados<b id="evaluated">0</b></div>
+  <div class="metric">Pendentes<b id="pending">0</b></div>
+  <div class="metric">Melhor ativo<b id="bestAsset">--</b></div>
+  <div class="metric">Melhor nota<b id="bestScore">--</b></div>
+  <div class="metric">Última varredura<b id="lastScan">--</b></div>
+</div>
+</section>
+
+<section class="card" style="margin-top:14px">
 <h2>Ranking dos ativos</h2>
-<div class="small" style="margin-bottom:10px">A varredura compara os 8 ativos e ordena pela melhor nota. Somente nota igual ou superior a 85, com os filtros obrigatórios aprovados, vira sinal forte.</div>
+<div class="small" style="margin-bottom:10px">A varredura compara os 8 ativos e ordena pela melhor nota. Em modo conservador, o sistema exige nota mínima 88, alinhamento completo, ausência de conflito e pullback confirmado.</div>
 <div style="overflow:auto"><table><thead><tr><th>Posição</th><th>Ativo</th><th>Mercado</th><th>Direção</th><th>Nota</th><th>Status</th></tr></thead><tbody id="ranking"><tr><td colspan="6">Clique em “Varrer os 8 ativos”.</td></tr></tbody></table></div>
 </section>
 
@@ -111,7 +128,7 @@ details{margin-top:12px;border:1px solid var(--border);border-radius:12px;paddin
 
 <script>
 const $=id=>document.getElementById(id);
-let historyData=JSON.parse(localStorage.getItem('robiaV9History')||'[]');
+let historyData=JSON.parse(localStorage.getItem('robiaV10History')||'[]');
 let monitorTimer=null,lastAlertKey=localStorage.getItem('robiaLastAlert')||'';
 const ASSETS=[
  {pair:'BTC/USD',market:'Cripto 24h'},{pair:'ETH/USD',market:'Cripto 24h'},
@@ -128,6 +145,14 @@ function playAlert(){
   gain.gain.setValueAtTime(.18,ctx.currentTime);
   gain.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+.8);
   osc.start();osc.stop(ctx.currentTime+.8);
+ }catch(e){}
+}
+
+async function notifyBrowser(title,body){
+ if(!$('browserNotify').checked||!('Notification' in window))return;
+ try{
+  if(Notification.permission==='default')await Notification.requestPermission();
+  if(Notification.permission==='granted')new Notification(title,{body});
  }catch(e){}
 }
 
@@ -173,32 +198,127 @@ function analyzeTF(c){
  const recent=c.slice(-30),support=Math.min(...recent.map(x=>x.low)),resistance=Math.max(...recent.map(x=>x.high));
  return{dir,last,e9,e21,e50,rsi:rsi(closes),macd:m,atr:aPct,adx:adxv,structure:st,candle:cs,support,resistance}
 }
-function buildSignal(a15,a30,a1h){
+
+function trendQuality(a){
+ let q=0;
+ if(a.dir!=='NEUTRO')q+=20;
+ if(a.adx>=25)q+=20; else if(a.adx>=20)q+=10;
+ if(a.structure===a.dir)q+=15;
+ const emaAligned=(a.e9>a.e21&&a.e21>a.e50)||(a.e9<a.e21&&a.e21<a.e50);
+ if(emaAligned)q+=20;
+ if(a.candle===a.dir)q+=10;
+ if(a.atr>=0.03&&a.atr<=0.22)q+=15;
+ return Math.min(100,q);
+}
+function momentumConflict(a,side){
+ if(side==='CALL'){
+  return (a.macd.hist<0)||(a.rsi>68)||(a.candle==='BAIXA');
+ }
+ if(side==='PUT'){
+  return (a.macd.hist>0)||(a.rsi<32)||(a.candle==='ALTA');
+ }
+ return true;
+}
+function pullbackQuality(c,a,side){
+ const last=c.at(-1),prev=c.at(-2);
+ if(side==='CALL'){
+  const touched=Math.min(last.low,prev.low)<=a.e21*1.0015;
+  const recovered=last.close>a.e9&&last.close>last.open;
+  return touched&&recovered;
+ }
+ if(side==='PUT'){
+  const touched=Math.max(last.high,prev.high)>=a.e21*0.9985;
+  const recovered=last.close<a.e9&&last.close<last.open;
+  return touched&&recovered;
+ }
+ return false;
+}
+function buildSignal(a15,a30,a1h,c15){
  let call=0,put=0,reasons=[];
  const add=(side,pts,msg)=>{if(side==='CALL')call+=pts;else put+=pts;reasons.push(msg)};
- if(a1h.dir==='ALTA')add('CALL',25,'H1 mantém tendência principal de alta.');else if(a1h.dir==='BAIXA')add('PUT',25,'H1 mantém tendência principal de baixa.');else reasons.push('H1 sem tendência suficientemente limpa.');
- if(a30.dir==='ALTA')add('CALL',20,'M30 confirma a alta.');else if(a30.dir==='BAIXA')add('PUT',20,'M30 confirma a baixa.');else reasons.push('M30 não confirmou direção.');
- if(a15.dir==='ALTA')add('CALL',15,'M15 alinhado para compra.');else if(a15.dir==='BAIXA')add('PUT',15,'M15 alinhado para venda.');else reasons.push('M15 ainda sem alinhamento completo.');
- if(a15.structure==='ALTA')add('CALL',8,'Máximas e mínimas recentes ascendentes.');else if(a15.structure==='BAIXA')add('PUT',8,'Máximas e mínimas recentes descendentes.');
- if(a15.candle==='ALTA')add('CALL',7,'Último candle fechado confirma pressão compradora.');else if(a15.candle==='BAIXA')add('PUT',7,'Último candle fechado confirma pressão vendedora.');
- if(a15.macd.hist>0&&a15.macd.hist>a15.macd.prevHist)add('CALL',8,'MACD ganha força compradora.');else if(a15.macd.hist<0&&a15.macd.hist<a15.macd.prevHist)add('PUT',8,'MACD ganha força vendedora.');else reasons.push('MACD sem aceleração clara.');
- if(a15.rsi>=52&&a15.rsi<=67)add('CALL',7,'RSI em faixa compradora saudável.');else if(a15.rsi>=33&&a15.rsi<=48)add('PUT',7,'RSI em faixa vendedora saudável.');else reasons.push('RSI fora da faixa ideal.');
- if(a15.adx>=22){if(call>put)call+=7;else if(put>call)put+=7;reasons.push('ADX confirma força de tendência.')}else reasons.push('ADX baixo: tendência pode estar fraca.');
- const distSup=(a15.last-a15.support)/a15.last*100,distRes=(a15.resistance-a15.last)/a15.last*100;
- if(call>put&&distRes<0.05){call-=15;reasons.push('Preço muito perto de resistência: compra penalizada.')}
- if(put>call&&distSup<0.05){put-=15;reasons.push('Preço muito perto de suporte: venda penalizada.')}
- if(a15.atr<0.025){call-=10;put-=10;reasons.push('Volatilidade muito baixa.')}if(a15.atr>0.30){call-=10;put-=10;reasons.push('Volatilidade muito alta.')}
- const alignment=(a1h.dir===a30.dir&&a30.dir===a15.dir&&a15.dir!=='NEUTRO');
+ const mode=$('riskMode')?.value||'conservative';
+ const minScore=mode==='conservative'?88:84;
+ const minGap=mode==='conservative'?35:28;
+
+ if(a1h.dir==='ALTA')add('CALL',28,'H1 mantém tendência principal de alta.');
+ else if(a1h.dir==='BAIXA')add('PUT',28,'H1 mantém tendência principal de baixa.');
+ else reasons.push('H1 sem tendência suficientemente limpa.');
+
+ if(a30.dir==='ALTA')add('CALL',22,'M30 confirma a alta.');
+ else if(a30.dir==='BAIXA')add('PUT',22,'M30 confirma a baixa.');
+ else reasons.push('M30 não confirmou direção.');
+
+ if(a15.dir==='ALTA')add('CALL',16,'M15 alinhado para compra.');
+ else if(a15.dir==='BAIXA')add('PUT',16,'M15 alinhado para venda.');
+ else reasons.push('M15 ainda sem alinhamento completo.');
+
+ if(a15.structure==='ALTA')add('CALL',8,'Estrutura recente favorece alta.');
+ else if(a15.structure==='BAIXA')add('PUT',8,'Estrutura recente favorece baixa.');
+
+ if(a15.candle==='ALTA')add('CALL',6,'Candle fechado confirma pressão compradora.');
+ else if(a15.candle==='BAIXA')add('PUT',6,'Candle fechado confirma pressão vendedora.');
+
+ if(a15.macd.hist>0&&a15.macd.hist>a15.macd.prevHist)add('CALL',7,'MACD acelera para cima.');
+ else if(a15.macd.hist<0&&a15.macd.hist<a15.macd.prevHist)add('PUT',7,'MACD acelera para baixo.');
+ else reasons.push('MACD sem aceleração clara.');
+
+ if(a15.rsi>=52&&a15.rsi<=66)add('CALL',6,'RSI em faixa compradora saudável.');
+ else if(a15.rsi>=34&&a15.rsi<=48)add('PUT',6,'RSI em faixa vendedora saudável.');
+ else reasons.push('RSI fora da faixa ideal.');
+
+ if(a15.adx>=25){
+  if(call>put)call+=8; else if(put>call)put+=8;
+  reasons.push('ADX confirma tendência forte.');
+ } else if(a15.adx<20){
+  call-=12;put-=12;reasons.push('ADX baixo: tendência fraca.');
+ }
+
+ const quality=(trendQuality(a1h)+trendQuality(a30)+trendQuality(a15))/3;
+ if(quality>=70){
+  if(call>put)call+=6; else if(put>call)put+=6;
+  reasons.push('Qualidade geral da tendência elevada.');
+ }else reasons.push('Qualidade geral da tendência ainda insuficiente.');
+
+ const distSup=(a15.last-a15.support)/a15.last*100;
+ const distRes=(a15.resistance-a15.last)/a15.last*100;
+ if(call>put&&distRes<0.08){call-=18;reasons.push('Preço muito perto de resistência: compra bloqueada.')}
+ if(put>call&&distSup<0.08){put-=18;reasons.push('Preço muito perto de suporte: venda bloqueada.')}
+
+ if(a15.atr<0.03){call-=10;put-=10;reasons.push('Volatilidade muito baixa.')}
+ if(a15.atr>0.24){call-=12;put-=12;reasons.push('Volatilidade muito alta.')}
+
+ const side=call>put?'CALL':put>call?'PUT':'NEUTRO';
+ const aligned=(a1h.dir===a30.dir&&a30.dir===a15.dir&&a15.dir!=='NEUTRO');
+ const noConflict=side!=='NEUTRO'&&!momentumConflict(a15,side);
+ const pullbackOk=side!=='NEUTRO'&&pullbackQuality(c15,a15,side);
+
+ if(!aligned)reasons.push('H1, M30 e M15 não estão totalmente alinhados.');
+ if(!noConflict)reasons.push('Existe conflito entre direção e momentum.');
+ if(pullbackOk){
+  if(side==='CALL')call+=6; else if(side==='PUT')put+=6;
+  reasons.push('Pullback saudável confirmado próximo à EMA 21.');
+ }else reasons.push('Sem pullback limpo para uma entrada conservadora.');
+
  let decision='NÃO ENTRAR',score=Math.max(call,put);
- if(alignment&&call>=85&&call-put>=30)decision='CALL';if(alignment&&put>=85&&put-call>=30)decision='PUT';
- if(!alignment)reasons.push('H1, M30 e M15 não estão totalmente alinhados.');
- return{decision,score:Math.max(0,Math.min(100,score)),reasons}
+ const gap=Math.abs(call-put);
+ if(aligned&&noConflict&&pullbackOk&&call>=minScore&&gap>=minGap)decision='CALL';
+ if(aligned&&noConflict&&pullbackOk&&put>=minScore&&gap>=minGap)decision='PUT';
+
+ return{
+  decision,
+  score:Math.max(0,Math.min(100,score)),
+  reasons,
+  minScore,
+  quality:Math.round(quality),
+  side,
+  gap
+ };
 }
 function setSignal(r,p,a15,a30,a1h){
  const b=$('signal');b.className='signal '+(r.decision==='CALL'?'call':r.decision==='PUT'?'put':'wait');
  b.querySelector('.decision').textContent=r.decision;b.querySelector('.score').textContent=`Nota técnica: ${Math.round(r.score)}/100`;
- const gap=Math.max(0,85-Math.round(r.score));
- $('scoreGap').textContent=r.decision==='NÃO ENTRAR'?(gap>0?`Faltam ${gap} pontos para o mínimo de 85.`:'A nota passou, mas algum filtro obrigatório falhou.'):'Todos os filtros principais foram aprovados.';
+ const gap=Math.max(0,(r.minScore||88)-Math.round(r.score));
+ $('scoreGap').textContent=r.decision==='NÃO ENTRAR'?(gap>0?`Faltam ${gap} pontos para o mínimo de ${r.minScore||88}.`:'A nota passou, mas algum filtro obrigatório falhou.'):'Todos os filtros principais foram aprovados.';
  $('signalTime').textContent=`${p} • ${new Date().toLocaleString('pt-BR')}`;$('h1').textContent=a1h.dir;$('m30').textContent=a30.dir;$('m15').textContent=a15.dir;
  $('rsi').textContent=a15.rsi.toFixed(1);$('adx').textContent=a15.adx.toFixed(1);$('macd').textContent=a15.macd.hist>0?'ALTA':a15.macd.hist<0?'BAIXA':'NEUTRO';
  $('ema').textContent=a15.e9>a15.e21&&a15.e21>a15.e50?'ALTA':a15.e9<a15.e21&&a15.e21<a15.e50?'BAIXA':'MISTO';
@@ -218,13 +338,15 @@ function setSignal(r,p,a15,a30,a1h){
   [rsiOk,'RSI em faixa segura'],
   [candleOk,'Candle fechado de confirmação'],
   [volatilityOk,'Volatilidade dentro da faixa'],
-  [r.score>=85,'Nota técnica mínima de 85']
+  [r.score>=(r.minScore||88),`Nota técnica mínima de ${r.minScore||88}`],
+  [r.quality>=70,'Qualidade média da tendência acima de 70'],
+  [r.gap>=28,'Diferença clara entre compra e venda']
  ];
  $('checklist').innerHTML=items.map(([ok,t])=>`<div>${ok?'✅':'❌'} ${t}</div>`).join('');
 }
 function saveSignal(pair,r){
  if(r.decision==='NÃO ENTRAR')return;historyData.unshift({id:Date.now(),time:new Date().toLocaleString('pt-BR'),pair,decision:r.decision,score:Math.round(r.score),result:'Pendente'});
- historyData=historyData.slice(0,60);localStorage.setItem('robiaV9History',JSON.stringify(historyData));renderHistory();
+ historyData=historyData.slice(0,60);localStorage.setItem('robiaV10History',JSON.stringify(historyData));renderHistory();
 }
 async function runAnalysis(auto=false){
  const key=$('apiKey').value.trim(),pair=$('pair').value;if(!key){$('status').textContent='Cole sua chave da Twelve Data.';return}
@@ -236,11 +358,11 @@ async function runAnalysis(auto=false){
   setProgress(55,'Calculando indicadores...');
   const a15=analyzeTF(c15),a30=analyzeTF(c30),a1h=analyzeTF(c1h);
   setProgress(75,'Comparando os três tempos...');
-  const r=buildSignal(a15,a30,a1h);
+  const r=buildSignal(a15,a30,a1h,c15);
   setProgress(90,'Aplicando filtros de segurança...');
   setSignal(r,pair,a15,a30,a1h);
   if(r.decision!=='NÃO ENTRAR'){
-   saveSignal(pair,r);playAlert();
+   saveSignal(pair,r);playAlert();notifyBrowser('Rob-ia V10 — Sinal forte',`${pair} • ${r.decision} • ${Math.round(r.score)}/100`);
    $('status').textContent='Sinal forte encontrado. Confirme o mesmo par na Avalon demo. O envio ao Telegram será ativado na versão 24 horas.';
   }else $('status').textContent='Nenhum sinal forte agora. O robô aguardará um alinhamento melhor.';
   setProgress(100,'Análise concluída.');
@@ -251,18 +373,18 @@ function setProgress(value,text){
  if(text)$('status').textContent=text;
 }
 function saveConfig(){
- const data={apiKey:$('apiKey').value.trim(),chatId:$('chatId').value.trim(),pair:$('pair').value,interval:$('chartInterval').value,newsBlock:$('newsBlock').checked,soundAlert:$('soundAlert').checked};
- localStorage.setItem('robiaV9Config',JSON.stringify(data));
+ const data={apiKey:$('apiKey').value.trim(),chatId:$('chatId').value.trim(),pair:$('pair').value,interval:$('chartInterval').value,newsBlock:$('newsBlock').checked,soundAlert:$('soundAlert').checked,browserNotify:$('browserNotify').checked,riskMode:$('riskMode').value};
+ localStorage.setItem('robiaV10Config',JSON.stringify(data));
  $('status').textContent='Configuração salva neste navegador.';
 }
 function loadConfig(){
- const data=JSON.parse(localStorage.getItem('robiaV9Config')||'{}');
+ const data=JSON.parse(localStorage.getItem('robiaV10Config')||'{}');
  if(data.apiKey)$('apiKey').value=data.apiKey;if(data.chatId)$('chatId').value=data.chatId;if(data.pair)$('pair').value=data.pair;
- if(data.interval)$('chartInterval').value=data.interval;if(typeof data.newsBlock==='boolean')$('newsBlock').checked=data.newsBlock;if(typeof data.soundAlert==='boolean')$('soundAlert').checked=data.soundAlert;
+ if(data.interval)$('chartInterval').value=data.interval;if(typeof data.newsBlock==='boolean')$('newsBlock').checked=data.newsBlock;if(typeof data.soundAlert==='boolean')$('soundAlert').checked=data.soundAlert;if(typeof data.browserNotify==='boolean')$('browserNotify').checked=data.browserNotify;if(data.riskMode)$('riskMode').value=data.riskMode;
 }
 function clearConfig(){
  if(!confirm('Apagar a API, o Chat ID e as preferências salvas neste navegador?'))return;
- localStorage.removeItem('robiaV9Config');$('apiKey').value='';$('chatId').value='';$('pair').value='EUR/USD';$('chartInterval').value='15';$('newsBlock').checked=false;$('soundAlert').checked=true;
+ localStorage.removeItem('robiaV10Config');$('apiKey').value='';$('chatId').value='';$('pair').value='EUR/USD';$('chartInterval').value='15';$('newsBlock').checked=false;$('soundAlert').checked=true;$('browserNotify').checked=true;$('riskMode').value='conservative';
  renderChart();$('status').textContent='Configuração apagada.';
 }
 
@@ -271,7 +393,7 @@ async function analyzeAsset(pair,key){
   getCandles(pair,'15min',key),getCandles(pair,'30min',key),getCandles(pair,'1h',key)
  ]);
  const a15=analyzeTF(c15),a30=analyzeTF(c30),a1h=analyzeTF(c1h);
- return {pair,r:buildSignal(a15,a30,a1h),a15,a30,a1h};
+ return {pair,r:buildSignal(a15,a30,a1h,c15),a15,a30,a1h};
 }
 async function scanAllAssets(){
  const key=$('apiKey').value.trim();
@@ -293,13 +415,16 @@ async function scanAllAssets(){
    return `<tr><td>${i+1}º</td><td>${x.pair}</td><td>${x.market}</td><td>${x.error?'ERRO':x.r.decision}</td><td>${x.error?'--':Math.round(x.r.score)+'/100'}</td><td>${x.error?x.error:(strong?'🚨 SINAL FORTE':'Aguardar')}</td></tr>`;
   }).join('');
   const best=results.find(x=>!x.error);
+  if($('lastScan'))$('lastScan').textContent=new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+  if(best&&$('bestAsset'))$('bestAsset').textContent=best.pair;
+  if(best&&$('bestScore'))$('bestScore').textContent=Math.round(best.r.score)+'/100';
   const strong=results.filter(x=>!x.error&&x.r.decision!=='NÃO ENTRAR'&&x.r.score>=85);
   if(best){
    setSignal(best.r,best.pair,best.a15,best.a30,best.a1h);
    $('pair').value=best.pair;renderChart();
   }
   if(strong.length){
-   playAlert();strong.forEach(x=>saveSignal(x.pair,x.r));
+   playAlert();notifyBrowser('Rob-ia V10 — Sinal forte',`${strong[0].pair} • ${strong[0].r.decision} • ${Math.round(strong[0].r.score)}/100`);strong.forEach(x=>saveSignal(x.pair,x.r));
    $('status').textContent=`${strong.length} sinal(is) forte(s) encontrado(s). Confira na conta demo.`;
   }else $('status').textContent='Varredura concluída: nenhum sinal forte agora.';
   setProgress(100,'Varredura concluída.');
@@ -309,8 +434,14 @@ async function scanAllAssets(){
 }
 function renderHistory(){
  $('history').innerHTML=historyData.length?historyData.map(x=>`<tr><td>${x.time}</td><td>${x.pair}</td><td>${x.decision}</td><td>${x.score}</td><td>${x.result==='Pendente'?`<div class="actions"><button class="win" data-id="${x.id}" data-r="Ganhou">Ganhou</button><button class="loss" data-id="${x.id}" data-r="Perdeu">Perdeu</button></div>`:x.result}</td></tr>`).join(''):'<tr><td colspan="5">Nenhum sinal registrado.</td></tr>';
- $('totalSignals').textContent=historyData.length;$('wins').textContent=historyData.filter(x=>x.result==='Ganhou').length;$('losses').textContent=historyData.filter(x=>x.result==='Perdeu').length;
- document.querySelectorAll('[data-r]').forEach(b=>b.addEventListener('click',()=>{historyData=historyData.map(x=>x.id===+b.dataset.id?{...x,result:b.dataset.r}:x);localStorage.setItem('robiaV9History',JSON.stringify(historyData));renderHistory()}));
+ const winsCount=historyData.filter(x=>x.result==='Ganhou').length;
+ const lossesCount=historyData.filter(x=>x.result==='Perdeu').length;
+ const evaluated=winsCount+lossesCount;
+ $('totalSignals').textContent=historyData.length;$('wins').textContent=winsCount;$('losses').textContent=lossesCount;
+ if($('winRate'))$('winRate').textContent=evaluated?Math.round((winsCount/evaluated)*100)+'%':'0%';
+ if($('evaluated'))$('evaluated').textContent=evaluated;
+ if($('pending'))$('pending').textContent=historyData.filter(x=>x.result==='Pendente').length;
+ document.querySelectorAll('[data-r]').forEach(b=>b.addEventListener('click',()=>{historyData=historyData.map(x=>x.id===+b.dataset.id?{...x,result:b.dataset.r}:x);localStorage.setItem('robiaV10History',JSON.stringify(historyData));renderHistory()}));
 }
 $('analyze').addEventListener('click',()=>runAnalysis(false));
 $('scanAll').addEventListener('click',scanAllAssets);
