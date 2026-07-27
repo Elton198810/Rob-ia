@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#07111f">
-<title>Rob-ia V10 PRO — Sinais Fortes Forex</title>
+<title>Rob-ia V11 PRO — Sinais Fortes Forex</title>
 <style>
 :root{--bg:#07111f;--panel:#0f1b2d;--panel2:#132238;--text:#edf4ff;--muted:#94a8c1;--blue:#38bdf8;--green:#22c55e;--red:#ef4444;--yellow:#f59e0b;--border:#263a55}
 *{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(180deg,#07111f,#0a1728);color:var(--text)}
@@ -31,9 +31,9 @@ details{margin-top:12px;border:1px solid var(--border);border-radius:12px;paddin
 <body>
 <div class="wrap">
 <header>
-  <h1>Rob-ia V10 PRO</h1>
-  <div class="sub">Leitura multitemporal seletiva para Forex normal. Motor de análise avançado com confirmação multitemporal, controle de risco e ranking automático.</div>
-  <div class="badges"><span class="badge">Sem OTC</span><span class="badge">Somente candle fechado</span><span class="badge">Alerta mínimo 85</span><span class="badge">8 ativos</span><span class="badge">Modo conservador</span><span class="badge">Conta demo</span></div>
+  <h1>Rob-ia V11 PRO</h1>
+  <div class="sub">Leitura multitemporal seletiva para Forex normal. Varredura contínua com Price Action, padrões de candle, volume, sessões e alertas seletivos.</div>
+  <div class="badges"><span class="badge">Sem OTC</span><span class="badge">Somente candle fechado</span><span class="badge">Alerta mínimo 85</span><span class="badge">8 ativos</span><span class="badge">Modo conservador</span><span class="badge">Price Action</span><span class="badge">Varredura contínua</span><span class="badge">Conta demo</span></div>
 </header>
 
 <div class="grid">
@@ -70,6 +70,16 @@ details{margin-top:12px;border:1px solid var(--border);border-radius:12px;paddin
       <option value="conservative">Conservador — poucos sinais</option>
       <option value="balanced">Equilibrado</option>
     </select></div>
+    <div><label for="scanInterval">Intervalo da varredura</label><select id="scanInterval">
+      <option value="300000">5 minutos</option>
+      <option value="600000">10 minutos</option>
+      <option value="900000">15 minutos</option>
+    </select></div>
+    <div><label for="sessionFilter">Filtro de sessão</label><select id="sessionFilter">
+      <option value="auto">Automático</option>
+      <option value="off">Desligado</option>
+    </select></div>
+    <div class="full switchrow"><input id="continuousScan" type="checkbox"><label for="continuousScan" style="margin:0">Varrer os 8 ativos continuamente</label></div>
     <div class="full"><button id="analyze">Analisar ativo escolhido</button></div>
     <div class="full"><button id="scanAll" class="secondary">Varrer os 8 ativos</button></div>
     <div><button id="saveConfig" class="secondary">Salvar configuração</button></div>
@@ -94,10 +104,11 @@ details{margin-top:12px;border:1px solid var(--border);border-radius:12px;paddin
   </div>
   <ul id="reasons" class="reason"></ul>
 
+  <details open><summary>Leitura de Price Action</summary><div id="priceActionBox" class="small" style="margin-top:9px;line-height:1.8">Nenhuma análise realizada.</div></details>
   <details><summary>Como a nota é formada</summary><div class="small" style="margin-top:9px">
     Tendência H1, confirmação M30, gatilho M15, alinhamento das EMAs, força ADX, MACD, RSI, estrutura de máximas/mínimas, candle fechado, distância de suporte/resistência e controle de volatilidade. Conflitos reduzem a nota.
   </div></details>
-  <div class="notice">O Chat ID fica salvo neste navegador. O alerta sonoro já funciona com a página aberta; o Telegram será ativado quando conectarmos a versão 24 horas ao servidor. Nunca coloque o token secreto do bot nesta página. Teste as entradas somente na demonstração.</div>
+  <div class="notice">O alerta sonoro, a notificação e a varredura contínua funcionam com a página aberta. Para trabalhar com o notebook desligado e enviar pelo Telegram, ainda precisaremos colocar o motor no servidor. Nunca coloque o token secreto do bot nesta página. Teste as entradas somente na demonstração.</div>
 </aside>
 </div>
 
@@ -110,13 +121,15 @@ details{margin-top:12px;border:1px solid var(--border);border-radius:12px;paddin
   <div class="metric">Melhor ativo<b id="bestAsset">--</b></div>
   <div class="metric">Melhor nota<b id="bestScore">--</b></div>
   <div class="metric">Última varredura<b id="lastScan">--</b></div>
+  <div class="metric">Próxima varredura<b id="nextScan">--</b></div>
+  <div class="metric">Estado do monitor<b id="monitorState">Parado</b></div>
 </div>
 </section>
 
 <section class="card" style="margin-top:14px">
 <h2>Ranking dos ativos</h2>
 <div class="small" style="margin-bottom:10px">A varredura compara os 8 ativos e ordena pela melhor nota. Em modo conservador, o sistema exige nota mínima 88, alinhamento completo, ausência de conflito e pullback confirmado.</div>
-<div style="overflow:auto"><table><thead><tr><th>Posição</th><th>Ativo</th><th>Mercado</th><th>Direção</th><th>Nota</th><th>Status</th></tr></thead><tbody id="ranking"><tr><td colspan="6">Clique em “Varrer os 8 ativos”.</td></tr></tbody></table></div>
+<div style="overflow:auto"><table><thead><tr><th>Posição</th><th>Ativo</th><th>Mercado</th><th>Direção</th><th>Nota</th><th>Price Action</th><th>Status</th></tr></thead><tbody id="ranking"><tr><td colspan="7">Clique em “Varrer os 8 ativos”.</td></tr></tbody></table></div>
 </section>
 
 <section class="card" style="margin-top:14px">
@@ -128,7 +141,7 @@ details{margin-top:12px;border:1px solid var(--border);border-radius:12px;paddin
 
 <script>
 const $=id=>document.getElementById(id);
-let historyData=JSON.parse(localStorage.getItem('robiaV10History')||'[]');
+let historyData=JSON.parse(localStorage.getItem('robiaV11History')||'[]');
 let monitorTimer=null,lastAlertKey=localStorage.getItem('robiaLastAlert')||'';
 const ASSETS=[
  {pair:'BTC/USD',market:'Cripto 24h'},{pair:'ETH/USD',market:'Cripto 24h'},
@@ -190,15 +203,53 @@ function candleSignal(c){const x=c.at(-1),body=Math.abs(x.close-x.open),range=x.
 async function getCandles(pair,interval,key){
  const url=`https://api.twelvedata.com/time_series?symbol=${encodeURIComponent(pair)}&interval=${interval}&outputsize=180&apikey=${encodeURIComponent(key)}`;
  const res=await fetch(url),data=await res.json();if(!res.ok||data.status==='error'||!data.values)throw new Error(data.message||'Falha ao buscar candles.');
- return data.values.reverse().map(v=>({datetime:v.datetime,open:+v.open,high:+v.high,low:+v.low,close:+v.close}));
+ return data.values.reverse().map(v=>({datetime:v.datetime,open:+v.open,high:+v.high,low:+v.low,close:+v.close,volume:+(v.volume||0)}));
 }
 function analyzeTF(c){
  const closes=c.map(x=>x.close),last=closes.at(-1),e9=ema(closes.slice(-80),9),e21=ema(closes.slice(-100),21),e50=ema(closes,50),m=macd(closes),a=atr(c),aPct=a/last*100,st=structure(c),cs=candleSignal(c),adxv=adx(c);
  let dir='NEUTRO';if(last>e9&&e9>e21&&e21>e50&&st!=='BAIXA')dir='ALTA';if(last<e9&&e9<e21&&e21<e50&&st!=='ALTA')dir='BAIXA';
  const recent=c.slice(-30),support=Math.min(...recent.map(x=>x.low)),resistance=Math.max(...recent.map(x=>x.high));
- return{dir,last,e9,e21,e50,rsi:rsi(closes),macd:m,atr:aPct,adx:adxv,structure:st,candle:cs,support,resistance}
+ return{dir,last,e9,e21,e50,rsi:rsi(closes),macd:m,atr:aPct,adx:adxv,structure:st,candle:cs,support,resistance,pattern:candlePattern(c),breakout:breakoutState(c),volume:volumeQuality(c)}
 }
 
+
+function candlePattern(c){
+ const x=c.at(-1),p=c.at(-2),body=Math.abs(x.close-x.open),range=(x.high-x.low)||1;
+ const upper=x.high-Math.max(x.open,x.close),lower=Math.min(x.open,x.close)-x.low;
+ const pBody=Math.abs(p.close-p.open);
+ if(x.close>x.open&&p.close<p.open&&x.open<=p.close&&x.close>=p.open)return'ENGOLFO DE ALTA';
+ if(x.close<x.open&&p.close>p.open&&x.open>=p.close&&x.close<=p.open)return'ENGOLFO DE BAIXA';
+ if(lower/range>.55&&body/range<.35)return'MARTELO';
+ if(upper/range>.55&&body/range<.35)return'ESTRELA CADENTE';
+ if(body/range<.12)return'DOJI';
+ if(body>pBody*1.5&&body/range>.65)return x.close>x.open?'IMPULSO DE ALTA':'IMPULSO DE BAIXA';
+ return'NEUTRO';
+}
+function breakoutState(c){
+ const recent=c.slice(-21,-1),x=c.at(-1);
+ const hh=Math.max(...recent.map(v=>v.high)),ll=Math.min(...recent.map(v=>v.low));
+ if(x.close>hh)return'ROMPIMENTO DE ALTA';
+ if(x.close<ll)return'ROMPIMENTO DE BAIXA';
+ const width=(hh-ll)/(x.close||1)*100;
+ if(width<0.22)return'LATERAL';
+ return'DENTRO DA ESTRUTURA';
+}
+function volumeQuality(c){
+ const vols=c.map(x=>Number(x.volume||0)).filter(v=>Number.isFinite(v));
+ if(!vols.length||vols.every(v=>v===0))return{label:'INDISPONÍVEL',ratio:1,ok:true};
+ const recent=vols.slice(-21,-1),avg=recent.reduce((a,b)=>a+b,0)/(recent.length||1),last=vols.at(-1);
+ const ratio=avg?last/avg:1;
+ return{label:ratio>=1.25?'FORTE':ratio<0.65?'FRACO':'NORMAL',ratio,ok:ratio>=0.65};
+}
+function sessionStatus(pair){
+ if($('sessionFilter')?.value==='off')return{ok:true,label:'FILTRO DESLIGADO'};
+ if(pair.includes('BTC')||pair.includes('ETH')||pair.includes('SOL')||pair.includes('XRP'))return{ok:true,label:'CRIPTO 24H'};
+ const h=new Date().getHours();
+ const weekday=new Date().getDay();
+ if(weekday===0||weekday===6)return{ok:false,label:'FOREX FECHADO'};
+ if(h>=7&&h<=18)return{ok:true,label:'SESSÃO ATIVA'};
+ return{ok:false,label:'BAIXA LIQUIDEZ'};
+}
 function trendQuality(a){
  let q=0;
  if(a.dir!=='NEUTRO')q+=20;
@@ -288,6 +339,19 @@ function buildSignal(a15,a30,a1h,c15){
  if(a15.atr>0.24){call-=12;put-=12;reasons.push('Volatilidade muito alta.')}
 
  const side=call>put?'CALL':put>call?'PUT':'NEUTRO';
+
+ if(a15.pattern==='ENGOLFO DE ALTA'||a15.pattern==='MARTELO'||a15.pattern==='IMPULSO DE ALTA'){
+  call+=6;reasons.push('Padrão de candle favorece alta.');
+ }
+ if(a15.pattern==='ENGOLFO DE BAIXA'||a15.pattern==='ESTRELA CADENTE'||a15.pattern==='IMPULSO DE BAIXA'){
+  put+=6;reasons.push('Padrão de candle favorece baixa.');
+ }
+ if(a15.breakout==='ROMPIMENTO DE ALTA'){call+=7;reasons.push('Rompimento de estrutura para cima.');}
+ if(a15.breakout==='ROMPIMENTO DE BAIXA'){put+=7;reasons.push('Rompimento de estrutura para baixo.');}
+ if(a15.breakout==='LATERAL'){call-=15;put-=15;reasons.push('Mercado lateral detectado.');}
+ if(!a15.volume.ok){call-=8;put-=8;reasons.push('Volume fraco para confirmar entrada.');}
+ else if(a15.volume.label==='FORTE'){if(call>put)call+=5;else if(put>call)put+=5;reasons.push('Volume confirma o movimento.');}
+
  const aligned=(a1h.dir===a30.dir&&a30.dir===a15.dir&&a15.dir!=='NEUTRO');
  const noConflict=side!=='NEUTRO'&&!momentumConflict(a15,side);
  const pullbackOk=side!=='NEUTRO'&&pullbackQuality(c15,a15,side);
@@ -343,14 +407,23 @@ function setSignal(r,p,a15,a30,a1h){
   [r.gap>=28,'Diferença clara entre compra e venda']
  ];
  $('checklist').innerHTML=items.map(([ok,t])=>`<div>${ok?'✅':'❌'} ${t}</div>`).join('');
+ if($('priceActionBox'))$('priceActionBox').innerHTML=[
+  `Padrão de candle: <b>${a15.pattern}</b>`,
+  `Estrutura: <b>${a15.breakout}</b>`,
+  `Volume: <b>${a15.volume.label}</b>`,
+  `Qualidade da tendência: <b>${r.quality}/100</b>`,
+  `Vantagem entre compra e venda: <b>${r.gap} pontos</b>`
+ ].map(x=>`<div>${x}</div>`).join('');
+
 }
 function saveSignal(pair,r){
  if(r.decision==='NÃO ENTRAR')return;historyData.unshift({id:Date.now(),time:new Date().toLocaleString('pt-BR'),pair,decision:r.decision,score:Math.round(r.score),result:'Pendente'});
- historyData=historyData.slice(0,60);localStorage.setItem('robiaV10History',JSON.stringify(historyData));renderHistory();
+ historyData=historyData.slice(0,60);localStorage.setItem('robiaV11History',JSON.stringify(historyData));renderHistory();
 }
 async function runAnalysis(auto=false){
  const key=$('apiKey').value.trim(),pair=$('pair').value;if(!key){$('status').textContent='Cole sua chave da Twelve Data.';return}
  if($('newsBlock').checked){$('status').textContent='Análise bloqueada manualmente por notícia forte.';return}
+ const sess=sessionStatus(pair);if(!sess.ok){$('status').textContent=`Análise bloqueada: ${sess.label}.`;return}
  $('analyze').disabled=true;setProgress(10,'Preparando análise...');
  try{
   setProgress(25,'Buscando candles M15, M30 e H1...');
@@ -373,18 +446,18 @@ function setProgress(value,text){
  if(text)$('status').textContent=text;
 }
 function saveConfig(){
- const data={apiKey:$('apiKey').value.trim(),chatId:$('chatId').value.trim(),pair:$('pair').value,interval:$('chartInterval').value,newsBlock:$('newsBlock').checked,soundAlert:$('soundAlert').checked,browserNotify:$('browserNotify').checked,riskMode:$('riskMode').value};
- localStorage.setItem('robiaV10Config',JSON.stringify(data));
+ const data={apiKey:$('apiKey').value.trim(),chatId:$('chatId').value.trim(),pair:$('pair').value,interval:$('chartInterval').value,newsBlock:$('newsBlock').checked,soundAlert:$('soundAlert').checked,browserNotify:$('browserNotify').checked,riskMode:$('riskMode').value,scanInterval:$('scanInterval').value,sessionFilter:$('sessionFilter').value,continuousScan:$('continuousScan').checked};
+ localStorage.setItem('robiaV11Config',JSON.stringify(data));
  $('status').textContent='Configuração salva neste navegador.';
 }
 function loadConfig(){
- const data=JSON.parse(localStorage.getItem('robiaV10Config')||'{}');
+ const data=JSON.parse(localStorage.getItem('robiaV11Config')||'{}');
  if(data.apiKey)$('apiKey').value=data.apiKey;if(data.chatId)$('chatId').value=data.chatId;if(data.pair)$('pair').value=data.pair;
- if(data.interval)$('chartInterval').value=data.interval;if(typeof data.newsBlock==='boolean')$('newsBlock').checked=data.newsBlock;if(typeof data.soundAlert==='boolean')$('soundAlert').checked=data.soundAlert;if(typeof data.browserNotify==='boolean')$('browserNotify').checked=data.browserNotify;if(data.riskMode)$('riskMode').value=data.riskMode;
+ if(data.interval)$('chartInterval').value=data.interval;if(typeof data.newsBlock==='boolean')$('newsBlock').checked=data.newsBlock;if(typeof data.soundAlert==='boolean')$('soundAlert').checked=data.soundAlert;if(typeof data.browserNotify==='boolean')$('browserNotify').checked=data.browserNotify;if(data.riskMode)$('riskMode').value=data.riskMode;if(data.scanInterval)$('scanInterval').value=data.scanInterval;if(data.sessionFilter)$('sessionFilter').value=data.sessionFilter;if(typeof data.continuousScan==='boolean')$('continuousScan').checked=data.continuousScan;
 }
 function clearConfig(){
  if(!confirm('Apagar a API, o Chat ID e as preferências salvas neste navegador?'))return;
- localStorage.removeItem('robiaV10Config');$('apiKey').value='';$('chatId').value='';$('pair').value='EUR/USD';$('chartInterval').value='15';$('newsBlock').checked=false;$('soundAlert').checked=true;$('browserNotify').checked=true;$('riskMode').value='conservative';
+ localStorage.removeItem('robiaV11Config');$('apiKey').value='';$('chatId').value='';$('pair').value='EUR/USD';$('chartInterval').value='15';$('newsBlock').checked=false;$('soundAlert').checked=true;$('browserNotify').checked=true;$('riskMode').value='conservative';$('scanInterval').value='300000';$('sessionFilter').value='auto';$('continuousScan').checked=false;stopContinuous();
  renderChart();$('status').textContent='Configuração apagada.';
 }
 
@@ -412,7 +485,7 @@ async function scanAllAssets(){
   results.sort((a,b)=>(b.r?.score||0)-(a.r?.score||0));
   $('ranking').innerHTML=results.map((x,i)=>{
    const strong=!x.error&&x.r.decision!=='NÃO ENTRAR'&&x.r.score>=85;
-   return `<tr><td>${i+1}º</td><td>${x.pair}</td><td>${x.market}</td><td>${x.error?'ERRO':x.r.decision}</td><td>${x.error?'--':Math.round(x.r.score)+'/100'}</td><td>${x.error?x.error:(strong?'🚨 SINAL FORTE':'Aguardar')}</td></tr>`;
+   return `<tr><td>${i+1}º</td><td>${x.pair}</td><td>${x.market}</td><td>${x.error?'ERRO':x.r.decision}</td><td>${x.error?'--':Math.round(x.r.score)+'/100'}</td><td>${x.error?'--':x.a15.pattern+' / '+x.a15.breakout}</td><td>${x.error?x.error:(strong?'🚨 SINAL FORTE':'Aguardar')}</td></tr>`;
   }).join('');
   const best=results.find(x=>!x.error);
   if($('lastScan'))$('lastScan').textContent=new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
@@ -441,15 +514,37 @@ function renderHistory(){
  if($('winRate'))$('winRate').textContent=evaluated?Math.round((winsCount/evaluated)*100)+'%':'0%';
  if($('evaluated'))$('evaluated').textContent=evaluated;
  if($('pending'))$('pending').textContent=historyData.filter(x=>x.result==='Pendente').length;
- document.querySelectorAll('[data-r]').forEach(b=>b.addEventListener('click',()=>{historyData=historyData.map(x=>x.id===+b.dataset.id?{...x,result:b.dataset.r}:x);localStorage.setItem('robiaV10History',JSON.stringify(historyData));renderHistory()}));
+ document.querySelectorAll('[data-r]').forEach(b=>b.addEventListener('click',()=>{historyData=historyData.map(x=>x.id===+b.dataset.id?{...x,result:b.dataset.r}:x);localStorage.setItem('robiaV11History',JSON.stringify(historyData));renderHistory()}));
+}
+
+let continuousTimer=null,nextScanTimer=null;
+function updateNextScan(ms){
+ const t=new Date(Date.now()+ms);
+ if($('nextScan'))$('nextScan').textContent=t.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+}
+function stopContinuous(){
+ clearInterval(continuousTimer);clearInterval(nextScanTimer);
+ continuousTimer=null;nextScanTimer=null;
+ if($('monitorState'))$('monitorState').textContent='Parado';
+ if($('nextScan'))$('nextScan').textContent='--';
+}
+function startContinuous(){
+ stopContinuous();
+ const ms=Number($('scanInterval').value||300000);
+ if($('monitorState'))$('monitorState').textContent='Ativo';
+ scanAllAssets();
+ updateNextScan(ms);
+ continuousTimer=setInterval(()=>{scanAllAssets();updateNextScan(ms)},ms);
 }
 $('analyze').addEventListener('click',()=>runAnalysis(false));
 $('scanAll').addEventListener('click',scanAllAssets);
+$('continuousScan').addEventListener('change',e=>e.target.checked?startContinuous():stopContinuous());
+$('scanInterval').addEventListener('change',()=>{if($('continuousScan').checked)startContinuous();});
 $('saveConfig').addEventListener('click',saveConfig);
 $('clearConfig').addEventListener('click',clearConfig);
 $('autoMonitor').addEventListener('change',e=>{clearInterval(monitorTimer);if(e.target.checked){runAnalysis(true);monitorTimer=setInterval(()=>runAnalysis(true),300000);$('status').textContent='Monitoramento automático ativado. Mantenha esta página aberta.'}else $('status').textContent='Monitoramento automático desligado.'});
 $('reloadChart').addEventListener('click',renderChart);$('pair').addEventListener('change',renderChart);$('chartInterval').addEventListener('change',renderChart);
-loadConfig();renderChart();renderHistory();
+loadConfig();renderChart();renderHistory();if($('continuousScan').checked)startContinuous();
 </script>
 </body>
 </html>
